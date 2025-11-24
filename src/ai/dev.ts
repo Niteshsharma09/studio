@@ -1,1 +1,5 @@
-// Flows will be imported for their side effects in this file.
+import { config } from 'dotenv';
+config();
+
+import '@/ai/flows/get-style-recommendation.ts';
+import '@/ai/flows/virtual-try-on.ts';
