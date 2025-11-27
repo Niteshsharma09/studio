@@ -19,7 +19,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { CreditCard, Lock } from "lucide-react";
+import { CreditCard, Lock, Loader2 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useToast } from "@/hooks/use-toast";
 import { useEffect, useState } from "react";
@@ -73,6 +73,7 @@ export default function CheckoutPage() {
   const { cartItems, cartTotal, clearCart } = useCart();
   const router = useRouter();
   const { toast } = useToast();
+  const [isProcessing, setIsProcessing] = useState(false);
 
   const form = useForm<z.infer<typeof checkoutSchema>>({
     resolver: zodResolver(checkoutSchema),
@@ -96,10 +97,10 @@ export default function CheckoutPage() {
   const paymentMethod = form.watch("paymentMethod");
 
   useEffect(() => {
-    if (cartItems.length === 0) {
+    if (cartItems.length === 0 && !isProcessing) {
       router.push('/');
     }
-  }, [cartItems, router]);
+  }, [cartItems, router, isProcessing]);
   
   if (cartItems.length === 0) {
     return null; // Or a loading spinner while redirecting
@@ -111,12 +112,18 @@ export default function CheckoutPage() {
 
   const onSubmit = (values: z.infer<typeof checkoutSchema>) => {
     console.log("Form submitted", values);
-    toast({
-        title: "Purchase Successful!",
-        description: "Thank you for your order. A confirmation has been sent to your email."
-    });
-    clearCart();
-    router.push('/');
+    setIsProcessing(true);
+
+    // Simulate API call to payment gateway
+    setTimeout(() => {
+        setIsProcessing(false);
+        toast({
+            title: "Purchase Successful!",
+            description: "Thank you for your order. A confirmation has been sent to your email."
+        });
+        clearCart();
+        router.push('/');
+    }, 2000); // 2-second delay
   };
 
   return (
@@ -270,9 +277,18 @@ export default function CheckoutPage() {
                     </CardContent>
                 </Card>
 
-              <Button type="submit" size="lg" className="w-full">
-                <Lock className="mr-2 h-4 w-4" />
-                Pay {formatPrice(cartTotal)}
+              <Button type="submit" size="lg" className="w-full" disabled={isProcessing}>
+                {isProcessing ? (
+                    <>
+                        <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                        Processing...
+                    </>
+                ) : (
+                    <>
+                        <Lock className="mr-2 h-4 w-4" />
+                        Pay {formatPrice(cartTotal)}
+                    </>
+                )}
               </Button>
             </form>
           </Form>
@@ -281,3 +297,5 @@ export default function CheckoutPage() {
     </div>
   );
 }
+
+    
