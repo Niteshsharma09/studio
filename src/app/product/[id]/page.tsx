@@ -1,4 +1,5 @@
 
+
 "use client";
 
 import { useParams, useRouter } from 'next/navigation';
@@ -211,7 +212,7 @@ export default function ProductDetailPage() {
                           maxLength={6}
                       />
                   </div>
-                  <Button variant="outline" onClick={handlePincodeCheck} disabled={deliveryStatus === 'checking'}>
+                  <Button onClick={handlePincodeCheck} disabled={deliveryStatus === 'checking'}>
                       {deliveryStatus === 'checking' ? <Loader2 className="h-4 w-4 animate-spin" /> : 'Check'}
                   </Button>
               </div>
