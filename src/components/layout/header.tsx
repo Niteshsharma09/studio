@@ -59,6 +59,10 @@ export function Header() {
                   ))}
                 </nav>
                  <div className="mt-8 space-y-2">
+                    <div className="relative">
+                        <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                        <Input placeholder="Search products..." className="pl-10"/>
+                    </div>
                   <Button variant="outline" className="w-full">Log In</Button>
                   <Button className="w-full">Sign Up</Button>
                 </div>
@@ -97,7 +101,7 @@ export function Header() {
             </Link>
         </div>
 
-        <div className="flex flex-1 items-center justify-end space-x-2">
+        <div className="flex flex-1 items-center justify-end space-x-4">
             <div className="hidden md:block w-full max-w-xs">
                  <div className="relative">
                     <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
