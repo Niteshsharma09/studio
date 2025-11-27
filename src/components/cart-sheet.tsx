@@ -9,6 +9,7 @@ import {
   SheetTitle,
   SheetFooter,
   SheetTrigger,
+  SheetClose,
 } from '@/components/ui/sheet';
 import { Button } from '@/components/ui/button';
 import { ScrollArea } from '@/components/ui/scroll-area';
@@ -95,12 +96,16 @@ export function CartSheet({ children }: { children: React.ReactNode }) {
                   <span>{formatPrice(cartTotal)}</span>
                 </div>
                 <p className="text-sm text-muted-foreground">Shipping and taxes calculated at checkout.</p>
-                <Button asChild size="lg" className="w-full">
-                  <Link href="/checkout">Proceed to Checkout</Link>
-                </Button>
-                <Button asChild variant="outline" className="w-full">
-                  <Link href="/">Continue Shopping</Link>
-                </Button>
+                <SheetClose asChild>
+                  <Button asChild size="lg" className="w-full">
+                    <Link href="/checkout">Proceed to Checkout</Link>
+                  </Button>
+                </SheetClose>
+                <SheetClose asChild>
+                  <Button asChild variant="outline" className="w-full">
+                    <Link href="/">Continue Shopping</Link>
+                  </Button>
+                </SheetClose>
               </div>
             </SheetFooter>
           </>
@@ -109,9 +114,11 @@ export function CartSheet({ children }: { children: React.ReactNode }) {
             <ShoppingBag className="h-16 w-16 text-muted-foreground" />
             <h2 className="text-xl font-semibold">Your cart is empty</h2>
             <p className="text-muted-foreground">Add some items to get started.</p>
-            <Button asChild>
-                <Link href="/">Browse Products</Link>
-            </Button>
+            <SheetClose asChild>
+                <Button asChild>
+                    <Link href="/">Browse Products</Link>
+                </Button>
+            </SheetClose>
           </div>
         )}
       </SheetContent>
