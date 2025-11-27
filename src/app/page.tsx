@@ -9,6 +9,7 @@ import { Separator } from '@/components/ui/separator';
 import { Button } from '@/components/ui/button';
 import Image from 'next/image';
 import { PlaceHolderImages } from '@/lib/placeholder-images';
+import Link from 'next/link';
 
 export default function Home() {
   const [filters, setFilters] = useState<{ types: string[]; brands: string[] }>({
@@ -37,7 +38,7 @@ export default function Home() {
 
   return (
     <div>
-      <section className="relative w-full h-[50vh] min-h-[300px] bg-secondary">
+      <section className="relative w-full h-[60vh] min-h-[400px] bg-secondary/30">
         {heroImage && (
           <Image
             src={heroImage.imageUrl}
@@ -48,32 +49,32 @@ export default function Home() {
             priority
           />
         )}
-        <div className="absolute inset-0 bg-black/40" />
-        <div className="relative h-full flex flex-col items-center justify-center text-center text-primary-foreground p-4">
-          <h1 className="text-4xl md:text-6xl font-bold tracking-tighter">See the World Differently</h1>
-          <p className="mt-4 max-w-2xl text-lg md:text-xl">Discover our curated collection of premium eyewear.</p>
-          <Button size="lg" className="mt-8 bg-accent hover:bg-accent/90 text-accent-foreground">
-            Shop Now
+        <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent" />
+        <div className="relative h-full flex flex-col items-center justify-end text-center text-white p-8">
+          <h1 className="text-4xl md:text-6xl font-extrabold tracking-tight">Crystal Clear Vision</h1>
+          <p className="mt-4 max-w-2xl text-lg md:text-xl">Find the perfect frames that define your style.</p>
+          <Button size="lg" asChild className="mt-8 bg-primary hover:bg-primary/90 text-primary-foreground font-semibold">
+            <Link href="#products">Shop Now</Link>
           </Button>
         </div>
       </section>
 
-      <div className="container mx-auto px-4 py-12">
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
-          <aside className="md:col-span-1">
-            <div className="sticky top-20">
-              <h2 className="text-2xl font-bold mb-4">Filters</h2>
+      <div id="products" className="container mx-auto px-4 py-16">
+        <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
+          <aside className="lg:col-span-1">
+            <div className="sticky top-24 p-6 bg-card rounded-lg border">
+              <h2 className="text-xl font-bold mb-6">Filters</h2>
               
               <div>
-                <h3 className="font-semibold mb-2">Product Type</h3>
-                <div className="space-y-2">
+                <h3 className="font-semibold mb-4 text-base">Product Type</h3>
+                <div className="space-y-3">
                   {PRODUCT_TYPES.map(type => (
                     <div key={type} className="flex items-center space-x-2">
                       <Checkbox 
                         id={`type-${type}`}
                         onCheckedChange={() => handleFilterChange('types', type)}
                       />
-                      <Label htmlFor={`type-${type}`} className="cursor-pointer">{type}</Label>
+                      <Label htmlFor={`type-${type}`} className="cursor-pointer text-sm font-normal">{type}</Label>
                     </div>
                   ))}
                 </div>
@@ -82,15 +83,15 @@ export default function Home() {
               <Separator className="my-6" />
 
               <div>
-                <h3 className="font-semibold mb-2">Brand</h3>
-                <div className="space-y-2">
+                <h3 className="font-semibold mb-4 text-base">Brand</h3>
+                <div className="space-y-3">
                   {BRANDS.map(brand => (
                     <div key={brand} className="flex items-center space-x-2">
                       <Checkbox 
                         id={`brand-${brand}`}
                         onCheckedChange={() => handleFilterChange('brands', brand)}
                       />
-                      <Label htmlFor={`brand-${brand}`} className="cursor-pointer">{brand}</Label>
+                      <Label htmlFor={`brand-${brand}`} className="cursor-pointer text-sm font-normal">{brand}</Label>
                     </div>
                   ))}
                 </div>
@@ -98,14 +99,14 @@ export default function Home() {
             </div>
           </aside>
 
-          <main className="md:col-span-3">
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          <main className="lg:col-span-3">
+            <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-6">
               {filteredProducts.map(product => (
                 <ProductCard key={product.id} product={product} />
               ))}
             </div>
             {filteredProducts.length === 0 && (
-                <div className="col-span-full flex flex-col items-center justify-center text-center h-96 bg-card rounded-lg shadow-sm">
+                <div className="col-span-full flex flex-col items-center justify-center text-center h-96 bg-card rounded-lg border">
                     <h3 className="text-2xl font-semibold">No Products Found</h3>
                     <p className="text-muted-foreground mt-2">Try adjusting your filters.</p>
                 </div>
