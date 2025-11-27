@@ -63,8 +63,12 @@ export function Header() {
                         <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
                         <Input placeholder="Search products..." className="pl-10"/>
                     </div>
-                  <Button variant="outline" className="w-full">Log In</Button>
-                  <Button className="w-full">Sign Up</Button>
+                  <Button asChild variant="outline" className="w-full">
+                    <Link href="/login" onClick={() => setIsMobileMenuOpen(false)}>Log In</Link>
+                  </Button>
+                  <Button asChild className="w-full">
+                    <Link href="/signup" onClick={() => setIsMobileMenuOpen(false)}>Sign Up</Link>
+                  </Button>
                 </div>
               </div>
             </SheetContent>
@@ -116,8 +120,12 @@ export function Header() {
                 </div>
               
                <div className="flex items-center gap-2">
-                    <Button variant="ghost">Log In</Button>
-                    <Button>Sign Up</Button>
+                    <Button asChild variant="ghost">
+                        <Link href="/login">Log In</Link>
+                    </Button>
+                    <Button asChild>
+                        <Link href="/signup">Sign Up</Link>
+                    </Button>
                 </div>
             </div>
 
