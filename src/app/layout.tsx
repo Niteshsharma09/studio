@@ -7,8 +7,8 @@ import { Footer } from '@/components/layout/footer';
 import { cn } from '@/lib/utils';
 
 export const metadata: Metadata = {
-  title: 'Shady Emporium',
-  description: 'An elegant e-commerce app for frames, lenses, and sunglasses.',
+  title: 'technoii',
+  description: 'Your destination for the latest tech.',
 };
 
 export default function RootLayout({

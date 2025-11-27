@@ -1,7 +1,7 @@
 "use client";
 
 import Link from 'next/link';
-import { ShoppingBag, Search, Menu, UserCircle } from 'lucide-react';
+import { ShoppingBag, Search, Menu, UserCircle, Tv } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { CartSheet } from '@/components/cart-sheet';
 import { useCart } from '@/context/cart-context';
@@ -40,8 +40,8 @@ export function Header() {
             <SheetContent side="left">
               <div className="px-2 py-6">
                 <Link href="/" className="flex items-center space-x-2 mb-8" onClick={() => setIsMobileMenuOpen(false)}>
-                  <ShoppingBag className="h-6 w-6 text-primary" />
-                  <span className="font-bold">Shady Emporium</span>
+                  <Tv className="h-6 w-6 text-primary" />
+                  <span className="font-bold">technoii</span>
                 </Link>
                 <nav className="flex flex-col space-y-4">
                   {navLinks.map((link) => (
@@ -78,9 +78,9 @@ export function Header() {
         {/* Desktop Nav */}
         <div className="hidden md:flex items-center space-x-6">
           <Link href="/" className="flex items-center space-x-2">
-              <ShoppingBag className="h-6 w-6 text-primary" />
+              <Tv className="h-6 w-6 text-primary" />
               <span className="font-bold text-lg">
-                Shady Emporium
+                technoii
               </span>
             </Link>
           <nav className="flex items-center space-x-6 text-sm font-medium">
@@ -102,9 +102,9 @@ export function Header() {
         {/* Mobile Logo (centered) */}
         <div className="flex-1 flex justify-center md:hidden">
              <Link href="/" className="flex items-center space-x-2">
-              <ShoppingBag className="h-6 w-6 text-primary" />
+              <Tv className="h-6 w-6 text-primary" />
               <span className="font-bold text-lg">
-                Shady Emporium
+                technoii
               </span>
             </Link>
         </div>
