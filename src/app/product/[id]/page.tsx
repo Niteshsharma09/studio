@@ -6,7 +6,7 @@ import { PRODUCTS } from '@/lib/data';
 import { Button } from '@/components/ui/button';
 import { useCart } from '@/context/cart-context';
 import { PlaceHolderImages } from '@/lib/placeholder-images';
-import { Star, ShieldCheck, Truck, ShoppingBag, Zap } from 'lucide-react';
+import { Star, ShieldCheck, Truck, ShoppingBag, Zap, MapPin, Loader2 } from 'lucide-react';
 import { useState, useMemo } from 'react';
 import { Input } from '@/components/ui/input';
 import { useToast } from '@/hooks/use-toast';
@@ -32,6 +32,9 @@ export default function ProductDetailPage() {
   const [quantity, setQuantity] = useState(1);
   const [selectedLens, setSelectedLens] = useState<Lens | null>(null);
   const isMobile = useIsMobile();
+  const [pincode, setPincode] = useState('');
+  const [deliveryStatus, setDeliveryStatus] = useState<'idle' | 'checking' | 'available' | 'unavailable'>('idle');
+
 
   const lenses = useMemo(() => PRODUCTS.filter(p => p.type === 'Lenses') as Lens[], []);
 
@@ -81,6 +84,28 @@ export default function ProductDetailPage() {
     addItem(product, quantity, selectedLens ?? undefined);
     router.push('/checkout');
   };
+
+  const handlePincodeCheck = () => {
+    if (!/^\d{6}$/.test(pincode)) {
+        toast({
+            variant: "destructive",
+            title: "Invalid Pincode",
+            description: "Please enter a valid 6-digit Indian pincode."
+        });
+        return;
+    }
+    setDeliveryStatus('checking');
+    // Simulate API call
+    setTimeout(() => {
+        const firstDigit = parseInt(pincode.charAt(0), 10);
+        if (firstDigit >= 1 && firstDigit <= 8) {
+            setDeliveryStatus('available');
+        } else {
+            setDeliveryStatus('unavailable');
+        }
+    }, 1000);
+  };
+
 
   return (
     <div className="container mx-auto px-4 py-12">
@@ -162,6 +187,35 @@ export default function ProductDetailPage() {
           )}
 
           <div className="mt-8 space-y-4">
+            <div>
+              <Label htmlFor="pincode">Check Delivery Availability</Label>
+              <div className="flex items-center gap-2 mt-2">
+                  <div className="relative flex-1">
+                      <MapPin className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                      <Input
+                          id="pincode"
+                          placeholder="Enter 6-digit pincode"
+                          value={pincode}
+                          onChange={(e) => {
+                            setPincode(e.target.value);
+                            setDeliveryStatus('idle');
+                          }}
+                          className="pl-10"
+                          maxLength={6}
+                      />
+                  </div>
+                  <Button variant="outline" onClick={handlePincodeCheck} disabled={deliveryStatus === 'checking'}>
+                      {deliveryStatus === 'checking' ? <Loader2 className="h-4 w-4 animate-spin" /> : 'Check'}
+                  </Button>
+              </div>
+               {deliveryStatus === 'available' && (
+                    <p className="mt-2 text-sm text-green-600">Great! Delivery is available to this pincode.</p>
+                )}
+                {deliveryStatus === 'unavailable' && (
+                    <p className="mt-2 text-sm text-destructive">Sorry, delivery is not available to this pincode.</p>
+                )}
+            </div>
+
             <div className="flex items-center gap-3 text-sm">
                 <ShieldCheck className="w-5 h-5 text-accent"/>
                 <p>2-Year Warranty Included</p>
