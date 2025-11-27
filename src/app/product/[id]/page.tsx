@@ -21,6 +21,8 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Label } from '@/components/ui/label';
+import { addDays, format } from 'date-fns';
+
 
 export default function ProductDetailPage() {
   const params = useParams();
@@ -34,6 +36,7 @@ export default function ProductDetailPage() {
   const isMobile = useIsMobile();
   const [pincode, setPincode] = useState('');
   const [deliveryStatus, setDeliveryStatus] = useState<'idle' | 'checking' | 'available' | 'unavailable'>('idle');
+  const [deliveryDate, setDeliveryDate] = useState<Date | null>(null);
 
 
   const lenses = useMemo(() => PRODUCTS.filter(p => p.type === 'Lenses') as Lens[], []);
@@ -95,11 +98,14 @@ export default function ProductDetailPage() {
         return;
     }
     setDeliveryStatus('checking');
+    setDeliveryDate(null);
     // Simulate API call
     setTimeout(() => {
         const firstDigit = parseInt(pincode.charAt(0), 10);
+        // Simulate serviceability for major metro areas (digits 1-8 are generally used in India)
         if (firstDigit >= 1 && firstDigit <= 8) {
             setDeliveryStatus('available');
+            setDeliveryDate(addDays(new Date(), 5));
         } else {
             setDeliveryStatus('unavailable');
         }
@@ -208,8 +214,8 @@ export default function ProductDetailPage() {
                       {deliveryStatus === 'checking' ? <Loader2 className="h-4 w-4 animate-spin" /> : 'Check'}
                   </Button>
               </div>
-               {deliveryStatus === 'available' && (
-                    <p className="mt-2 text-sm text-green-600">Great! Delivery is available to this pincode.</p>
+               {deliveryStatus === 'available' && deliveryDate && (
+                    <p className="mt-2 text-sm text-green-600">Great! Delivery available. Expected by {format(deliveryDate, "eeee, MMMM d")}.</p>
                 )}
                 {deliveryStatus === 'unavailable' && (
                     <p className="mt-2 text-sm text-destructive">Sorry, delivery is not available to this pincode.</p>
