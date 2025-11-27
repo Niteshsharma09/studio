@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useParams, useRouter } from 'next/navigation';
@@ -6,7 +7,7 @@ import { PRODUCTS } from '@/lib/data';
 import { Button } from '@/components/ui/button';
 import { useCart } from '@/context/cart-context';
 import { PlaceHolderImages } from '@/lib/placeholder-images';
-import { Star, ShieldCheck, Truck, ShoppingBag, Zap, MapPin, Loader2 } from 'lucide-react';
+import { Star, ShieldCheck, ShoppingBag, Zap, MapPin, Loader2, Undo2 } from 'lucide-react';
 import { useState, useMemo } from 'react';
 import { Input } from '@/components/ui/input';
 import { useToast } from '@/hooks/use-toast';
@@ -224,11 +225,11 @@ export default function ProductDetailPage() {
 
             <div className="flex items-center gap-3 text-sm">
                 <ShieldCheck className="w-5 h-5 text-accent"/>
-                <p>2-Year Warranty Included</p>
+                <p>6 Months Warranty Included</p>
             </div>
             <div className="flex items-center gap-3 text-sm">
-                <Truck className="w-5 h-5 text-accent"/>
-                <p>Free Shipping & Returns</p>
+                <Undo2 className="w-5 h-5 text-accent"/>
+                <p>5-day return policy for unused products</p>
             </div>
           </div>
         </div>
