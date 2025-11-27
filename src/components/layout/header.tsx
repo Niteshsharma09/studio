@@ -71,27 +71,33 @@ export function Header() {
           </Sheet>
         </div>
 
-        {/* Desktop: Nav Links on Left */}
-        <div className="hidden md:flex flex-1 items-center justify-start">
-             <nav className="flex items-center space-x-6 text-sm font-medium">
-                {navLinks.map((link) => (
-                  <Link
-                    key={link.href}
-                    href={link.href}
-                    className={cn(
-                      'transition-colors hover:text-foreground/80',
-                      pathname === link.href ? 'text-foreground' : 'text-foreground/60'
-                    )}
-                  >
-                    {link.label}
-                  </Link>
-                ))}
-              </nav>
+        {/* Desktop Nav */}
+        <div className="hidden md:flex items-center space-x-6">
+          <Link href="/" className="flex items-center space-x-2">
+              <ShoppingBag className="h-6 w-6 text-primary" />
+              <span className="font-bold text-lg">
+                Shady Emporium
+              </span>
+            </Link>
+          <nav className="flex items-center space-x-6 text-sm font-medium">
+            {navLinks.map((link) => (
+              <Link
+                key={link.href}
+                href={link.href}
+                className={cn(
+                  'transition-colors hover:text-foreground/80',
+                  pathname === link.href ? 'text-foreground' : 'text-foreground/60'
+                )}
+              >
+                {link.label}
+              </Link>
+            ))}
+          </nav>
         </div>
         
-        {/* Centered Logo */}
-        <div className="flex flex-1 justify-center md:flex-none">
-            <Link href="/" className="flex items-center space-x-2">
+        {/* Mobile Logo (centered) */}
+        <div className="flex-1 flex justify-center md:hidden">
+             <Link href="/" className="flex items-center space-x-2">
               <ShoppingBag className="h-6 w-6 text-primary" />
               <span className="font-bold text-lg">
                 Shady Emporium
@@ -100,8 +106,8 @@ export function Header() {
         </div>
 
         {/* Right Side: Search, Auth, Cart */}
-        <div className="flex flex-1 items-center justify-end space-x-4">
-            <div className="hidden md:flex items-center space-x-4">
+        <div className="flex flex-1 items-center justify-end space-x-2 md:space-x-4">
+            <div className="hidden md:flex items-center space-x-2">
                <div className="w-full max-w-xs">
                      <div className="relative">
                         <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
