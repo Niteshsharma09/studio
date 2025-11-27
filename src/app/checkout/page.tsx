@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useCart } from "@/context/cart-context";
@@ -21,7 +22,8 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { CreditCard, Lock } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useToast } from "@/hooks/use-toast";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 
 const shippingSchema = z.object({
   email: z.string().email(),
@@ -34,13 +36,38 @@ const shippingSchema = z.object({
 });
 
 const paymentSchema = z.object({
-  cardNumber: z.string().regex(/^\d{16}$/, "Card number must be 16 digits"),
-  cardName: z.string().min(1, "Name on card is required"),
-  expiryDate: z.string().regex(/^(0[1-9]|1[0-2])\/\d{2}$/, "Expiry must be in MM/YY format"),
-  cvc: z.string().regex(/^\d{3}$/, "CVC must be 3 digits"),
+  paymentMethod: z.enum(["card", "upi", "cod"], {
+    required_error: "You need to select a payment method.",
+  }),
+  cardNumber: z.string().optional(),
+  cardName: z.string().optional(),
+  expiryDate: z.string().optional(),
+  cvc: z.string().optional(),
+  upiId: z.string().optional(),
 });
 
-const checkoutSchema = shippingSchema.merge(paymentSchema);
+const checkoutSchema = shippingSchema.merge(paymentSchema).superRefine((data, ctx) => {
+    if (data.paymentMethod === 'card') {
+        if (!data.cardNumber || !/^\d{16}$/.test(data.cardNumber)) {
+            ctx.addIssue({ code: z.ZodIssueCode.custom, message: "Card number must be 16 digits", path: ["cardNumber"] });
+        }
+        if (!data.cardName || data.cardName.length < 1) {
+            ctx.addIssue({ code: z.ZodIssueCode.custom, message: "Name on card is required", path: ["cardName"] });
+        }
+        if (!data.expiryDate || !/^(0[1-9]|1[0-2])\/\d{2}$/.test(data.expiryDate)) {
+            ctx.addIssue({ code: z.ZodIssueCode.custom, message: "Expiry must be in MM/YY format", path: ["expiryDate"] });
+        }
+        if (!data.cvc || !/^\d{3}$/.test(data.cvc)) {
+            ctx.addIssue({ code: z.ZodIssueCode.custom, message: "CVC must be 3 digits", path: ["cvc"] });
+        }
+    }
+    if (data.paymentMethod === 'upi') {
+        if (!data.upiId || !/^[\w.-]+@[\w.-]+$/.test(data.upiId)) {
+            ctx.addIssue({ code: z.ZodIssueCode.custom, message: "Please enter a valid UPI ID", path: ["upiId"] });
+        }
+    }
+});
+
 
 export default function CheckoutPage() {
   const { cartItems, cartTotal, clearCart } = useCart();
@@ -57,12 +84,16 @@ export default function CheckoutPage() {
       city: "",
       zipCode: "",
       country: "",
+      paymentMethod: "card",
       cardNumber: "",
       cardName: "",
       expiryDate: "",
       cvc: "",
+      upiId: ""
     },
   });
+
+  const paymentMethod = form.watch("paymentMethod");
 
   useEffect(() => {
     if (cartItems.length === 0) {
@@ -166,20 +197,76 @@ export default function CheckoutPage() {
                         <CardTitle>Payment Details</CardTitle>
                     </CardHeader>
                     <CardContent className="space-y-4">
-                         <FormField control={form.control} name="cardName" render={({ field }) => (
-                            <FormItem><FormLabel>Name on Card</FormLabel><FormControl><Input {...field} /></FormControl><FormMessage /></FormItem>
-                        )}/>
-                        <FormField control={form.control} name="cardNumber" render={({ field }) => (
-                            <FormItem><FormLabel>Card Number</FormLabel><FormControl><div className="relative"><CreditCard className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" /><Input {...field} className="pl-10" /></div></FormControl><FormMessage /></FormItem>
-                        )}/>
-                        <div className="grid grid-cols-2 gap-4">
-                            <FormField control={form.control} name="expiryDate" render={({ field }) => (
-                                <FormItem><FormLabel>Expiry Date</FormLabel><FormControl><Input {...field} placeholder="MM/YY" /></FormControl><FormMessage /></FormItem>
+                        <FormField
+                            control={form.control}
+                            name="paymentMethod"
+                            render={({ field }) => (
+                                <FormItem className="space-y-3">
+                                <FormLabel>Payment Method</FormLabel>
+                                <FormControl>
+                                    <RadioGroup
+                                    onValueChange={field.onChange}
+                                    defaultValue={field.value}
+                                    className="flex flex-col space-y-2"
+                                    >
+                                    <FormItem className="flex items-center space-x-3 space-y-0">
+                                        <FormControl>
+                                        <RadioGroupItem value="card" />
+                                        </FormControl>
+                                        <FormLabel className="font-normal">
+                                        Credit/Debit Card
+                                        </FormLabel>
+                                    </FormItem>
+                                    <FormItem className="flex items-center space-x-3 space-y-0">
+                                        <FormControl>
+                                        <RadioGroupItem value="upi" />
+                                        </FormControl>
+                                        <FormLabel className="font-normal">
+                                        UPI
+                                        </FormLabel>
+                                    </FormItem>
+                                    <FormItem className="flex items-center space-x-3 space-y-0">
+                                        <FormControl>
+                                        <RadioGroupItem value="cod" />
+                                        </FormControl>
+                                        <FormLabel className="font-normal">
+                                        Cash on Delivery
+                                        </FormLabel>
+                                    </FormItem>
+                                    </RadioGroup>
+                                </FormControl>
+                                <FormMessage />
+                                </FormItem>
+                            )}
+                        />
+                        {paymentMethod === 'card' && (
+                            <div className="space-y-4">
+                                <FormField control={form.control} name="cardName" render={({ field }) => (
+                                    <FormItem><FormLabel>Name on Card</FormLabel><FormControl><Input {...field} /></FormControl><FormMessage /></FormItem>
+                                )}/>
+                                <FormField control={form.control} name="cardNumber" render={({ field }) => (
+                                    <FormItem><FormLabel>Card Number</FormLabel><FormControl><div className="relative"><CreditCard className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" /><Input {...field} className="pl-10" /></div></FormControl><FormMessage /></FormItem>
+                                )}/>
+                                <div className="grid grid-cols-2 gap-4">
+                                    <FormField control={form.control} name="expiryDate" render={({ field }) => (
+                                        <FormItem><FormLabel>Expiry Date</FormLabel><FormControl><Input {...field} placeholder="MM/YY" /></FormControl><FormMessage /></FormItem>
+                                    )}/>
+                                    <FormField control={form.control} name="cvc" render={({ field }) => (
+                                        <FormItem><FormLabel>CVC</FormLabel><FormControl><Input {...field} /></FormControl><FormMessage /></FormItem>
+                                    )}/>
+                                </div>
+                            </div>
+                        )}
+                        {paymentMethod === 'upi' && (
+                             <FormField control={form.control} name="upiId" render={({ field }) => (
+                                <FormItem><FormLabel>UPI ID</FormLabel><FormControl><Input {...field} placeholder="yourname@bank" /></FormControl><FormMessage /></FormItem>
                             )}/>
-                            <FormField control={form.control} name="cvc" render={({ field }) => (
-                                <FormItem><FormLabel>CVC</FormLabel><FormControl><Input {...field} /></FormControl><FormMessage /></FormItem>
-                            )}/>
-                        </div>
+                        )}
+                         {paymentMethod === 'cod' && (
+                             <div className="text-sm text-muted-foreground bg-secondary p-4 rounded-md">
+                                You will pay upon delivery.
+                            </div>
+                        )}
                     </CardContent>
                 </Card>
 
