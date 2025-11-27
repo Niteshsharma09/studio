@@ -6,7 +6,7 @@ import { PRODUCTS } from '@/lib/data';
 import { Button } from '@/components/ui/button';
 import { useCart } from '@/context/cart-context';
 import { PlaceHolderImages } from '@/lib/placeholder-images';
-import { Star, ShieldCheck, Truck, ShoppingCart } from 'lucide-react';
+import { Star, ShieldCheck, Truck, ShoppingBag } from 'lucide-react';
 import { useState } from 'react';
 import { Input } from '@/components/ui/input';
 import { useToast } from '@/hooks/use-toast';
@@ -90,7 +90,7 @@ export default function ProductDetailPage() {
               aria-label="Quantity"
             />
             <Button size="lg" className="flex-1" onClick={handleAddToCart}>
-              <ShoppingCart className="mr-2 h-5 w-5" />
+              <ShoppingBag className="mr-2 h-5 w-5" />
               Add to Cart
             </Button>
           </div>
