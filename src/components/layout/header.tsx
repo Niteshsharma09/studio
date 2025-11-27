@@ -28,8 +28,8 @@ export function Header() {
   return (
     <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
       <div className="container flex h-16 items-center">
-        {/* Mobile Nav */}
-        <div className="md:hidden flex items-center">
+        {/* Mobile Menu Trigger */}
+        <div className="flex items-center md:hidden">
           <Sheet open={isMobileMenuOpen} onOpenChange={setIsMobileMenuOpen}>
             <SheetTrigger asChild>
               <Button variant="ghost" size="icon">
@@ -71,34 +71,9 @@ export function Header() {
           </Sheet>
         </div>
 
-        <div className="flex-1 flex justify-start">
-            {/* Desktop: Search and Auth */}
-            <div className="hidden md:flex items-center space-x-4">
-               <div className="w-full max-w-xs">
-                     <div className="relative">
-                        <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-                        <Input placeholder="Search products..." className="pl-10"/>
-                    </div>
-                </div>
-              
-               <div className="flex items-center gap-2">
-                    <Button variant="ghost">Log In</Button>
-                    <Button>Sign Up</Button>
-                </div>
-            </div>
-        </div>
-        
-        <div className="flex-1 flex justify-center">
-            <Link href="/" className="flex items-center space-x-2">
-              <ShoppingBag className="h-6 w-6 text-primary" />
-              <span className="font-bold text-lg hidden md:inline">
-                Shady Emporium
-              </span>
-            </Link>
-        </div>
-
-        <div className="flex-1 flex items-center justify-end space-x-4">
-            <nav className="hidden md:flex items-center space-x-6 text-sm font-medium">
+        {/* Desktop: Nav Links on Left */}
+        <div className="hidden md:flex flex-1 items-center justify-start">
+             <nav className="flex items-center space-x-6 text-sm font-medium">
                 {navLinks.map((link) => (
                   <Link
                     key={link.href}
@@ -112,6 +87,33 @@ export function Header() {
                   </Link>
                 ))}
               </nav>
+        </div>
+        
+        {/* Centered Logo */}
+        <div className="flex flex-1 justify-center md:flex-none">
+            <Link href="/" className="flex items-center space-x-2">
+              <ShoppingBag className="h-6 w-6 text-primary" />
+              <span className="font-bold text-lg">
+                Shady Emporium
+              </span>
+            </Link>
+        </div>
+
+        {/* Right Side: Search, Auth, Cart */}
+        <div className="flex flex-1 items-center justify-end space-x-4">
+            <div className="hidden md:flex items-center space-x-4">
+               <div className="w-full max-w-xs">
+                     <div className="relative">
+                        <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                        <Input placeholder="Search products..." className="pl-10"/>
+                    </div>
+                </div>
+              
+               <div className="flex items-center gap-2">
+                    <Button variant="ghost">Log In</Button>
+                    <Button>Sign Up</Button>
+                </div>
+            </div>
 
           <CartSheet>
             <Button variant="ghost" size="icon" className="relative">
@@ -124,6 +126,8 @@ export function Header() {
               <span className="sr-only">Open cart</span>
             </Button>
           </CartSheet>
+
+           {/* Mobile: Account Icon as placeholder */}
            <Button variant="ghost" size="icon" className="md:hidden">
               <UserCircle className="h-5 w-5" />
               <span className="sr-only">Account</span>
