@@ -72,47 +72,44 @@ export function Header() {
         </div>
 
         {/* Desktop Nav */}
-        <div className="mr-4 hidden md:flex items-center gap-6">
-          <Link href="/" className="flex items-center space-x-2">
-            <ShoppingBag className="h-6 w-6 text-primary" />
-            <span className="font-bold text-lg">
-              Shady Emporium
-            </span>
-          </Link>
-          <nav className="flex items-center space-x-6 text-sm font-medium">
-            {navLinks.map((link) => (
-              <Link
-                key={link.href}
-                href={link.href}
-                className={cn(
-                  'transition-colors hover:text-foreground/80',
-                  pathname === link.href ? 'text-foreground' : 'text-foreground/60'
-                )}
-              >
-                {link.label}
-              </Link>
-            ))}
-          </nav>
-        </div>
-        
-        <div className="flex-1 flex justify-center md:hidden">
-            <Link href="/" className="flex items-center space-x-2">
-              <ShoppingBag className="h-6 w-6 text-primary" />
-            </Link>
-        </div>
-
-        <div className="flex flex-1 items-center justify-end space-x-4">
-            <div className="hidden md:block w-full max-w-xs">
+        <div className="hidden md:flex items-center space-x-4">
+           <div className="w-full max-w-xs">
                  <div className="relative">
                     <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
                     <Input placeholder="Search products..." className="pl-10"/>
                 </div>
             </div>
           
-           <div className="hidden md:flex items-center gap-2">
+           <div className="flex items-center gap-2">
                 <Button variant="ghost">Log In</Button>
                 <Button>Sign Up</Button>
             </div>
+        </div>
+        
+        <div className="flex-1 flex justify-center">
+            <Link href="/" className="flex items-center space-x-2">
+              <ShoppingBag className="h-6 w-6 text-primary" />
+              <span className="font-bold text-lg hidden md:inline">
+                Shady Emporium
+              </span>
+            </Link>
+        </div>
+
+        <div className="flex items-center justify-end space-x-4">
+            <nav className="hidden md:flex items-center space-x-6 text-sm font-medium">
+                {navLinks.map((link) => (
+                  <Link
+                    key={link.href}
+                    href={link.href}
+                    className={cn(
+                      'transition-colors hover:text-foreground/80',
+                      pathname === link.href ? 'text-foreground' : 'text-foreground/60'
+                    )}
+                  >
+                    {link.label}
+                  </Link>
+                ))}
+              </nav>
 
           <CartSheet>
             <Button variant="ghost" size="icon" className="relative">
