@@ -1,12 +1,12 @@
 "use client";
 
-import { useParams } from 'next/navigation';
+import { useParams, useRouter } from 'next/navigation';
 import Image from 'next/image';
 import { PRODUCTS } from '@/lib/data';
 import { Button } from '@/components/ui/button';
 import { useCart } from '@/context/cart-context';
 import { PlaceHolderImages } from '@/lib/placeholder-images';
-import { Star, ShieldCheck, Truck, ShoppingBag, Check } from 'lucide-react';
+import { Star, ShieldCheck, Truck, ShoppingBag, Zap } from 'lucide-react';
 import { useState, useMemo } from 'react';
 import { Input } from '@/components/ui/input';
 import { useToast } from '@/hooks/use-toast';
@@ -24,9 +24,10 @@ import { Label } from '@/components/ui/label';
 
 export default function ProductDetailPage() {
   const params = useParams();
+  const router = useRouter();
   const { id } = params;
   const product = PRODUCTS.find(p => p.id === id);
-  const { addItem } = useCart();
+  const { addItem, clearCart } = useCart();
   const { toast } = useToast();
   const [quantity, setQuantity] = useState(1);
   const [selectedLens, setSelectedLens] = useState<Lens | null>(null);
@@ -73,6 +74,12 @@ export default function ProductDetailPage() {
         title: "Success!",
         description: `${quantity} x ${product.name} ${selectedLens ? `with ${selectedLens.name}`: ""} added to your cart.`
     });
+  };
+
+  const handleBuyNow = () => {
+    clearCart();
+    addItem(product, quantity, selectedLens ?? undefined);
+    router.push('/checkout');
   };
 
   return (
@@ -125,18 +132,24 @@ export default function ProductDetailPage() {
             </div>
           )}
           
-          <div className="mt-8 flex items-center gap-4">
-            <Input
-              type="number"
-              min="1"
-              value={quantity}
-              onChange={(e) => setQuantity(Math.max(1, parseInt(e.target.value, 10) || 1))}
-              className="w-20"
-              aria-label="Quantity"
-            />
-            <Button size="lg" className="flex-1" onClick={handleAddToCart}>
-              <ShoppingBag className="mr-2 h-5 w-5" />
-              Add to Cart
+          <div className="mt-8 space-y-4">
+            <div className="flex items-center gap-4">
+              <Input
+                type="number"
+                min="1"
+                value={quantity}
+                onChange={(e) => setQuantity(Math.max(1, parseInt(e.target.value, 10) || 1))}
+                className="w-20"
+                aria-label="Quantity"
+              />
+              <Button size="lg" className="flex-1" onClick={handleAddToCart}>
+                <ShoppingBag className="mr-2 h-5 w-5" />
+                Add to Cart
+              </Button>
+            </div>
+            <Button size="lg" variant="secondary" className="w-full" onClick={handleBuyNow}>
+              <Zap className="mr-2 h-5 w-5" />
+              Buy Now
             </Button>
           </div>
           
