@@ -6,12 +6,21 @@ import { PRODUCTS } from '@/lib/data';
 import { Button } from '@/components/ui/button';
 import { useCart } from '@/context/cart-context';
 import { PlaceHolderImages } from '@/lib/placeholder-images';
-import { Star, ShieldCheck, Truck, ShoppingBag } from 'lucide-react';
-import { useState } from 'react';
+import { Star, ShieldCheck, Truck, ShoppingBag, Check } from 'lucide-react';
+import { useState, useMemo } from 'react';
 import { Input } from '@/components/ui/input';
 import { useToast } from '@/hooks/use-toast';
 import { useIsMobile } from '@/hooks/use-mobile';
 import { VirtualTryOn } from '@/components/virtual-try-on';
+import type { Lens } from '@/lib/types';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { Label } from '@/components/ui/label';
 
 export default function ProductDetailPage() {
   const params = useParams();
@@ -20,7 +29,15 @@ export default function ProductDetailPage() {
   const { addItem } = useCart();
   const { toast } = useToast();
   const [quantity, setQuantity] = useState(1);
+  const [selectedLens, setSelectedLens] = useState<Lens | null>(null);
   const isMobile = useIsMobile();
+
+  const lenses = useMemo(() => PRODUCTS.filter(p => p.type === 'Lenses') as Lens[], []);
+
+  const total_price = useMemo(() => {
+    if (!product) return 0;
+    return product.price + (selectedLens?.price ?? 0);
+  }, [product, selectedLens]);
 
   if (!product) {
     return (
@@ -40,12 +57,21 @@ export default function ProductDetailPage() {
       currency: 'USD',
     }).format(price);
   };
+
+  const handleLensChange = (lensId: string) => {
+    if (lensId === 'none') {
+      setSelectedLens(null);
+    } else {
+      const lens = lenses.find(l => l.id === lensId);
+      setSelectedLens(lens || null);
+    }
+  };
   
   const handleAddToCart = () => {
-    addItem(product, quantity);
+    addItem(product, quantity, selectedLens ?? undefined);
     toast({
         title: "Success!",
-        description: `${quantity} x ${product.name} added to your cart.`
+        description: `${quantity} x ${product.name} ${selectedLens ? `with ${selectedLens.name}`: ""} added to your cart.`
     });
   };
 
@@ -67,7 +93,7 @@ export default function ProductDetailPage() {
         <div>
           <p className="text-sm font-medium text-primary">{product.brand}</p>
           <h1 className="text-4xl font-bold tracking-tight mt-1">{product.name}</h1>
-          <p className="text-3xl font-light mt-4">{formatPrice(product.price)}</p>
+          <p className="text-3xl font-light mt-4">{formatPrice(total_price)}</p>
 
           <div className="flex items-center mt-2">
             <div className="flex items-center">
@@ -79,6 +105,25 @@ export default function ProductDetailPage() {
           </div>
           
           <p className="mt-6 text-foreground/80 leading-relaxed">{product.description}</p>
+
+          {product.type === 'Frames' && (
+            <div className="mt-8 space-y-2">
+              <Label htmlFor="lens-select">Select Lenses (Optional)</Label>
+              <Select onValueChange={handleLensChange}>
+                <SelectTrigger id="lens-select">
+                  <SelectValue placeholder="No lenses" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="none">No lenses</SelectItem>
+                  {lenses.map(lens => (
+                    <SelectItem key={lens.id} value={lens.id}>
+                      {lens.name} (+{formatPrice(lens.price)})
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+          )}
           
           <div className="mt-8 flex items-center gap-4">
             <Input
@@ -95,7 +140,7 @@ export default function ProductDetailPage() {
             </Button>
           </div>
           
-          {isMobile === true && (
+          {isMobile === true && product.type === 'Frames' && (
             <VirtualTryOn product={product}>
               <Button size="lg" variant="outline" className="w-full mt-4">
                 Virtual Try-On

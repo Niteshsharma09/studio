@@ -44,9 +44,10 @@ export function CartSheet({ children }: { children: React.ReactNode }) {
                   const placeholder = PlaceHolderImages.find(p => p.id === item.product.imageId);
                   const imageUrl = placeholder?.imageUrl ?? `https://picsum.photos/seed/${item.product.id}/100/100`;
                   const imageHint = placeholder?.imageHint ?? '';
+                  const itemPrice = item.product.price + (item.lens?.price ?? 0);
                   
                   return (
-                    <div key={item.product.id} className="flex items-start justify-between space-x-4">
+                    <div key={`${item.product.id}-${item.lens?.id || ''}`} className="flex items-start justify-between space-x-4">
                       <div className="flex-shrink-0">
                         <Image
                           src={imageUrl}
@@ -59,7 +60,10 @@ export function CartSheet({ children }: { children: React.ReactNode }) {
                       </div>
                       <div className="flex-1">
                         <h3 className="font-medium">{item.product.name}</h3>
-                        <p className="text-sm text-muted-foreground">{formatPrice(item.product.price)}</p>
+                        {item.lens && (
+                          <p className="text-sm text-muted-foreground">+ {item.lens.name}</p>
+                        )}
+                        <p className="text-sm text-muted-foreground">{formatPrice(itemPrice)}</p>
                         <div className="mt-2 flex items-center">
                           <Input
                             type="number"
@@ -72,7 +76,7 @@ export function CartSheet({ children }: { children: React.ReactNode }) {
                         </div>
                       </div>
                       <div className="flex flex-col items-end space-y-2">
-                        <p className="font-medium">{formatPrice(item.product.price * item.quantity)}</p>
+                        <p className="font-medium">{formatPrice(itemPrice * item.quantity)}</p>
                         <Button variant="ghost" size="icon" className="h-8 w-8 text-muted-foreground" onClick={() => removeItem(item.product.id)}>
                           <Trash2 className="h-4 w-4" />
                           <span className="sr-only">Remove {item.product.name}</span>

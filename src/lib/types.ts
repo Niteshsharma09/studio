@@ -8,7 +8,10 @@ export type Product = {
   imageId: string;
 };
 
+export type Lens = Product & { type: 'Lenses' };
+
 export type CartItem = {
   product: Product;
   quantity: number;
+  lens?: Lens;
 };

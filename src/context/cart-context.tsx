@@ -1,11 +1,11 @@
 "use client";
 
 import React, { createContext, useContext, useState, ReactNode } from 'react';
-import type { CartItem, Product } from '@/lib/types';
+import type { CartItem, Product, Lens } from '@/lib/types';
 
 interface CartContextType {
   cartItems: CartItem[];
-  addItem: (product: Product, quantity: number) => void;
+  addItem: (product: Product, quantity: number, lens?: Lens) => void;
   removeItem: (productId: string) => void;
   updateQuantity: (productId: string, quantity: number) => void;
   clearCart: () => void;
@@ -18,17 +18,19 @@ const CartContext = createContext<CartContextType | undefined>(undefined);
 export const CartProvider = ({ children }: { children: ReactNode }) => {
   const [cartItems, setCartItems] = useState<CartItem[]>([]);
 
-  const addItem = (product: Product, quantity: number) => {
+  const addItem = (product: Product, quantity: number, lens?: Lens) => {
     setCartItems(prevItems => {
-      const existingItem = prevItems.find(item => item.product.id === product.id);
-      if (existingItem) {
-        return prevItems.map(item =>
-          item.product.id === product.id
-            ? { ...item, quantity: item.quantity + quantity }
-            : item
-        );
+      // For simplicity, we'll treat items with different lenses as separate cart items.
+      // A more robust implementation might group them.
+      const existingItemIndex = prevItems.findIndex(item => item.product.id === product.id && item.lens?.id === lens?.id);
+
+      if (existingItemIndex > -1) {
+        const newItems = [...prevItems];
+        newItems[existingItemIndex].quantity += quantity;
+        return newItems;
+      } else {
+        return [...prevItems, { product, quantity, lens }];
       }
-      return [...prevItems, { product, quantity }];
     });
   };
 
@@ -52,7 +54,11 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
     setCartItems([]);
   };
 
-  const cartTotal = cartItems.reduce((total, item) => total + item.product.price * item.quantity, 0);
+  const cartTotal = cartItems.reduce((total, item) => {
+    const itemPrice = item.product.price + (item.lens?.price ?? 0);
+    return total + itemPrice * item.quantity;
+  }, 0);
+  
   const cartCount = cartItems.reduce((count, item) => count + item.quantity, 0);
 
   return (
