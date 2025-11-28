@@ -6,19 +6,26 @@ import { Button } from '@/components/ui/button';
 import { CartSheet } from '@/components/cart-sheet';
 import { useCart } from '@/context/cart-context';
 import { cn } from '@/lib/utils';
-import { usePathname } from 'next/navigation';
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import {
   Sheet,
   SheetContent,
   SheetTrigger,
 } from "@/components/ui/sheet"
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Input } from '@/components/ui/input';
 
 export function Header() {
   const { cartCount } = useCart();
   const pathname = usePathname();
+  const router = useRouter();
+  const searchParams = useSearchParams();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [searchQuery, setSearchQuery] = useState(searchParams.get('q') || '');
+
+  useEffect(() => {
+    setSearchQuery(searchParams.get('q') || '');
+  }, [searchParams]);
 
   const navLinks = [
     { href: '/?type=Frames', label: 'Eyeglasses' },
@@ -26,6 +33,17 @@ export function Header() {
     { href: '/?type=Lenses', label: 'Lenses' },
     { href: '/style-guide', label: 'Style Guide' },
   ];
+
+  const handleSearchSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const params = new URLSearchParams(searchParams);
+    if (searchQuery) {
+      params.set('q', searchQuery);
+    } else {
+      params.delete('q');
+    }
+    router.push(`${pathname}?${params.toString()}`);
+  };
 
   return (
     <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
@@ -96,14 +114,20 @@ export function Header() {
           </div>
           
           {/* Search bar */}
-          <div className="hidden lg:flex flex-1 justify-center px-8">
-            <div className="w-full max-w-md">
-                   <div className="relative">
-                      <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-                      <Input placeholder="What are you looking for?" className="pl-10"/>
-                  </div>
-              </div>
-          </div>
+           <div className="hidden lg:flex flex-1 justify-center px-8">
+             <form onSubmit={handleSearchSubmit} className="w-full max-w-md">
+               <div className="relative">
+                 <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                 <Input 
+                   placeholder="Search for products..." 
+                   className="pl-10"
+                   value={searchQuery}
+                   onChange={(e) => setSearchQuery(e.target.value)}
+                 />
+               </div>
+             </form>
+           </div>
+
 
           {/* Right Side: Auth, Wishlist, Cart */}
           <div className="flex flex-1 items-center justify-end space-x-2 md:space-x-4">

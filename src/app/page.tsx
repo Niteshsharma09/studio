@@ -47,6 +47,7 @@ const CategoryCard = ({ title, imageId, href }: { title: string, imageId: string
 export default function Home() {
   const searchParams = useSearchParams();
   const typeFilterFromUrl = searchParams.get('type');
+  const searchQuery = searchParams.get('q');
 
   const [filters, setFilters] = useState<{ types: string[]; brands: string[] }>({
     types: typeFilterFromUrl ? [typeFilterFromUrl] : [],
@@ -76,9 +77,10 @@ export default function Home() {
     return PRODUCTS.filter(product => {
       const typeMatch = filters.types.length === 0 || filters.types.includes(product.type);
       const brandMatch = filters.brands.length === 0 || filters.brands.includes(product.brand);
-      return typeMatch && brandMatch;
+      const searchMatch = !searchQuery || product.name.toLowerCase().includes(searchQuery.toLowerCase());
+      return typeMatch && brandMatch && searchMatch;
     });
-  }, [filters]);
+  }, [filters, searchQuery]);
   
   const heroCarouselImages = PlaceHolderImages.filter(p => p.id.startsWith('hero-carousel-'));
   const categories = [
@@ -176,7 +178,7 @@ export default function Home() {
             {filteredProducts.length === 0 && (
                 <div className="col-span-full flex flex-col items-center justify-center text-center h-96 bg-card rounded-lg border">
                     <h3 className="text-2xl font-semibold">No Products Found</h3>
-                    <p className="text-muted-foreground mt-2">Try adjusting your filters.</p>
+                    <p className="text-muted-foreground mt-2">Try adjusting your filters or search query.</p>
                 </div>
             )}
           </main>
