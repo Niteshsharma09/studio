@@ -19,6 +19,7 @@ import Autoplay from "embla-carousel-autoplay";
 import type { Product } from '@/lib/types';
 import { Separator } from '@/components/ui/separator';
 import { Button } from '@/components/ui/button';
+import { FilterSidebar } from '@/components/filter-sidebar';
 
 const CategoryCard = ({ title, imageId, href }: { title: string, imageId: string, href: string }) => {
     const placeholder = PlaceHolderImages.find(p => p.id === imageId);
@@ -43,14 +44,14 @@ const CategoryCard = ({ title, imageId, href }: { title: string, imageId: string
 }
 
 const ProductCollection = ({ title, products, id, showAllLink }: { title: string, products: Product[], id: string, showAllLink: string }) => (
-    <section id={id} className="container mx-auto px-4 py-12">
+    <section id={id} className="py-12">
         <div className="flex justify-between items-center mb-8">
             <h2 className="text-3xl font-bold tracking-tight">{title}</h2>
             <Button asChild variant="outline">
                 <Link href={showAllLink}>Show All</Link>
             </Button>
         </div>
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
             {products.slice(0, 4).map(product => (
                 <ProductCard key={product.id} product={product} />
             ))}
@@ -58,67 +59,69 @@ const ProductCollection = ({ title, products, id, showAllLink }: { title: string
         {products.length === 0 && (
             <div className="col-span-full flex flex-col items-center justify-center text-center h-64 bg-card rounded-lg border">
                 <h3 className="text-2xl font-semibold">No Products Found</h3>
-                <p className="text-muted-foreground mt-2">Check back later for new arrivals in this category.</p>
+                <p className="text-muted-foreground mt-2">Try adjusting your search or filters.</p>
             </div>
         )}
     </section>
 );
 
-
 function ProductList() {
   const searchParams = useSearchParams();
   const searchQuery = searchParams.get('q');
   const category = searchParams.get('category');
+  const selectedBrands = useMemo(() => searchParams.get('brands')?.split(',') || [], [searchParams]);
+  const minPrice = useMemo(() => Number(searchParams.get('minPrice') || 0), [searchParams]);
+  const maxPrice = useMemo(() => Number(searchParams.get('maxPrice') || 9999), [searchParams]);
 
-  const { frameProducts, sunglassesProducts, lensesProducts, allProducts } = useMemo(() => {
-    const all = PRODUCTS;
-    return {
-        allProducts: all,
-        frameProducts: all.filter(p => p.type === 'Frames'),
-        sunglassesProducts: all.filter(p => p.type === 'Sunglasses'),
-        lensesProducts: all.filter(p => p.type === 'Lenses'),
-    }
-  }, []);
+  const filteredProducts = useMemo(() => {
+    let products = PRODUCTS;
 
-  const productsToDisplay = useMemo(() => {
-    if (category) {
-      switch (category) {
-        case 'frames':
-          return frameProducts;
-        case 'sunglasses':
-          return sunglassesProducts;
-        case 'lenses':
-          return lensesProducts;
-        default:
-          return allProducts;
-      }
-    }
     if (searchQuery) {
-        return allProducts.filter(product => 
+        products = products.filter(product => 
             product.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
             product.brand.toLowerCase().includes(searchQuery.toLowerCase())
         );
     }
-    return null;
-  }, [searchQuery, allProducts, category, frameProducts, sunglassesProducts, lensesProducts]);
 
-  if (productsToDisplay) {
-    const title = category ? `${category.charAt(0).toUpperCase() + category.slice(1)}` : `Search results for "${searchQuery}"`;
+    if (selectedBrands.length > 0) {
+        products = products.filter(product => selectedBrands.includes(product.brand));
+    }
+
+    products = products.filter(product => product.price >= minPrice && product.price <= maxPrice);
+
+    return products;
+  }, [searchQuery, selectedBrands, minPrice, maxPrice]);
+
+  const { frameProducts, sunglassesProducts, lensesProducts } = useMemo(() => {
+    return {
+        frameProducts: filteredProducts.filter(p => p.type === 'Frames'),
+        sunglassesProducts: filteredProducts.filter(p => p.type === 'Sunglasses'),
+        lensesProducts: filteredProducts.filter(p => p.type === 'Lenses'),
+    }
+  }, [filteredProducts]);
+
+  if (category) {
+    const productsToDisplay = category === 'frames' ? frameProducts 
+                            : category === 'sunglasses' ? sunglassesProducts 
+                            : category === 'lenses' ? lensesProducts 
+                            : filteredProducts;
+    const title = category.charAt(0).toUpperCase() + category.slice(1);
+    
     return (
-        <div className="container mx-auto px-4 py-16">
-             <div className="mb-8 text-center">
+        <div className="col-span-12 lg:col-span-9">
+            <div className="mb-8 text-center">
               <h2 className="text-3xl font-bold">{title}</h2>
               <p className="text-muted-foreground">{productsToDisplay?.length || 0} products found.</p>
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-6">
                 {productsToDisplay?.map(product => (
-                <ProductCard key={product.id} product={product} />
+                    <ProductCard key={product.id} product={product} />
                 ))}
             </div>
             {productsToDisplay?.length === 0 && (
                 <div className="col-span-full flex flex-col items-center justify-center text-center h-96 bg-card rounded-lg border mt-8">
                     <h3 className="text-2xl font-semibold">No Products Found</h3>
-                    <p className="text-muted-foreground mt-2">Try adjusting your search query or category.</p>
+                    <p className="text-muted-foreground mt-2">Try adjusting your search or filters.</p>
                 </div>
             )}
         </div>
@@ -126,7 +129,7 @@ function ProductList() {
   }
   
   return (
-    <div>
+    <div className="col-span-12 lg:col-span-9">
         <ProductCollection id="frames" title="Frames" products={frameProducts} showAllLink="/?category=frames" />
         <Separator />
         <ProductCollection id="sunglasses" title="Sunglasses" products={sunglassesProducts} showAllLink="/?category=sunglasses" />
@@ -143,47 +146,60 @@ export default function Home() {
       { title: 'Sunglasses', imageId: 'category-sunglasses', href: '/?category=sunglasses' },
       { title: 'Lenses', imageId: 'category-lenses', href: '/?category=lenses' },
   ]
+  const searchParams = useSearchParams();
+  const category = searchParams.get('category');
 
   return (
     <div>
-        <section className="container mx-auto px-4 pt-12 pb-8">
-             <div className="grid grid-cols-2 md:grid-cols-3 gap-x-4 gap-y-8 justify-items-center">
-                {categories.map(cat => (
-                    <CategoryCard key={cat.title} {...cat} />
-                ))}
-            </div>
-        </section>
+        {!category && (
+            <>
+                <section className="container mx-auto px-4 pt-12 pb-8">
+                    <div className="grid grid-cols-2 md:grid-cols-3 gap-x-4 gap-y-8 justify-items-center">
+                        {categories.map(cat => (
+                            <CategoryCard key={cat.title} {...cat} />
+                        ))}
+                    </div>
+                </section>
 
-      <section className="w-full pb-12">
-        <Carousel
-          opts={{ loop: true }}
-          plugins={[Autoplay({ delay: 5000 })]}
-          className="w-full"
-        >
-          <CarouselContent>
-            {heroCarouselImages.map(image => (
-              <CarouselItem key={image.id}>
-                <div className="relative w-full h-[50vh] min-h-[300px] bg-secondary">
-                  <Image
-                    src={image.imageUrl}
-                    alt={image.description}
-                    fill
-                    className="object-cover"
-                    data-ai-hint={image.imageHint}
-                    priority={heroCarouselImages.indexOf(image) === 0}
-                  />
-                </div>
-              </CarouselItem>
-            ))}
-          </CarouselContent>
-          <CarouselPrevious className="left-4" />
-          <CarouselNext className="right-4" />
-        </Carousel>
-      </section>
+                <section className="w-full pb-12">
+                    <Carousel
+                    opts={{ loop: true }}
+                    plugins={[Autoplay({ delay: 5000 })]}
+                    className="w-full"
+                    >
+                    <CarouselContent>
+                        {heroCarouselImages.map(image => (
+                        <CarouselItem key={image.id}>
+                            <div className="relative w-full h-[50vh] min-h-[300px] bg-secondary">
+                            <Image
+                                src={image.imageUrl}
+                                alt={image.description}
+                                fill
+                                className="object-cover"
+                                data-ai-hint={image.imageHint}
+                                priority={heroCarouselImages.indexOf(image) === 0}
+                            />
+                            </div>
+                        </CarouselItem>
+                        ))}
+                    </CarouselContent>
+                    <CarouselPrevious className="left-4" />
+                    <CarouselNext className="right-4" />
+                    </Carousel>
+                </section>
+            </>
+        )}
 
-      <Suspense fallback={<div>Loading products...</div>}>
-        <ProductList />
-      </Suspense>
+      <div className="container mx-auto px-4 grid grid-cols-12 gap-8 items-start">
+        <div className="hidden lg:block lg:col-span-3">
+          <Suspense fallback={<p>Loading filters...</p>}>
+            <FilterSidebar />
+          </Suspense>
+        </div>
+        <Suspense fallback={<div>Loading products...</div>}>
+            <ProductList />
+        </Suspense>
+      </div>
     </div>
   );
 }
