@@ -75,8 +75,8 @@
     {
       "id": "hero-image",
       "description": "A stylish person wearing sunglasses.",
-      "imageUrl": "https://images.unsplash.com/photo-1465429167186-266ef03d6277?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw2fHxwZXJzb24lMjBzdW5nbGFzc2VzfGVufDB8fHx8MTc2MzkzOTAwMXww&ixlib=rb-4.1.0&q=80&w=1080",
-      "imageHint": "person sunglasses"
+      "imageUrl": "https://images.unsplash.com/photo-1562572159-4efc207f5aff?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw0fHxmYXNoaW9uJTIwbW9kZWx8ZW58MHx8fHwxNzY0MzE4Nzk4fDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "fashion model"
     },
     {
       "id": "checkout-image",
@@ -89,6 +89,48 @@
       "description": "A person trying on different glasses.",
       "imageUrl": "https://images.unsplash.com/photo-1682664175900-7771b38e1585?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw0fHxjaG9vc2luZyUyMGdsYXNzZXN8ZW58MHx8fHwxNzYzOTc1NjM5fDA&ixlib=rb-4.1.0&q=80&w=1080",
       "imageHint": "choosing glasses"
+    },
+    {
+      "id": "category-eyeglasses",
+      "description": "A pair of eyeglasses.",
+      "imageUrl": "https://images.unsplash.com/photo-1638038988551-28155572ce41?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxMHx8ZXllZ2xhc3Nlc3xlbnwwfHx8fDE3NjQzNDUyNTJ8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "eyeglasses"
+    },
+    {
+      "id": "category-sunglasses",
+      "description": "A pair of sunglasses.",
+      "imageUrl": "https://images.unsplash.com/photo-1508296695146-257a814070b4?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw4fHxzdW5nbGFzc2VzfGVufDB8fHx8MTc2NDMzMDA0Mnww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "sunglasses"
+    },
+    {
+      "id": "category-lenses",
+      "description": "A pair of contact lenses.",
+      "imageUrl": "https://images.unsplash.com/photo-1494869042583-f6c911f04b4c?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxMHx8Y29udGFjdCUyMGxlbnNlc3xlbnwwfHx8fDE3NjQzNDUyNTJ8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "contact lenses"
+    },
+    {
+      "id": "category-frames",
+      "description": "A pair of spectacle frames.",
+      "imageUrl": "https://images.unsplash.com/photo-1585486451366-5b5b9520797e?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwzfHxzcGVjdGFjbGUlMjBmcmFtZXN8ZW58MHx8fHwxNzY0MzQ1MjUyfDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "spectacle frames"
+    },
+    {
+      "id": "hero-carousel-1",
+      "description": "A stylish person wearing sunglasses.",
+      "imageUrl": "https://images.unsplash.com/photo-1645815747911-1942b39277a8?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwzfHxmYXNoaW9uJTIwbW9kZWwlMjBzdW5nbGFzc2VzfGVufDB8fHx8MTc2NDM0NTI1Mnww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "fashion model sunglasses"
+    },
+    {
+      "id": "hero-carousel-2",
+      "description": "A close-up of a person's eye with glasses.",
+      "imageUrl": "https://images.unsplash.com/photo-1582142407894-ec85a1260a46?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw4fHxleWV3ZWFyJTIwZmFzaGlvbnxlbnwwfHx8fDE3NjQzNDUyNTJ8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "eyewear fashion"
+    },
+    {
+      "id": "hero-carousel-3",
+      "description": "A collection of different styles of glasses.",
+      "imageUrl": "https://images.unsplash.com/photo-1663190579915-6677c4aaec4b?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxMHx8Z2xhc3NlcyUyMGNvbGxlY3Rpb258ZW58MHx8fHwxNzY0MzQ1MjUyfDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "glasses collection"
     }
   ]
 }

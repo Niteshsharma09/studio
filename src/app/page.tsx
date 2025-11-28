@@ -1,21 +1,62 @@
 "use client";
 
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import { ProductCard } from '@/components/product-card';
 import { PRODUCTS, BRANDS, PRODUCT_TYPES } from '@/lib/data';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Label } from '@/components/ui/label';
 import { Separator } from '@/components/ui/separator';
-import { Button } from '@/components/ui/button';
 import Image from 'next/image';
 import { PlaceHolderImages } from '@/lib/placeholder-images';
 import Link from 'next/link';
+import { Card, CardContent } from '@/components/ui/card';
+import { useSearchParams } from 'next/navigation';
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+  CarouselNext,
+  CarouselPrevious,
+} from "@/components/ui/carousel";
+import Autoplay from "embla-carousel-autoplay";
+
+const CategoryCard = ({ title, imageId, href }: { title: string, imageId: string, href: string }) => {
+    const placeholder = PlaceHolderImages.find(p => p.id === imageId);
+    return (
+        <Link href={href}>
+            <div className="text-center group">
+                <Card className="overflow-hidden mb-2 bg-gray-100 border-0 group-hover:shadow-md transition-shadow">
+                    <div className="relative aspect-[2/1]">
+                        {placeholder && (
+                            <Image
+                                src={placeholder.imageUrl}
+                                alt={title}
+                                fill
+                                className="object-contain p-2"
+                                sizes="200px"
+                            />
+                        )}
+                    </div>
+                </Card>
+                <p className="font-medium text-sm text-foreground/90">{title}</p>
+            </div>
+        </Link>
+    )
+}
 
 export default function Home() {
+  const searchParams = useSearchParams();
+  const typeFilterFromUrl = searchParams.get('type');
+
   const [filters, setFilters] = useState<{ types: string[]; brands: string[] }>({
-    types: [],
+    types: typeFilterFromUrl ? [typeFilterFromUrl] : [],
     brands: [],
   });
+
+  useEffect(() => {
+    setFilters(prev => ({ ...prev, types: typeFilterFromUrl ? [typeFilterFromUrl] : [] }));
+  }, [typeFilterFromUrl]);
+
 
   const handleFilterChange = (category: 'types' | 'brands', value: string) => {
     setFilters(prev => {
@@ -34,29 +75,49 @@ export default function Home() {
     });
   }, [filters]);
   
-  const heroImage = PlaceHolderImages.find(p => p.id === 'hero-image');
+  const heroCarouselImages = PlaceHolderImages.filter(p => p.id.startsWith('hero-carousel-'));
+  const categories = [
+      { title: 'Eyeglasses', imageId: 'category-eyeglasses', href: '/?type=Frames' },
+      { title: 'Sunglasses', imageId: 'category-sunglasses', href: '/?type=Sunglasses' },
+      { title: 'Lenses', imageId: 'category-lenses', href: '/?type=Lenses' },
+      { title: 'Frames', imageId: 'category-frames', href: '/?type=Frames' },
+  ]
 
   return (
     <div>
-      <section className="relative w-full h-[60vh] min-h-[400px] bg-secondary/30">
-        {heroImage && (
-          <Image
-            src={heroImage.imageUrl}
-            alt={heroImage.description}
-            fill
-            className="object-cover"
-            data-ai-hint={heroImage.imageHint}
-            priority
-          />
-        )}
-        <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent" />
-        <div className="relative h-full flex flex-col items-center justify-end text-center text-white p-8">
-          <h1 className="text-4xl md:text-6xl font-extrabold tracking-tight">Crystal Clear Vision</h1>
-          <p className="mt-4 max-w-2xl text-lg md:text-xl">Find the perfect frames that define your style.</p>
-          <Button size="lg" asChild className="mt-8 bg-primary hover:bg-primary/90 text-primary-foreground font-semibold">
-            <Link href="#products">Shop Now</Link>
-          </Button>
-        </div>
+        <section className="container mx-auto px-4 py-6">
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                {categories.map(cat => (
+                    <CategoryCard key={cat.title} {...cat} />
+                ))}
+            </div>
+        </section>
+
+      <section className="w-full bg-secondary/30 pb-12">
+        <Carousel
+          opts={{ loop: true }}
+          plugins={[Autoplay({ delay: 5000 })]}
+          className="w-full"
+        >
+          <CarouselContent>
+            {heroCarouselImages.map(image => (
+              <CarouselItem key={image.id}>
+                <div className="relative w-full h-[40vh] min-h-[300px]">
+                  <Image
+                    src={image.imageUrl}
+                    alt={image.description}
+                    fill
+                    className="object-cover"
+                    data-ai-hint={image.imageHint}
+                    priority={heroCarouselImages.indexOf(image) === 0}
+                  />
+                </div>
+              </CarouselItem>
+            ))}
+          </CarouselContent>
+          <CarouselPrevious className="left-4" />
+          <CarouselNext className="right-4" />
+        </Carousel>
       </section>
 
       <div id="products" className="container mx-auto px-4 py-16">
@@ -72,6 +133,7 @@ export default function Home() {
                     <div key={type} className="flex items-center space-x-2">
                       <Checkbox 
                         id={`type-${type}`}
+                        checked={filters.types.includes(type)}
                         onCheckedChange={() => handleFilterChange('types', type)}
                       />
                       <Label htmlFor={`type-${type}`} className="cursor-pointer text-sm font-normal">{type}</Label>
@@ -89,6 +151,7 @@ export default function Home() {
                     <div key={brand} className="flex items-center space-x-2">
                       <Checkbox 
                         id={`brand-${brand}`}
+                        checked={filters.brands.includes(brand)}
                         onCheckedChange={() => handleFilterChange('brands', brand)}
                       />
                       <Label htmlFor={`brand-${brand}`} className="cursor-pointer text-sm font-normal">{brand}</Label>
