@@ -44,7 +44,7 @@ export function Header() {
       params.delete('q');
     }
     // Navigate to homepage to show search results
-    router.push(`/?${params.toString()}`);
+    router.push(`/?${params.toString()}#products`);
     if(isMobileMenuOpen) setIsMobileMenuOpen(false);
   };
 
@@ -53,7 +53,7 @@ export function Header() {
       <div className="container px-4">
         {/* Top bar */}
         <div className="flex h-16 items-center">
-          {/* Mobile Menu Trigger */}
+          {/* Mobile Menu & Logo */}
           <div className="flex items-center lg:hidden">
             <Sheet open={isMobileMenuOpen} onOpenChange={setIsMobileMenuOpen}>
               <SheetTrigger asChild>
@@ -108,9 +108,9 @@ export function Header() {
               </SheetContent>
             </Sheet>
           </div>
-
-          {/* Desktop Logo */}
-          <div className="hidden lg:flex items-center">
+          
+          {/* Logo */}
+          <div className="flex items-center">
             <Link href="/" className="flex items-center space-x-2">
               <UserCircle className="h-8 w-8 text-primary" />
               <span className="font-bold text-2xl">
@@ -119,18 +119,8 @@ export function Header() {
             </Link>
           </div>
           
-          {/* Mobile Logo (centered) */}
-          <div className="flex-1 flex justify-center lg:hidden">
-               <Link href="/" className="flex items-center space-x-2">
-                <UserCircle className="h-7 w-7 text-primary" />
-                <span className="font-bold text-xl">
-                  technoii
-                </span>
-              </Link>
-          </div>
-          
-          {/* Desktop Search bar */}
-           <div className="hidden lg:flex flex-1 justify-center px-8">
+          {/* Search bar */}
+           <div className="flex-1 flex justify-center px-4 sm:px-8">
              <form onSubmit={handleSearchSubmit} className="w-full max-w-md">
                <div className="relative">
                  <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
@@ -187,7 +177,7 @@ export function Header() {
             href={link.href}
             className={cn(
               'transition-colors hover:text-primary',
-              pathname.startsWith(link.href.split('?')[0]) && searchParams.get('type') === link.href.split('=')[1] ? 'text-primary' : 'text-foreground/80'
+              (pathname.startsWith(link.href.split('?')[0]) && searchParams.get('type') === link.href.split('=')[1]) || pathname === link.href ? 'text-primary' : 'text-foreground/80'
             )}
           >
             {link.label}
