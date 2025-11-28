@@ -1,7 +1,7 @@
 "use client";
 
 import Link from 'next/link';
-import { ShoppingBag, Search, Menu, UserCircle, Heart, Phone } from 'lucide-react';
+import { ShoppingBag, Search, Menu, UserCircle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { CartSheet } from '@/components/cart-sheet';
 import { useCart } from '@/context/cart-context';
@@ -129,10 +129,12 @@ export function Header() {
             </CartSheet>
 
              {/* Mobile: Account Icon as placeholder */}
-             <Button variant="ghost" size="icon" className="lg:hidden">
-                <UserCircle className="h-5 w-5" />
-                <span className="sr-only">Account</span>
-            </Button>
+             <Link href="/login" className="lg:hidden">
+              <Button variant="ghost" size="icon">
+                  <UserCircle className="h-5 w-5" />
+                  <span className="sr-only">Account</span>
+              </Button>
+             </Link>
           </div>
         </div>
 
@@ -144,15 +146,15 @@ export function Header() {
               href={link.href}
               className={cn(
                 'transition-colors hover:text-primary',
-                pathname === link.href && !usePathname().includes('?') ? 'text-primary' : 'text-foreground/80'
+                pathname.startsWith(link.href) && pathname.includes('?') ? 'text-primary' : 'text-foreground/80'
               )}
             >
               {link.label}
             </Link>
           ))}
            <Link
-              href="#"
-              className="font-bold text-sm text-primary hover:underline"
+              href="/style-guide"
+              className={cn("font-bold text-sm text-primary hover:underline", { "text-primary": pathname === "/style-guide"})}
             >
               3D TRY ON
             </Link>

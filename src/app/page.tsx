@@ -9,7 +9,7 @@ import { Separator } from '@/components/ui/separator';
 import Image from 'next/image';
 import { PlaceHolderImages } from '@/lib/placeholder-images';
 import Link from 'next/link';
-import { Card, CardContent } from '@/components/ui/card';
+import { Card } from '@/components/ui/card';
 import { useSearchParams } from 'next/navigation';
 import {
   Carousel,
@@ -54,15 +54,20 @@ export default function Home() {
   });
 
   useEffect(() => {
-    setFilters(prev => ({ ...prev, types: typeFilterFromUrl ? [typeFilterFromUrl] : [] }));
-  }, [typeFilterFromUrl]);
+    const newTypes = typeFilterFromUrl ? [typeFilterFromUrl] : [];
+    // Only update if the type filter from URL has actually changed
+    if (JSON.stringify(newTypes) !== JSON.stringify(filters.types)) {
+        setFilters(prev => ({ ...prev, types: newTypes }));
+    }
+  }, [typeFilterFromUrl, filters.types]);
 
 
   const handleFilterChange = (category: 'types' | 'brands', value: string) => {
     setFilters(prev => {
-      const newValues = prev[category].includes(value)
-        ? prev[category].filter(v => v !== value)
-        : [...prev[category], value];
+      const currentValues = prev[category];
+      const newValues = currentValues.includes(value)
+        ? currentValues.filter(v => v !== value)
+        : [...currentValues, value];
       return { ...prev, [category]: newValues };
     });
   };
@@ -80,20 +85,20 @@ export default function Home() {
       { title: 'Eyeglasses', imageId: 'category-eyeglasses', href: '/?type=Frames' },
       { title: 'Sunglasses', imageId: 'category-sunglasses', href: '/?type=Sunglasses' },
       { title: 'Lenses', imageId: 'category-lenses', href: '/?type=Lenses' },
-      { title: 'Frames', imageId: 'category-frames', href: '/?type=Frames' },
+      { title: 'Contact Lenses', imageId: 'category-lenses', href: '/?type=Lenses' },
   ]
 
   return (
     <div>
-        <section className="container mx-auto px-4 py-6">
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+        <section className="container mx-auto px-4 pt-8 pb-4">
+             <div className="grid grid-cols-2 md:grid-cols-4 gap-x-4 gap-y-8">
                 {categories.map(cat => (
                     <CategoryCard key={cat.title} {...cat} />
                 ))}
             </div>
         </section>
 
-      <section className="w-full bg-secondary/30 pb-12">
+      <section className="w-full pb-12">
         <Carousel
           opts={{ loop: true }}
           plugins={[Autoplay({ delay: 5000 })]}
@@ -102,7 +107,7 @@ export default function Home() {
           <CarouselContent>
             {heroCarouselImages.map(image => (
               <CarouselItem key={image.id}>
-                <div className="relative w-full h-[40vh] min-h-[300px]">
+                <div className="relative w-full h-[50vh] min-h-[300px] bg-secondary">
                   <Image
                     src={image.imageUrl}
                     alt={image.description}
