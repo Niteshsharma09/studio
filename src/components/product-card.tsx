@@ -25,7 +25,7 @@ export function ProductCard({ product }: ProductCardProps) {
   return (
     <Card className="overflow-hidden group transition-all duration-300 border hover:shadow-lg">
       <Link href={`/product/${product.id}`} aria-label={`View details for ${product.name}`}>
-        <div className="relative aspect-square w-full bg-secondary/30">
+        <div className="relative aspect-video w-full bg-secondary/30">
             <Image
               src={imageUrl}
               alt={product.name}
@@ -38,7 +38,7 @@ export function ProductCard({ product }: ProductCardProps) {
       </Link>
       <CardContent className="p-4 text-center">
         <p className="text-sm font-medium text-muted-foreground">{product.brand}</p>
-        <h3 className="font-semibold text-base leading-tight mt-1">
+        <h3 className="font-semibold text-base leading-tight mt-1 h-10">
             <Link href={`/product/${product.id}`} className="hover:underline focus:underline">
               {product.name}
             </Link>

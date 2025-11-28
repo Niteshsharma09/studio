@@ -43,15 +43,17 @@ const CategoryCard = ({ title, imageId, href }: { title: string, imageId: string
     )
 }
 
-const ProductCollection = ({ title, products, id, showAllLink }: { title: string, products: Product[], id: string, showAllLink: string }) => (
+const ProductCollection = ({ title, products, id, showAllLink }: { title: string, products: Product[], id: string, showAllLink?: string }) => (
     <section id={id} className="py-12">
         <div className="flex justify-between items-center mb-8">
             <h2 className="text-3xl font-bold tracking-tight">{title}</h2>
-            <Button asChild variant="outline">
-                <Link href={showAllLink}>Show All</Link>
-            </Button>
+            {showAllLink && (
+              <Button asChild variant="outline">
+                  <Link href={showAllLink}>Show All</Link>
+              </Button>
+            )}
         </div>
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 gap-6">
             {products.slice(0, 4).map(product => (
                 <ProductCard key={product.id} product={product} />
             ))}
@@ -82,7 +84,7 @@ function ProductList() {
             product.brand.toLowerCase().includes(searchQuery.toLowerCase())
         );
     }
-
+    
     if (selectedBrands.length > 0) {
         products = products.filter(product => selectedBrands.includes(product.brand));
     }
@@ -104,7 +106,7 @@ function ProductList() {
     const productsToDisplay = category === 'frames' ? frameProducts 
                             : category === 'sunglasses' ? sunglassesProducts 
                             : category === 'lenses' ? lensesProducts 
-                            : filteredProducts;
+                            : [];
     const title = category.charAt(0).toUpperCase() + category.slice(1);
     
     return (
@@ -113,7 +115,7 @@ function ProductList() {
               <h2 className="text-3xl font-bold">{title}</h2>
               <p className="text-muted-foreground">{productsToDisplay?.length || 0} products found.</p>
             </div>
-            <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-6">
                 {productsToDisplay?.map(product => (
                     <ProductCard key={product.id} product={product} />
                 ))}
@@ -148,10 +150,13 @@ export default function Home() {
   ]
   const searchParams = useSearchParams();
   const category = searchParams.get('category');
+  const hasFilters = searchParams.has('brands') || searchParams.has('minPrice') || searchParams.has('maxPrice') || searchParams.has('q');
+
+  const shouldShowCollections = !category && !hasFilters;
 
   return (
     <div>
-        {!category && (
+        {shouldShowCollections && (
             <>
                 <section className="container mx-auto px-4 pt-12 pb-8">
                     <div className="grid grid-cols-2 md:grid-cols-3 gap-x-4 gap-y-8 justify-items-center">
@@ -191,11 +196,11 @@ export default function Home() {
         )}
 
       <div className="container mx-auto px-4 grid grid-cols-12 gap-8 items-start">
-        <div className="hidden lg:block lg:col-span-3">
+        <aside className="hidden lg:block lg:col-span-3">
           <Suspense fallback={<p>Loading filters...</p>}>
             <FilterSidebar />
           </Suspense>
-        </div>
+        </aside>
         <Suspense fallback={<div>Loading products...</div>}>
             <ProductList />
         </Suspense>

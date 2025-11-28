@@ -17,7 +17,7 @@ export function FilterSidebar() {
 
   const selectedBrands = useMemo(() => searchParams.get('brands')?.split(',') || [], [searchParams]);
   const minPrice = useMemo(() => Number(searchParams.get('minPrice') || 0), [searchParams]);
-  const maxPrice = useMemo(() => Number(searchParams.get('maxPrice') || 500), [searchParams]);
+  const maxPrice = useMemo(() => Number(searchParams.get('maxPrice') || 9999), [searchParams]);
 
   const maxProductPrice = useMemo(() => Math.max(...PRODUCTS.map(p => p.price), 500), []);
 
@@ -47,7 +47,11 @@ export function FilterSidebar() {
   };
 
   const clearFilters = () => {
-    router.replace(pathname);
+    const newParams = new URLSearchParams(searchParams);
+    newParams.delete('brands');
+    newParams.delete('minPrice');
+    newParams.delete('maxPrice');
+    router.replace(`${pathname}?${newParams.toString()}`);
   };
 
 
@@ -79,12 +83,12 @@ export function FilterSidebar() {
             min={0}
             max={maxProductPrice}
             step={10}
-            value={[minPrice, maxPrice]}
-            onValueChange={handlePriceChange}
+            defaultValue={[minPrice, maxPrice]}
+            onValueChangeCommitted={handlePriceChange}
           />
           <div className="flex justify-between text-sm text-muted-foreground mt-2">
             <span>₹{minPrice}</span>
-            <span>₹{maxPrice}</span>
+            <span>₹{maxPrice === 9999 ? `${maxProductPrice}+` : `₹${maxPrice}`}</span>
           </div>
         </div>
       </CardContent>
