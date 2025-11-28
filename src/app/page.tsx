@@ -151,10 +151,10 @@ function ProductFiltersAndList() {
 export default function Home() {
   const heroCarouselImages = PlaceHolderImages.filter(p => p.id.startsWith('hero-carousel-'));
   const categories = [
-      { title: 'Eyeglasses', imageId: 'category-eyeglasses', href: '/?type=Frames' },
-      { title: 'Sunglasses', imageId: 'category-sunglasses', href: '/?type=Sunglasses' },
-      { title: 'Lenses', imageId: 'category-lenses', href: '/?type=Lenses' },
-      { title: 'Contact Lenses', imageId: 'category-lenses', href: '/?type=Lenses' },
+      { title: 'Eyeglasses', imageId: 'category-eyeglasses', href: '/?type=Frames#products' },
+      { title: 'Sunglasses', imageId: 'category-sunglasses', href: '/?type=Sunglasses#products' },
+      { title: 'Lenses', imageId: 'category-lenses', href: '/?type=Lenses#products' },
+      { title: 'Contact Lenses', imageId: 'category-lenses', href: '/?type=Lenses#products' },
   ]
 
   return (
