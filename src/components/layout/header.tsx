@@ -29,9 +29,9 @@ export function Header() {
   }, [searchParams]);
 
   const navLinks = [
-    { href: '/?type=Frames', label: 'Eyeglasses' },
-    { href: '/?type=Sunglasses', label: 'Sunglasses' },
-    { href: '/?type=Lenses', label: 'Lenses' },
+    { href: '/#frames', label: 'Eyeglasses' },
+    { href: '/#sunglasses', label: 'Sunglasses' },
+    { href: '/#lenses', label: 'Lenses' },
     { href: '/style-guide', label: 'Style Guide' },
   ];
 
@@ -44,7 +44,7 @@ export function Header() {
       params.delete('q');
     }
     // Navigate to homepage to show search results
-    router.push(`/?${params.toString()}#products`);
+    router.push(`/?${params.toString()}`);
     if(isMobileMenuOpen) setIsMobileMenuOpen(false);
   };
 
@@ -177,7 +177,7 @@ export function Header() {
             href={link.href}
             className={cn(
               'transition-colors hover:text-primary',
-              (pathname.startsWith(link.href.split('?')[0]) && searchParams.get('type') === link.href.split('=')[1]) || pathname === link.href ? 'text-primary' : 'text-foreground/80'
+              pathname === link.href ? 'text-primary' : 'text-foreground/80'
             )}
           >
             {link.label}
