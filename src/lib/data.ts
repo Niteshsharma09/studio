@@ -1,7 +1,48 @@
+
 import type { Product } from './types';
 
 export const BRANDS = ['Ray-Ban', 'Oakley', 'Persol', 'Gucci', 'Prada'] as const;
 export const PRODUCT_TYPES = ['Frames', 'Lenses', 'Sunglasses'] as const;
+
+export const LENS_TYPES: Product[] = [
+  {
+    id: 'lens-zero',
+    name: 'Zero Power',
+    description: 'Standard lenses with no prescription. Includes anti-glare coating.',
+    price: 0.00,
+    brand: 'Generic',
+    type: 'Lenses',
+    imageId: 'clearblue-lenses',
+  },
+  {
+    id: 'lens-single-vision',
+    name: 'Single Vision',
+    description: 'Lenses for one field of vision—near, intermediate, or distance. Includes anti-glare coating.',
+    price: 999.00,
+    brand: 'Generic',
+    type: 'Lenses',
+    imageId: 'clearblue-lenses',
+  },
+  {
+    id: 'lens-photochromic',
+    name: 'Photochromic',
+    description: 'Lenses that automatically darken when exposed to sunlight. Includes anti-glare coating.',
+    price: 1499.00,
+    brand: 'Generic',
+    type: 'Lenses',
+    imageId: 'photochromic-lenses',
+  },
+    {
+    id: 'lens-bifocal',
+    name: 'Bifocal',
+    description: 'Lenses with two distinct optical powers, for both near and distant vision. Includes anti-glare coating.',
+    price: 2499.00,
+    brand: 'Generic',
+    type: 'Lenses',
+    imageId: 'polarized-pro-lenses',
+  },
+];
+
 
 export const PRODUCTS: Product[] = [
   {
@@ -113,3 +154,4 @@ export const PRODUCTS: Product[] = [
     imageId: 'minimalist-square-frames',
   },
 ];
+

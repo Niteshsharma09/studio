@@ -4,7 +4,7 @@
 
 import { useParams, useRouter } from 'next/navigation';
 import Image from 'next/image';
-import { PRODUCTS } from '@/lib/data';
+import { PRODUCTS, LENS_TYPES } from '@/lib/data';
 import { Button } from '@/components/ui/button';
 import { useCart } from '@/context/cart-context';
 import { PlaceHolderImages } from '@/lib/placeholder-images';
@@ -41,7 +41,7 @@ export default function ProductDetailPage() {
   const [deliveryDate, setDeliveryDate] = useState<Date | null>(null);
 
 
-  const lenses = useMemo(() => PRODUCTS.filter(p => p.type === 'Lenses') as Lens[], []);
+  const lenses = useMemo(() => LENS_TYPES as Lens[], []);
 
   const total_price = useMemo(() => {
     if (!product) return 0;
@@ -149,7 +149,7 @@ export default function ProductDetailPage() {
           {product.type === 'Frames' && (
             <div className="mt-8 space-y-2">
               <Label htmlFor="lens-select">Select Lenses (Optional)</Label>
-              <Select onValueChange={handleLensChange}>
+              <Select onValueChange={handleLensChange} defaultValue="none">
                 <SelectTrigger id="lens-select">
                   <SelectValue placeholder="No lenses" />
                 </SelectTrigger>
@@ -157,7 +157,7 @@ export default function ProductDetailPage() {
                   <SelectItem value="none">No lenses</SelectItem>
                   {lenses.map(lens => (
                     <SelectItem key={lens.id} value={lens.id}>
-                      {lens.name} (+{formatPrice(lens.price)})
+                      {lens.name} {lens.price > 0 ? `(+${formatPrice(lens.price)})` : ''}
                     </SelectItem>
                   ))}
                 </SelectContent>
@@ -238,3 +238,4 @@ export default function ProductDetailPage() {
     </div>
   );
 }
+
