@@ -1,6 +1,8 @@
 import type {NextConfig} from 'next';
 import path from 'path';
 import {fileURLToPath} from 'url';
+// @ts-ignore - no types for this module
+import withPWA from '@ducanh2912/next-pwa';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -28,7 +30,7 @@ const nextConfig: NextConfig = {
         pathname: '/**',
       },
       {
-        protocol: 'https://picsum.photos',
+        protocol: 'https',
         hostname: 'picsum.photos',
         port: '',
         pathname: '/**',
@@ -37,4 +39,11 @@ const nextConfig: NextConfig = {
   },
 };
 
-export default nextConfig;
+const pwaConfig = withPWA({
+  dest: 'public',
+  register: true,
+  skipWaiting: true,
+  disable: process.env.NODE_ENV === 'development',
+});
+
+export default pwaConfig(nextConfig);
