@@ -24,25 +24,24 @@ const CategoryCard = ({ title, imageId, href }: { title: string, imageId: string
     const placeholder = PlaceHolderImages.find(p => p.id === imageId);
     return (
         <Link href={href}>
-            <div className="text-center group">
-                <Card className="overflow-hidden mb-2 bg-gray-100 border-0 group-hover:shadow-md transition-shadow">
-                    <div className="relative aspect-[2/1]">
-                        {placeholder && (
-                            <Image
-                                src={placeholder.imageUrl}
-                                alt={title}
-                                fill
-                                className="object-contain p-2"
-                                sizes="200px"
-                            />
-                        )}
-                    </div>
-                </Card>
+            <div className="text-center group flex flex-col items-center">
+                <div className="relative w-32 h-32 md:w-40 md:h-40 mb-2 transition-shadow group-hover:shadow-lg rounded-full bg-gray-100 overflow-hidden">
+                    {placeholder && (
+                        <Image
+                            src={placeholder.imageUrl}
+                            alt={title}
+                            fill
+                            className="object-contain p-4"
+                            sizes="(max-width: 768px) 128px, 160px"
+                        />
+                    )}
+                </div>
                 <p className="font-medium text-sm text-foreground/90">{title}</p>
             </div>
         </Link>
     )
 }
+
 
 function ProductFiltersAndList() {
   const searchParams = useSearchParams();
@@ -158,8 +157,8 @@ export default function Home() {
 
   return (
     <div>
-        <section className="container mx-auto px-4 pt-8 pb-4">
-             <div className="grid grid-cols-2 md:grid-cols-4 gap-x-4 gap-y-8">
+        <section className="container mx-auto px-4 pt-12 pb-8">
+             <div className="grid grid-cols-2 md:grid-cols-3 gap-x-4 gap-y-8 justify-items-center">
                 {categories.map(cat => (
                     <CategoryCard key={cat.title} {...cat} />
                 ))}
