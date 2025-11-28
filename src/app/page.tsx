@@ -154,7 +154,6 @@ export default function Home() {
       { title: 'Eyeglasses', imageId: 'category-eyeglasses', href: '/?type=Frames#products' },
       { title: 'Sunglasses', imageId: 'category-sunglasses', href: '/?type=Sunglasses#products' },
       { title: 'Lenses', imageId: 'category-lenses', href: '/?type=Lenses#products' },
-      { title: 'Contact Lenses', imageId: 'category-lenses', href: '/?type=Lenses#products' },
   ]
 
   return (
