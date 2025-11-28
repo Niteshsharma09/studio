@@ -53,7 +53,7 @@ const ProductCollection = ({ title, products, id, showAllLink }: { title: string
               </Button>
             )}
         </div>
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
             {products.slice(0, 4).map(product => (
                 <ProductCard key={product.id} product={product} />
             ))}
@@ -115,7 +115,7 @@ function ProductList() {
               <h2 className="text-3xl font-bold">{title}</h2>
               <p className="text-muted-foreground">{productsToDisplay?.length || 0} products found.</p>
             </div>
-            <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
                 {productsToDisplay?.map(product => (
                     <ProductCard key={product.id} product={product} />
                 ))}
