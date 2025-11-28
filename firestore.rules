@@ -1,0 +1,45 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function isOwner(userId) {
+      return isSignedIn() && request.auth.uid == userId;
+    }
+
+    match /users/{userId} {
+      allow read, write: if isOwner(userId);
+    }
+
+    match /products/{productId} {
+      allow read: if true;
+      allow write: if false; // Admin only
+    }
+
+    match /frames/{frameId} {
+      allow read: if true;
+      allow write: if false; // Admin only
+    }
+
+    match /sunglasses/{sunglassId} {
+      allow read: if true;
+      allow write: if false; // Admin only
+    }
+
+    match /lenses/{lensId} {
+      allow read: if true;
+      allow write: if false; // Admin only
+    }
+
+    match /users/{userId}/orders/{orderId} {
+      allow read, create, update, delete: if isOwner(userId);
+
+      match /orderItems/{orderItemId} {
+        allow read, create, update, delete: if isOwner(userId);
+      }
+    }
+  }
+}

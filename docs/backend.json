@@ -1,0 +1,163 @@
+{
+  "entities": {
+    "User": {
+      "title": "User",
+      "description": "Represents a user of the application.",
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "The unique identifier for the user, matching the Firebase Auth UID."
+        },
+        "email": {
+          "type": "string",
+          "format": "email",
+          "description": "The user's email address."
+        },
+        "passwordHash": {
+          "type": "string",
+          "description": "The hashed password for the user."
+        },
+        "createdAt": {
+          "type": "number",
+          "description": "The timestamp of when the user was created."
+        },
+        "firstName": {
+          "type": "string",
+          "description": "The user's first name."
+        },
+        "lastName": {
+          "type": "string",
+          "description": "The user's last name."
+        },
+        "address": {
+          "type": "string",
+          "description": "The user's address."
+        },
+        "phone": {
+          "type": "string",
+          "description": "The user's phone number."
+        }
+      },
+      "required": ["id", "email", "createdAt"]
+    },
+    "Product": {
+      "title": "Product",
+      "description": "Represents a product in the store.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "name": { "type": "string" },
+        "description": { "type": "string" },
+        "price": { "type": "number" },
+        "imageUrl": { "type": "string" },
+        "category": { "type": "string" },
+        "createdAt": { "type": "number" },
+        "brand": { "type": "string" },
+        "material": { "type": "string" },
+        "color": { "type": "string" },
+        "gender": { "type": "string" },
+        "SKU": { "type": "string" }
+      },
+      "required": ["id", "name", "description", "price", "imageUrl", "category", "createdAt"]
+    },
+    "Frame": {
+      "title": "Frame",
+      "description": "Represents a frame product.",
+      "type": "object",
+      "properties": {
+        "productId": { "type": "string" },
+        "frameShape": { "type": "string" },
+        "size": { "type": "string" },
+        "templeLength": { "type": "string" },
+        "bridgeWidth": { "type": "string" }
+      },
+      "required": ["productId", "frameShape"]
+    },
+    "Sunglass": {
+      "title": "Sunglass",
+      "description": "Represents a sunglass product.",
+      "type": "object",
+      "properties": {
+        "productId": { "type": "string" },
+        "lensColor": { "type": "string" },
+        "polarization": { "type": "boolean" },
+        "UVProtection": { "type": "string" }
+      },
+      "required": ["productId", "lensColor"]
+    },
+    "Lens": {
+      "title": "Lens",
+      "description": "Represents a lens product.",
+      "type": "object",
+      "properties": {
+        "productId": { "type": "string" },
+        "lensType": { "type": "string" },
+        "material": { "type": "string" },
+        "coatings": { "type": "string" },
+        "prescriptionRange": { "type": "string" }
+      },
+      "required": ["productId", "lensType", "material"]
+    },
+    "Order": {
+      "title": "Order",
+      "description": "Represents an order made by a user.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "userId": { "type": "string" },
+        "orderDate": { "type": "number" },
+        "totalAmount": { "type": "number" },
+        "status": { "type": "string" },
+        "shippingAddress": { "type": "string" },
+        "billingAddress": { "type": "string" }
+      },
+      "required": ["id", "userId", "orderDate", "totalAmount", "status"]
+    },
+    "OrderItem": {
+      "title": "OrderItem",
+      "description": "Represents an item within an order.",
+      "type": "object",
+      "properties": {
+        "orderId": { "type": "string" },
+        "productId": { "type": "string" },
+        "quantity": { "type": "integer" },
+        "priceAtPurchase": { "type": "number" }
+      },
+      "required": ["orderId", "productId", "quantity", "priceAtPurchase"]
+    }
+  },
+  "auth": {
+    "providers": ["anonymous", "email-and-password", "google"]
+  },
+  "firestore": {
+    "/users/{userId}": {
+      "schema": { "$ref": "#/entities/User" },
+      "description": "Stores user profile information."
+    },
+    "/products/{productId}": {
+      "schema": { "$ref": "#/entities/Product" },
+      "description": "Stores all product details."
+    },
+    "/frames/{frameId}": {
+        "schema": { "$ref": "#/entities/Frame" },
+        "description": "Stores frame-specific product details."
+    },
+    "/sunglasses/{sunglassId}": {
+        "schema": { "$ref": "#/entities/Sunglass" },
+        "description": "Stores sunglass-specific product details."
+    },
+    "/lenses/{lensId}": {
+        "schema": { "$ref": "#/entities/Lens" },
+        "description": "Stores lens-specific product details."
+    },
+    "/users/{userId}/orders/{orderId}": {
+      "schema": { "$ref": "#/entities/Order" },
+      "description": "Stores user orders."
+    },
+    "/users/{userId}/orders/{orderId}/orderItems/{orderItemId}": {
+      "schema": { "$ref": "#/entities/OrderItem" },
+      "description": "Stores items within a user's order."
+    }
+  }
+}
