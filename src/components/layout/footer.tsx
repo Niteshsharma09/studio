@@ -36,10 +36,10 @@ export function Footer() {
           <div className="space-y-4">
             <Link href="/" className="flex items-center space-x-2">
                 <Glasses className="h-10 w-10 text-red-500" />
-                <span className="font-bold text-2xl text-white">Techno-i</span>
+                <span className="font-bold text-2xl">Techno-i</span>
             </Link>
             <h3 className="font-bold text-lg">Clear Vision Better Vision</h3>
-            <p className="text-sm text-gray-400">
+            <p className="text-sm text-muted-foreground">
               Techno-i is an ophthalmic optics company that designs, manufactures and markets lenses to correct or protect eyesight. It has German lacquer coating with nominal price.
             </p>
           </div>
@@ -99,8 +99,8 @@ export function Footer() {
           </div>
         </div>
       </div>
-      <div className="bg-black/20 py-4">
-          <div className="container mx-auto px-4 text-center text-sm text-gray-500">
+      <div className="bg-background/10 py-4">
+          <div className="container mx-auto px-4 text-center text-sm text-muted-foreground">
             <p>&copy; {new Date().getFullYear()} technoii. All rights reserved.</p>
           </div>
       </div>
