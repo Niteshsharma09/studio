@@ -23,7 +23,7 @@ export function ProductCard({ product }: ProductCardProps) {
   };
 
   return (
-    <Card className="overflow-hidden group transition-all duration-300 border hover:shadow-lg">
+    <Card className="overflow-hidden group transition-all duration-300 border hover:shadow-lg hover:-translate-y-1">
       <Link href={`/product/${product.id}`} aria-label={`View details for ${product.name}`}>
         <div className="relative aspect-video w-full bg-secondary/30">
             <Image

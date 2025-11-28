@@ -26,25 +26,25 @@ const CategoryCard = ({ title, imageId, href }: { title: string, imageId: string
     return (
         <Link href={href}>
             <div className="text-center group flex flex-col items-center">
-                <div className="relative w-32 h-32 md:w-40 md:h-40 mb-2 transition-shadow group-hover:shadow-lg rounded-full bg-gray-100 overflow-hidden">
+                <div className="relative w-32 h-32 md:w-40 md:h-40 mb-2 transition-all duration-300 group-hover:shadow-lg rounded-full bg-gray-100 overflow-hidden">
                     {placeholder && (
                         <Image
                             src={placeholder.imageUrl}
                             alt={title}
                             fill
-                            className="object-contain p-4"
+                            className="object-contain p-4 transition-transform duration-300 group-hover:scale-110"
                             sizes="(max-width: 768px) 128px, 160px"
                         />
                     )}
                 </div>
-                <p className="font-medium text-sm text-foreground/90">{title}</p>
+                <p className="font-medium text-sm text-foreground/90 transition-colors group-hover:text-primary">{title}</p>
             </div>
         </Link>
     )
 }
 
 const ProductCollection = ({ title, products, id, showAllLink }: { title: string, products: Product[], id: string, showAllLink?: string }) => (
-    <section id={id} className="py-12">
+    <section id={id} className="py-12 animate-fade-in-up">
         <div className="flex justify-between items-center mb-8">
             <h2 className="text-3xl font-bold tracking-tight">{title}</h2>
             {showAllLink && (
@@ -110,7 +110,7 @@ function ProductList() {
     const title = category.charAt(0).toUpperCase() + category.slice(1);
     
     return (
-        <div className="col-span-12 lg:col-span-9">
+        <div className="col-span-12 lg:col-span-9 animate-fade-in">
             <div className="mb-8 text-center">
               <h2 className="text-3xl font-bold">{title}</h2>
               <p className="text-muted-foreground">{productsToDisplay?.length || 0} products found.</p>
@@ -158,7 +158,7 @@ export default function Home() {
     <div>
         {shouldShowCollections && (
             <>
-                <section className="container mx-auto px-4 pt-12 pb-8">
+                <section className="container mx-auto px-4 pt-12 pb-8 animate-fade-in">
                     <div className="grid grid-cols-2 md:grid-cols-3 gap-x-4 gap-y-8 justify-items-center">
                         {categories.map(cat => (
                             <CategoryCard key={cat.title} {...cat} />
@@ -166,7 +166,7 @@ export default function Home() {
                     </div>
                 </section>
 
-                <section className="w-full pb-12">
+                <section className="w-full pb-12 animate-fade-in">
                     <Carousel
                     opts={{ loop: true }}
                     plugins={[Autoplay({ delay: 5000 })]}
