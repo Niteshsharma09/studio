@@ -9,7 +9,7 @@ export const LENS_TYPES: Product[] = [
     id: 'lens-zero',
     name: 'Zero Power',
     description: 'Standard lenses with no prescription. Includes anti-glare coating.',
-    price: 0.00,
+    price: 450.00,
     brand: 'Generic',
     type: 'Lenses',
     imageId: 'clearblue-lenses',
