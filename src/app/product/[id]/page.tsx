@@ -14,7 +14,7 @@ import { Input } from '@/components/ui/input';
 import { useToast } from '@/hooks/use-toast';
 import { useIsMobile } from '@/hooks/use-mobile';
 import { VirtualTryOn } from '@/components/virtual-try-on';
-import type { Lens } from '@/lib/types';
+import type { Lens, Product } from '@/lib/types';
 import {
   Select,
   SelectContent,
@@ -24,6 +24,8 @@ import {
 } from "@/components/ui/select";
 import { Label } from '@/components/ui/label';
 import { addDays, format } from 'date-fns';
+import { ProductCard } from '@/components/product-card';
+import { Separator } from '@/components/ui/separator';
 
 
 export default function ProductDetailPage() {
@@ -39,6 +41,11 @@ export default function ProductDetailPage() {
   const [pincode, setPincode] = useState('');
   const [deliveryStatus, setDeliveryStatus] = useState<'idle' | 'checking' | 'available' | 'unavailable'>('idle');
   const [deliveryDate, setDeliveryDate] = useState<Date | null>(null);
+
+  const similarProducts = useMemo(() => {
+    if (!product) return [];
+    return PRODUCTS.filter(p => p.type === product.type && p.id !== product.id).slice(0, 4);
+  }, [product]);
 
 
   const lenses = useMemo(() => LENS_TYPES as Lens[], []);
@@ -116,6 +123,7 @@ export default function ProductDetailPage() {
 
 
   return (
+    <>
     <div className="container mx-auto px-4 py-12">
       <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-start">
         <div className="aspect-[4/3] relative bg-card rounded-lg shadow-lg overflow-hidden">
@@ -236,6 +244,17 @@ export default function ProductDetailPage() {
         </div>
       </div>
     </div>
+    {similarProducts.length > 0 && (
+        <div className="container mx-auto px-4 py-16">
+          <Separator className="my-8" />
+          <h2 className="text-3xl font-bold tracking-tight text-center mb-8">Similar Products</h2>
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+            {similarProducts.map(p => (
+              <ProductCard key={p.id} product={p} />
+            ))}
+          </div>
+        </div>
+      )}
+    </>
   );
 }
-
