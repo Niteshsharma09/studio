@@ -21,7 +21,7 @@ export function Footer() {
 
   const FooterLink = ({ href, children }: { href: string; children: React.ReactNode }) => (
     <Link href={href}>
-      <span className="flex items-center gap-2 hover:text-primary transition-colors">
+      <span className="flex items-center gap-2 hover:text-accent transition-colors">
         <ChevronsRight className="w-4 h-4" />
         {children}
       </span>
@@ -35,11 +35,11 @@ export function Footer() {
           {/* Column 1: Logo and Description */}
           <div className="space-y-4">
             <Link href="/" className="flex items-center space-x-2">
-                <Glasses className="h-10 w-10 text-red-500" />
+                <Glasses className="h-10 w-10 text-accent" />
                 <span className="font-bold text-2xl">Techno-i</span>
             </Link>
             <h3 className="font-bold text-lg">Clear Vision Better Vision</h3>
-            <p className="text-sm text-muted-foreground">
+            <p className="text-sm text-muted-foreground/80">
               Techno-i is an ophthalmic optics company that designs, manufactures and markets lenses to correct or protect eyesight. It has German lacquer coating with nominal price.
             </p>
           </div>
@@ -72,15 +72,15 @@ export function Footer() {
           <div className="space-y-4">
             <h3 className="font-bold text-lg">Help</h3>
             <ul className="space-y-3 text-sm">
-              <li className="flex items-center gap-2">
-                <Mail className="w-4 h-4" />
-                <a href="mailto:technoi728@gmail.com" className="hover:text-primary transition-colors">
+              <li className="flex items-center gap-3">
+                <Mail className="w-5 h-5 text-accent" />
+                <a href="mailto:technoi728@gmail.com" className="hover:text-accent transition-colors">
                   technoi728@gmail.com
                 </a>
               </li>
-              <li className="flex items-center gap-2">
-                <Phone className="w-4 h-4" />
-                <a href="tel:+919399842936" className="hover:text-primary transition-colors">
+              <li className="flex items-center gap-3">
+                <Phone className="w-5 h-5 text-accent" />
+                <a href="tel:+919399842936" className="hover:text-accent transition-colors">
                   +919399842936
                 </a>
               </li>
@@ -89,10 +89,10 @@ export function Footer() {
                 <h4 className="font-semibold">Available Soon</h4>
                 <div className="flex items-center gap-2">
                     <a href="#" aria-label="Download on Google Play">
-                        <Image src="https://placehold.co/135x40/000000/FFFFFF?text=Google+Play" alt="Google Play" width={135} height={40} className="rounded-md" />
+                        <Image src="https://placehold.co/135x40/ffffff/000000?text=Google+Play" alt="Google Play" width={135} height={40} className="rounded-md opacity-80 hover:opacity-100 transition-opacity" />
                     </a>
                     <a href="#" aria-label="Download on the App Store">
-                        <Image src="https://placehold.co/135x40/000000/FFFFFF?text=App+Store" alt="App Store" width={135} height={40} className="rounded-md" />
+                        <Image src="https://placehold.co/135x40/ffffff/000000?text=App+Store" alt="App Store" width={135} height={40} className="rounded-md opacity-80 hover:opacity-100 transition-opacity" />
                     </a>
                 </div>
             </div>
