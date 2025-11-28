@@ -24,6 +24,7 @@ export function Header() {
   const [searchQuery, setSearchQuery] = useState(searchParams.get('q') || '');
 
   useEffect(() => {
+    // Update search input if URL query changes
     setSearchQuery(searchParams.get('q') || '');
   }, [searchParams]);
 
@@ -42,12 +43,14 @@ export function Header() {
     } else {
       params.delete('q');
     }
-    router.push(`${pathname}?${params.toString()}`);
+    // Navigate to homepage to show search results
+    router.push(`/?${params.toString()}`);
+    if(isMobileMenuOpen) setIsMobileMenuOpen(false);
   };
 
   return (
     <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-      <div className="container">
+      <div className="container px-4">
         {/* Top bar */}
         <div className="flex h-16 items-center">
           {/* Mobile Menu Trigger */}
@@ -60,19 +63,32 @@ export function Header() {
                 </Button>
               </SheetTrigger>
               <SheetContent side="left" className="w-full max-w-sm">
-                <div className="px-2 py-6">
-                  <Link href="/" className="flex items-center space-x-2 mb-8" onClick={() => setIsMobileMenuOpen(false)}>
-                    <UserCircle className="h-6 w-6 text-primary" />
-                    <span className="font-bold text-xl">technoii</span>
+                <div className="px-4 py-6">
+                  <Link href="/" className="flex items-center space-x-2 mb-6" onClick={() => setIsMobileMenuOpen(false)}>
+                    <UserCircle className="h-8 w-8 text-primary" />
+                    <span className="font-bold text-2xl">technoii</span>
                   </Link>
-                  <nav className="flex flex-col space-y-4">
+                  
+                  <form onSubmit={handleSearchSubmit} className="w-full mb-6">
+                    <div className="relative">
+                      <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                      <Input 
+                        placeholder="Search for products..." 
+                        className="pl-10"
+                        value={searchQuery}
+                        onChange={(e) => setSearchQuery(e.target.value)}
+                      />
+                    </div>
+                  </form>
+
+                  <nav className="flex flex-col space-y-4 text-lg">
                     {navLinks.map((link) => (
                       <Link
                         key={link.href}
                         href={link.href}
                         onClick={() => setIsMobileMenuOpen(false)}
                         className={cn(
-                          'text-lg font-medium transition-colors hover:text-foreground/80',
+                          'font-medium transition-colors hover:text-foreground/80',
                           pathname === link.href ? 'text-foreground' : 'text-foreground/60'
                         )}
                       >
@@ -93,8 +109,8 @@ export function Header() {
             </Sheet>
           </div>
 
-          {/* Desktop Logo & Phone */}
-          <div className="hidden lg:flex items-center gap-6">
+          {/* Desktop Logo */}
+          <div className="hidden lg:flex items-center">
             <Link href="/" className="flex items-center space-x-2">
               <UserCircle className="h-8 w-8 text-primary" />
               <span className="font-bold text-2xl">
@@ -106,14 +122,14 @@ export function Header() {
           {/* Mobile Logo (centered) */}
           <div className="flex-1 flex justify-center lg:hidden">
                <Link href="/" className="flex items-center space-x-2">
-                <UserCircle className="h-6 w-6 text-primary" />
-                <span className="font-bold text-lg">
+                <UserCircle className="h-7 w-7 text-primary" />
+                <span className="font-bold text-xl">
                   technoii
                 </span>
               </Link>
           </div>
           
-          {/* Search bar */}
+          {/* Desktop Search bar */}
            <div className="hidden lg:flex flex-1 justify-center px-8">
              <form onSubmit={handleSearchSubmit} className="w-full max-w-md">
                <div className="relative">
@@ -129,8 +145,8 @@ export function Header() {
            </div>
 
 
-          {/* Right Side: Auth, Wishlist, Cart */}
-          <div className="flex flex-1 items-center justify-end space-x-2 md:space-x-4">
+          {/* Right Side: Auth, Cart */}
+          <div className="flex flex-shrink-0 items-center justify-end space-x-2">
               <div className="hidden lg:flex items-center gap-2">
                   <Button asChild variant="outline">
                     <Link href="/login">Log In</Link>
@@ -152,7 +168,7 @@ export function Header() {
               </Button>
             </CartSheet>
 
-             {/* Mobile: Account Icon as placeholder */}
+             {/* Mobile: Account Icon */}
              <Link href="/login" className="lg:hidden">
               <Button variant="ghost" size="icon">
                   <UserCircle className="h-5 w-5" />
@@ -161,29 +177,23 @@ export function Header() {
              </Link>
           </div>
         </div>
-
-        {/* Bottom Nav */}
-        <nav className="hidden lg:flex items-center justify-center space-x-8 text-sm font-medium h-12 border-t">
-          {navLinks.map((link) => (
-            <Link
-              key={link.href}
-              href={link.href}
-              className={cn(
-                'transition-colors hover:text-primary',
-                pathname.startsWith(link.href) && pathname.includes('?') ? 'text-primary' : 'text-foreground/80'
-              )}
-            >
-              {link.label}
-            </Link>
-          ))}
-           <Link
-              href="/style-guide"
-              className={cn("font-bold text-sm text-primary hover:underline", { "text-primary": pathname === "/style-guide"})}
-            >
-              3D TRY ON
-            </Link>
-        </nav>
       </div>
+      
+      {/* Bottom Nav for Desktop */}
+      <nav className="hidden lg:flex container items-center justify-center space-x-8 text-sm font-medium h-12 border-t">
+        {navLinks.map((link) => (
+          <Link
+            key={link.href}
+            href={link.href}
+            className={cn(
+              'transition-colors hover:text-primary',
+              pathname.startsWith(link.href.split('?')[0]) && searchParams.get('type') === link.href.split('=')[1] ? 'text-primary' : 'text-foreground/80'
+            )}
+          >
+            {link.label}
+          </Link>
+        ))}
+      </nav>
     </header>
   );
 }

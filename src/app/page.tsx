@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useMemo, useEffect } from 'react';
+import { useState, useMemo, useEffect, Suspense } from 'react';
 import { ProductCard } from '@/components/product-card';
 import { PRODUCTS, BRANDS, PRODUCT_TYPES } from '@/lib/data';
 import { Checkbox } from '@/components/ui/checkbox';
@@ -44,7 +44,7 @@ const CategoryCard = ({ title, imageId, href }: { title: string, imageId: string
     )
 }
 
-export default function Home() {
+function ProductFiltersAndList() {
   const searchParams = useSearchParams();
   const typeFilterFromUrl = searchParams.get('type');
   const searchQuery = searchParams.get('q');
@@ -57,10 +57,9 @@ export default function Home() {
   useEffect(() => {
     const newTypes = typeFilterFromUrl ? [typeFilterFromUrl] : [];
     // Only update if the type filter from URL has actually changed
-    if (JSON.stringify(newTypes) !== JSON.stringify(filters.types)) {
-        setFilters(prev => ({ ...prev, types: newTypes }));
-    }
-  }, [typeFilterFromUrl, filters.types]);
+    // This prevents re-setting filters when search query changes
+    setFilters(prev => ({ ...prev, types: newTypes }));
+  }, [typeFilterFromUrl]);
 
 
   const handleFilterChange = (category: 'types' | 'brands', value: string) => {
@@ -82,6 +81,74 @@ export default function Home() {
     });
   }, [filters, searchQuery]);
   
+  return (
+    <div id="products" className="container mx-auto px-4 py-16">
+      <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
+        <aside className="lg:col-span-1">
+          <div className="sticky top-24 p-6 bg-card rounded-lg border">
+            <h2 className="text-xl font-bold mb-6">Filters</h2>
+            
+            <div>
+              <h3 className="font-semibold mb-4 text-base">Product Type</h3>
+              <div className="space-y-3">
+                {PRODUCT_TYPES.map(type => (
+                  <div key={type} className="flex items-center space-x-2">
+                    <Checkbox 
+                      id={`type-${type}`}
+                      checked={filters.types.includes(type)}
+                      onCheckedChange={() => handleFilterChange('types', type)}
+                    />
+                    <Label htmlFor={`type-${type}`} className="cursor-pointer text-sm font-normal">{type}</Label>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            <Separator className="my-6" />
+
+            <div>
+              <h3 className="font-semibold mb-4 text-base">Brand</h3>
+              <div className="space-y-3">
+                {BRANDS.map(brand => (
+                  <div key={brand} className="flex items-center space-x-2">
+                    <Checkbox 
+                      id={`brand-${brand}`}
+                      checked={filters.brands.includes(brand)}
+                      onCheckedChange={() => handleFilterChange('brands', brand)}
+                    />
+                    <Label htmlFor={`brand-${brand}`} className="cursor-pointer text-sm font-normal">{brand}</Label>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        </aside>
+
+        <main className="lg:col-span-3">
+          {searchQuery && (
+            <div className="mb-6">
+              <h2 className="text-2xl font-bold">Search results for &quot;{searchQuery}&quot;</h2>
+              <p className="text-muted-foreground">{filteredProducts.length} products found.</p>
+            </div>
+          )}
+          <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-6">
+            {filteredProducts.map(product => (
+              <ProductCard key={product.id} product={product} />
+            ))}
+          </div>
+          {filteredProducts.length === 0 && (
+              <div className="col-span-full flex flex-col items-center justify-center text-center h-96 bg-card rounded-lg border">
+                  <h3 className="text-2xl font-semibold">No Products Found</h3>
+                  <p className="text-muted-foreground mt-2">Try adjusting your filters or search query.</p>
+              </div>
+          )}
+        </main>
+      </div>
+    </div>
+  );
+}
+
+export default function Home() {
   const heroCarouselImages = PlaceHolderImages.filter(p => p.id.startsWith('hero-carousel-'));
   const categories = [
       { title: 'Eyeglasses', imageId: 'category-eyeglasses', href: '/?type=Frames' },
@@ -127,63 +194,9 @@ export default function Home() {
         </Carousel>
       </section>
 
-      <div id="products" className="container mx-auto px-4 py-16">
-        <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
-          <aside className="lg:col-span-1">
-            <div className="sticky top-24 p-6 bg-card rounded-lg border">
-              <h2 className="text-xl font-bold mb-6">Filters</h2>
-              
-              <div>
-                <h3 className="font-semibold mb-4 text-base">Product Type</h3>
-                <div className="space-y-3">
-                  {PRODUCT_TYPES.map(type => (
-                    <div key={type} className="flex items-center space-x-2">
-                      <Checkbox 
-                        id={`type-${type}`}
-                        checked={filters.types.includes(type)}
-                        onCheckedChange={() => handleFilterChange('types', type)}
-                      />
-                      <Label htmlFor={`type-${type}`} className="cursor-pointer text-sm font-normal">{type}</Label>
-                    </div>
-                  ))}
-                </div>
-              </div>
-
-              <Separator className="my-6" />
-
-              <div>
-                <h3 className="font-semibold mb-4 text-base">Brand</h3>
-                <div className="space-y-3">
-                  {BRANDS.map(brand => (
-                    <div key={brand} className="flex items-center space-x-2">
-                      <Checkbox 
-                        id={`brand-${brand}`}
-                        checked={filters.brands.includes(brand)}
-                        onCheckedChange={() => handleFilterChange('brands', brand)}
-                      />
-                      <Label htmlFor={`brand-${brand}`} className="cursor-pointer text-sm font-normal">{brand}</Label>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            </div>
-          </aside>
-
-          <main className="lg:col-span-3">
-            <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-6">
-              {filteredProducts.map(product => (
-                <ProductCard key={product.id} product={product} />
-              ))}
-            </div>
-            {filteredProducts.length === 0 && (
-                <div className="col-span-full flex flex-col items-center justify-center text-center h-96 bg-card rounded-lg border">
-                    <h3 className="text-2xl font-semibold">No Products Found</h3>
-                    <p className="text-muted-foreground mt-2">Try adjusting your filters or search query.</p>
-                </div>
-            )}
-          </main>
-        </div>
-      </div>
+      <Suspense fallback={<div>Loading filters...</div>}>
+        <ProductFiltersAndList />
+      </Suspense>
     </div>
   );
 }
