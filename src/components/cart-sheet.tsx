@@ -70,7 +70,7 @@ export function CartSheet({ children }: { children: React.ReactNode }) {
                             type="number"
                             min="1"
                             value={item.quantity}
-                            onChange={(e) => updateQuantity(item.product.id, parseInt(e.target.value, 10))}
+                            onChange={(e) => updateQuantity(item.product.id, parseInt(e.target.value, 10), item.lens?.id)}
                             className="w-16 h-8"
                             aria-label={`Quantity for ${item.product.name}`}
                           />
@@ -78,7 +78,7 @@ export function CartSheet({ children }: { children: React.ReactNode }) {
                       </div>
                       <div className="flex flex-col items-end space-y-2">
                         <p className="font-medium">{formatPrice(itemPrice * item.quantity)}</p>
-                        <Button variant="ghost" size="icon" className="h-8 w-8 text-muted-foreground" onClick={() => removeItem(item.product.id)}>
+                        <Button variant="ghost" size="icon" className="h-8 w-8 text-muted-foreground" onClick={() => removeItem(item.product.id, item.lens?.id)}>
                           <Trash2 className="h-4 w-4" />
                           <span className="sr-only">Remove {item.product.name}</span>
                         </Button>

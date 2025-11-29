@@ -39,8 +39,8 @@ export function ProductCard({ product }: ProductCardProps) {
 
   return (
     <Card className="overflow-hidden group transition-all duration-300 border hover:shadow-xl hover:-translate-y-1">
-      <div className="relative aspect-[4/3] w-full bg-secondary/30">
-          <Link href={`/product/${product.id}`} aria-label={`View details for ${product.name}`} className="block">
+      <Link href={`/product/${product.id}`} aria-label={`View details for ${product.name}`} className="block">
+        <div className="relative aspect-[4/3] w-full bg-secondary/30">
             <Image
               src={imageUrl}
               alt={product.name}
@@ -49,12 +49,11 @@ export function ProductCard({ product }: ProductCardProps) {
               data-ai-hint={imageHint}
               sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
             />
-          </Link>
             <div className="absolute top-2 right-2 flex flex-col gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
                 <Button size="icon" variant="secondary" className="h-9 w-9" asChild>
-                     <Link href={`/product/${product.id}`}>
+                     <div tabIndex={0} role="button">
                         <Eye className="h-4 w-4"/>
-                     </Link>
+                     </div>
                 </Button>
                 {product.type !== "Lenses" &&
                     <Button size="icon" variant="secondary" className="h-9 w-9" onClick={handleAddToCart}>
@@ -63,10 +62,11 @@ export function ProductCard({ product }: ProductCardProps) {
                 }
             </div>
         </div>
+      </Link>
       <CardContent className="p-4 text-left">
         <p className="text-sm font-medium text-muted-foreground">{product.brand}</p>
-        <h3 className="font-semibold text-base leading-tight mt-1 h-10 truncate">
-            <Link href={`/product/${product.id}`} className="hover:text-primary transition-colors">
+        <h3 className="font-semibold text-base leading-tight mt-1 h-10">
+            <Link href={`/product/${product.id}`} className="hover:text-primary transition-colors line-clamp-2">
               {product.name}
             </Link>
         </h3>

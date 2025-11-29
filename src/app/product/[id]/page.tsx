@@ -14,7 +14,7 @@ import { Input } from '@/components/ui/input';
 import { useToast } from '@/hooks/use-toast';
 import { useIsMobile } from '@/hooks/use-mobile';
 import { VirtualTryOn } from '@/components/virtual-try-on';
-import type { Lens, Product } from '@/lib/types';
+import type { Product } from '@/lib/types';
 import {
   Select,
   SelectContent,
@@ -36,7 +36,7 @@ export default function ProductDetailPage() {
   const { addItem, clearCart } = useCart();
   const { toast } = useToast();
   const [quantity, setQuantity] = useState(1);
-  const [selectedLens, setSelectedLens] = useState<Lens | null>(null);
+  const [selectedLens, setSelectedLens] = useState<Product | null>(null);
   const isMobile = useIsMobile();
   const [pincode, setPincode] = useState('');
   const [deliveryStatus, setDeliveryStatus] = useState<'idle' | 'checking' | 'available' | 'unavailable'>('idle');
@@ -48,7 +48,7 @@ export default function ProductDetailPage() {
   }, [product]);
 
 
-  const lenses = useMemo(() => LENS_TYPES as Lens[], []);
+  const lenses = useMemo(() => LENS_TYPES as Product[], []);
 
   const total_price = useMemo(() => {
     if (!product) return 0;
@@ -183,12 +183,12 @@ export default function ProductDetailPage() {
                 className="w-20"
                 aria-label="Quantity"
               />
-              <Button size="lg" className="flex-1 bg-gray-800 hover:bg-gray-900" onClick={handleAddToCart}>
+              <Button size="lg" className="flex-1" onClick={handleAddToCart}>
                 <ShoppingBag className="mr-2 h-5 w-5" />
                 Add to Cart
               </Button>
             </div>
-            <Button size="lg" variant="default" className="w-full bg-gray-800 hover:bg-gray-900" onClick={handleBuyNow}>
+            <Button size="lg" variant="default" className="w-full" onClick={handleBuyNow}>
               <Zap className="mr-2 h-5 w-5" />
               Buy Now
             </Button>

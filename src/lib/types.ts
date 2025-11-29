@@ -10,7 +10,7 @@ export type Product = {
   color?: string;
   gender?: string;
   SKU?: string;
-  createdAt: number;
+  createdAt?: number;
 };
 
 export type Frame = Product & {
@@ -30,7 +30,7 @@ export type Sunglass = Product & {
 
 export type Lens = Product & {
   type: 'Lenses';
-  lensType: string;
+  lensType?: string;
   coatings?: string;
   prescriptionRange?: string;
 };
@@ -66,5 +66,5 @@ export type OrderItem = {
 export type CartItem = {
   product: Product;
   quantity: number;
-  lens?: Lens;
+  lens?: Product;
 };
