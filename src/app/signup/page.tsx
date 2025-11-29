@@ -169,7 +169,7 @@ export default function SignUpPage() {
                             )}
                         />
                         <Button type="submit" className="w-full" size="lg" disabled={isLoading}>
-                            {isLoading ? <Loader2 className="animate-spin" /> : <UserPlus />}
+                            {isLoading ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <UserPlus className="mr-2 h-4 w-4" />}
                             Sign Up
                         </Button>
                     </form>
@@ -185,5 +185,3 @@ export default function SignUpPage() {
         </div>
     );
 }
-
-    

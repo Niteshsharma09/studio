@@ -120,7 +120,7 @@ export default function LoginPage() {
                 )}
               />
               <Button type="submit" className="w-full" size="lg" disabled={isLoading}>
-                {isLoading ? <Loader2 className="animate-spin" /> : <LogIn />}
+                {isLoading ? <Loader2 className="animate-spin" /> : <LogIn className="mr-2 h-4 w-4" />}
                 Log In
               </Button>
             </form>
@@ -136,5 +136,3 @@ export default function LoginPage() {
     </div>
   );
 }
-
-    
