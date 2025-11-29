@@ -2,7 +2,7 @@
 "use client";
 
 import Link from 'next/link';
-import { ShoppingBag, Search, Menu, UserCircle, LogOut, LayoutDashboard } from 'lucide-react';
+import { ShoppingBag, Search, Menu, UserCircle, LogOut, LayoutDashboard, Glasses } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { CartSheet } from '@/components/cart-sheet';
 import { useCart } from '@/context/cart-context';
@@ -122,7 +122,7 @@ export function Header() {
               <SheetContent side="left" className="w-full max-w-sm">
                 <div className="px-4 py-6">
                   <Link href="/" className="flex items-center space-x-2 mb-6" onClick={() => setIsMobileMenuOpen(false)}>
-                    <UserCircle className="h-8 w-8 text-primary" />
+                    <Glasses className="h-8 w-8 text-primary" />
                     <span className="font-bold text-2xl">technoii</span>
                   </Link>
                   
@@ -174,7 +174,7 @@ export function Header() {
           
           <div className="flex items-center">
             <Link href="/" className="flex items-center space-x-2">
-              <UserCircle className="h-8 w-8 text-primary" />
+              <Glasses className="h-8 w-8 text-primary" />
               <span className="font-bold text-2xl">
                 technoii
               </span>
@@ -258,5 +258,3 @@ export function Header() {
     </header>
   );
 }
-
-    
