@@ -59,13 +59,17 @@ export default function SignUpPage() {
             const userCredential = await createUserWithEmailAndPassword(auth, values.email, values.password);
             const user = userCredential.user;
 
+            const nameParts = values.name.trim().split(/\s+/);
+            const firstName = nameParts[0];
+            const lastName = nameParts.slice(1).join(" ");
+
             // 2. Create user profile in Firestore
             const userRef = doc(firestore, "users", user.uid);
             await setDoc(userRef, {
                 id: user.uid,
                 email: values.email,
-                firstName: values.name.split(' ')[0] || '',
-                lastName: values.name.split(' ').slice(1).join(' ') || '',
+                firstName: firstName,
+                lastName: lastName,
                 createdAt: serverTimestamp()
             });
 

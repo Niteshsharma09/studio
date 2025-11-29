@@ -35,7 +35,7 @@
           "description": "The user's phone number."
         }
       },
-      "required": ["id", "email", "createdAt"]
+      "required": ["id", "email", "createdAt", "firstName"]
     },
     "Product": {
       "title": "Product",
