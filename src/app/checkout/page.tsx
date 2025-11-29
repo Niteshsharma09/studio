@@ -24,6 +24,9 @@ import { useRouter } from "next/navigation";
 import { useToast } from "@/hooks/use-toast";
 import { useEffect, useState } from "react";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { useUser } from "@/firebase";
+import { useFirestore } from "@/firebase/provider";
+import { addDoc, collection, serverTimestamp } from "firebase/firestore";
 
 const shippingSchema = z.object({
   email: z.string().email(),
@@ -71,6 +74,8 @@ const checkoutSchema = shippingSchema.merge(paymentSchema).superRefine((data, ct
 
 export default function CheckoutPage() {
   const { cartItems, cartTotal, clearCart } = useCart();
+  const { user } = useUser();
+  const firestore = useFirestore();
   const router = useRouter();
   const { toast } = useToast();
   const [isProcessing, setIsProcessing] = useState(false);
@@ -78,7 +83,7 @@ export default function CheckoutPage() {
   const form = useForm<z.infer<typeof checkoutSchema>>({
     resolver: zodResolver(checkoutSchema),
     defaultValues: {
-      email: "",
+      email: user?.email || "",
       firstName: "",
       lastName: "",
       address: "",
@@ -95,35 +100,86 @@ export default function CheckoutPage() {
   });
 
   const paymentMethod = form.watch("paymentMethod");
+  
+  useEffect(() => {
+      if (!user) {
+          router.push('/login');
+      }
+  }, [user, router]);
 
   useEffect(() => {
     if (cartItems.length === 0 && !isProcessing) {
+      toast({ title: 'Your cart is empty', description: 'Redirecting you to the homepage.', variant: 'destructive' });
       router.push('/');
     }
-  }, [cartItems, router, isProcessing]);
+  }, [cartItems, router, isProcessing, toast]);
   
-  if (cartItems.length === 0) {
-    return null; // Or a loading spinner while redirecting
+  useEffect(() => {
+    if (user?.email) {
+      form.setValue('email', user.email);
+    }
+  }, [user, form]);
+  
+  if (cartItems.length === 0 || !user) {
+    return (
+        <div className="flex h-screen items-center justify-center">
+            <Loader2 className="h-16 w-16 animate-spin" />
+        </div>
+    );
   }
 
   const formatPrice = (price: number) => {
     return new Intl.NumberFormat("en-IN", { style: "currency", currency: "INR" }).format(price);
   };
 
-  const onSubmit = (values: z.infer<typeof checkoutSchema>) => {
+  const onSubmit = async (values: z.infer<typeof checkoutSchema>) => {
     console.log("Form submitted", values);
     setIsProcessing(true);
 
-    // Simulate API call to payment gateway
-    setTimeout(() => {
-        setIsProcessing(false);
+    try {
+        if (!user) throw new Error("User not authenticated");
+
+        // 1. Create the order document
+        const ordersRef = collection(firestore, `users/${user.uid}/orders`);
+        const orderDoc = await addDoc(ordersRef, {
+            userId: user.uid,
+            orderDate: serverTimestamp(),
+            totalAmount: cartTotal,
+            status: 'pending',
+            shippingAddress: `${values.address}, ${values.city}, ${values.zipCode}, ${values.country}`,
+            billingAddress: `${values.address}, ${values.city}, ${values.zipCode}, ${values.country}`,
+        });
+
+        // 2. Create the order items subcollection
+        const orderItemsRef = collection(orderDoc, 'orderItems');
+        for (const item of cartItems) {
+            await addDoc(orderItemsRef, {
+                productId: item.product.id,
+                quantity: item.quantity,
+                priceAtPurchase: item.product.price + (item.lens?.price || 0),
+                productName: item.product.name, // Store some denormalized data
+                lensName: item.lens?.name || null,
+            });
+        }
+        
+        // 3. Success
         toast({
             title: "Purchase Successful!",
             description: "Thank you for your order. A confirmation has been sent to your email."
         });
         clearCart();
         router.push('/');
-    }, 2000); // 2-second delay
+
+    } catch (error) {
+        console.error("Order submission failed: ", error);
+        toast({
+            title: "Order Failed",
+            description: "There was a problem submitting your order. Please try again.",
+            variant: "destructive",
+        });
+    } finally {
+        setIsProcessing(false);
+    }
   };
 
   return (
@@ -173,7 +229,7 @@ export default function CheckoutPage() {
                     </CardHeader>
                     <CardContent className="space-y-4">
                         <FormField control={form.control} name="email" render={({ field }) => (
-                            <FormItem><FormLabel>Email</FormLabel><FormControl><Input {...field} /></FormControl><FormMessage /></FormItem>
+                            <FormItem><FormLabel>Email</FormLabel><FormControl><Input {...field} readOnly /></FormControl><FormMessage /></FormItem>
                         )}/>
                         <div className="grid grid-cols-2 gap-4">
                             <FormField control={form.control} name="firstName" render={({ field }) => (

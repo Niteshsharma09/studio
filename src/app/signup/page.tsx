@@ -1,3 +1,4 @@
+
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -17,7 +18,12 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useToast } from "@/hooks/use-toast";
-import { UserPlus } from "lucide-react";
+import { Loader2, UserPlus } from "lucide-react";
+import { useAuth, useFirestore } from "@/firebase/provider";
+import { createUserWithEmailAndPassword } from "firebase/auth";
+import { doc, setDoc, serverTimestamp } from "firebase/firestore";
+import { useState } from "react";
+import { FirebaseError } from "firebase/app";
 
 const formSchema = z.object({
     name: z.string().min(2, { message: "Name must be at least 2 characters." }),
@@ -32,6 +38,9 @@ const formSchema = z.object({
 export default function SignUpPage() {
     const router = useRouter();
     const { toast } = useToast();
+    const auth = useAuth();
+    const firestore = useFirestore();
+    const [isLoading, setIsLoading] = useState(false);
 
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
@@ -43,14 +52,54 @@ export default function SignUpPage() {
         },
     });
 
-    function onSubmit(values: z.infer<typeof formSchema>) {
-        console.log(values);
-        // TODO: Implement actual signup logic
-        toast({
-            title: "Account Created",
-            description: "You have successfully signed up.",
-        });
-        router.push("/");
+    async function onSubmit(values: z.infer<typeof formSchema>) {
+        setIsLoading(true);
+        try {
+            // 1. Create user in Firebase Auth
+            const userCredential = await createUserWithEmailAndPassword(auth, values.email, values.password);
+            const user = userCredential.user;
+
+            // 2. Create user profile in Firestore
+            const userRef = doc(firestore, "users", user.uid);
+            await setDoc(userRef, {
+                id: user.uid,
+                email: values.email,
+                firstName: values.name.split(' ')[0] || '',
+                lastName: values.name.split(' ').slice(1).join(' ') || '',
+                createdAt: serverTimestamp()
+            });
+
+            toast({
+                title: "Account Created",
+                description: "You have successfully signed up.",
+            });
+            router.push("/");
+        } catch (error) {
+            console.error("Signup Error: ", error);
+            let description = "An unexpected error occurred. Please try again.";
+            if (error instanceof FirebaseError) {
+                switch(error.code) {
+                    case 'auth/email-already-in-use':
+                        description = "This email is already in use. Please log in or use a different email.";
+                        break;
+                    case 'auth/invalid-email':
+                        description = "The email address is not valid.";
+                        break;
+                    case 'auth/weak-password':
+                        description = "The password is too weak. Please use at least 6 characters.";
+                        break;
+                    default:
+                        description = "Failed to create an account. Please try again later.";
+                }
+            }
+            toast({
+                title: "Signup Failed",
+                description: description,
+                variant: "destructive"
+            });
+        } finally {
+            setIsLoading(false);
+        }
     }
 
     return (
@@ -115,8 +164,8 @@ export default function SignUpPage() {
                                 </FormItem>
                             )}
                         />
-                        <Button type="submit" className="w-full" size="lg">
-                            <UserPlus className="mr-2" />
+                        <Button type="submit" className="w-full" size="lg" disabled={isLoading}>
+                            {isLoading ? <Loader2 className="animate-spin" /> : <UserPlus />}
                             Sign Up
                         </Button>
                     </form>
@@ -132,3 +181,5 @@ export default function SignUpPage() {
         </div>
     );
 }
+
+    

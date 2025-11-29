@@ -1,12 +1,21 @@
+
 "use client";
 
 import Link from 'next/link';
-import { ShoppingBag, Search, Menu, UserCircle } from 'lucide-react';
+import { ShoppingBag, Search, Menu, UserCircle, LogOut, LayoutDashboard } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { CartSheet } from '@/components/cart-sheet';
 import { useCart } from '@/context/cart-context';
 import { cn } from '@/lib/utils';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu"
 import {
   Sheet,
   SheetContent,
@@ -14,9 +23,17 @@ import {
 } from "@/components/ui/sheet"
 import { useState, useEffect } from 'react';
 import { Input } from '@/components/ui/input';
+import { useUser } from '@/firebase';
+import { signOut } from 'firebase/auth';
+import { useAuth } from '@/firebase/provider';
+import { Avatar, AvatarFallback, AvatarImage } from '../ui/avatar';
+import { useToast } from '@/hooks/use-toast';
 
 export function Header() {
   const { cartCount } = useCart();
+  const { user, loading } = useUser();
+  const auth = useAuth();
+  const { toast } = useToast();
   const pathname = usePathname();
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -24,14 +41,13 @@ export function Header() {
   const [searchQuery, setSearchQuery] = useState(searchParams.get('q') || '');
 
   useEffect(() => {
-    // Update search input if URL query changes
     setSearchQuery(searchParams.get('q') || '');
   }, [searchParams]);
 
   const navLinks = [
-    { href: '/#frames', label: 'Eyeglasses' },
-    { href: '/#sunglasses', label: 'Sunglasses' },
-    { href: '/#lenses', label: 'Lenses' },
+    { href: '/?category=frames', label: 'Eyeglasses' },
+    { href: '/?category=sunglasses', label: 'Sunglasses' },
+    { href: '/?category=lenses', label: 'Lenses' },
     { href: '/style-guide', label: 'Style Guide' },
   ];
 
@@ -43,17 +59,58 @@ export function Header() {
     } else {
       params.delete('q');
     }
-    // Navigate to homepage to show search results
     router.push(`/?${params.toString()}`);
     if(isMobileMenuOpen) setIsMobileMenuOpen(false);
   };
+  
+  const handleLogout = async () => {
+    await signOut(auth);
+    toast({ title: 'Logged Out', description: 'You have been successfully logged out.' });
+    router.push('/');
+  }
+
+  const getInitials = (name?: string | null) => {
+    if (!name) return 'U';
+    return name.split(' ').map(n => n[0]).join('').toUpperCase();
+  }
+
+  const UserMenu = () => (
+    <DropdownMenu>
+      <DropdownMenuTrigger asChild>
+        <Button variant="ghost" className="relative h-8 w-8 rounded-full">
+            <Avatar className="h-8 w-8">
+              <AvatarImage src={user?.photoURL || ''} alt={user?.displayName || 'User'} />
+              <AvatarFallback>{getInitials(user?.displayName || user?.email)}</AvatarFallback>
+            </Avatar>
+        </Button>
+      </DropdownMenuTrigger>
+      <DropdownMenuContent className="w-56" align="end" forceMount>
+        <DropdownMenuLabel className="font-normal">
+          <div className="flex flex-col space-y-1">
+            <p className="text-sm font-medium leading-none">{user?.displayName || 'User'}</p>
+            <p className="text-xs leading-none text-muted-foreground">
+              {user?.email}
+            </p>
+          </div>
+        </DropdownMenuLabel>
+        <DropdownMenuSeparator />
+        <DropdownMenuItem>
+          <LayoutDashboard className="mr-2 h-4 w-4" />
+          <span>My Orders</span>
+        </DropdownMenuItem>
+        <DropdownMenuSeparator />
+        <DropdownMenuItem onClick={handleLogout}>
+          <LogOut className="mr-2 h-4 w-4" />
+          <span>Log out</span>
+        </DropdownMenuItem>
+      </DropdownMenuContent>
+    </DropdownMenu>
+  );
 
   return (
     <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
       <div className="container px-4">
-        {/* Top bar */}
         <div className="flex h-16 items-center">
-          {/* Mobile Menu & Logo */}
           <div className="flex items-center lg:hidden">
             <Sheet open={isMobileMenuOpen} onOpenChange={setIsMobileMenuOpen}>
               <SheetTrigger asChild>
@@ -96,20 +153,25 @@ export function Header() {
                       </Link>
                     ))}
                   </nav>
-                   <div className="mt-8 space-y-2">
-                    <Button asChild variant="outline" className="w-full">
-                      <Link href="/login" onClick={() => setIsMobileMenuOpen(false)}>Log In</Link>
-                    </Button>
-                    <Button asChild className="w-full">
-                      <Link href="/signup" onClick={() => setIsMobileMenuOpen(false)}>Sign Up</Link>
-                    </Button>
+                  <div className="mt-8 space-y-2">
+                    {user ? (
+                      <Button onClick={handleLogout} variant="outline" className="w-full">Log Out</Button>
+                    ) : (
+                      <>
+                        <Button asChild variant="outline" className="w-full">
+                          <Link href="/login" onClick={() => setIsMobileMenuOpen(false)}>Log In</Link>
+                        </Button>
+                        <Button asChild className="w-full">
+                          <Link href="/signup" onClick={() => setIsMobileMenuOpen(false)}>Sign Up</Link>
+                        </Button>
+                      </>
+                    )}
                   </div>
                 </div>
               </SheetContent>
             </Sheet>
           </div>
           
-          {/* Logo */}
           <div className="flex items-center">
             <Link href="/" className="flex items-center space-x-2">
               <UserCircle className="h-8 w-8 text-primary" />
@@ -119,9 +181,8 @@ export function Header() {
             </Link>
           </div>
           
-          {/* Search bar */}
            <div className="flex-1 flex justify-center px-4 sm:px-8">
-             <form onSubmit={handleSearchSubmit} className="w-full max-w-md">
+             <form onSubmit={handleSearchSubmit} className="w-full max-w-md hidden lg:block">
                <div className="relative">
                  <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
                  <Input 
@@ -134,17 +195,23 @@ export function Header() {
              </form>
            </div>
 
-
-          {/* Right Side: Auth, Cart */}
           <div className="flex flex-shrink-0 items-center justify-end space-x-2">
-              <div className="hidden lg:flex items-center gap-2">
-                  <Button asChild variant="outline">
-                    <Link href="/login">Log In</Link>
-                  </Button>
-                  <Button asChild>
-                    <Link href="/signup">Sign Up</Link>
-                  </Button>
-              </div>
+            <div className="hidden lg:flex items-center gap-2">
+              {!loading && (
+                user ? (
+                  <UserMenu />
+                ) : (
+                  <>
+                    <Button asChild variant="outline">
+                      <Link href="/login">Log In</Link>
+                    </Button>
+                    <Button asChild>
+                      <Link href="/signup">Sign Up</Link>
+                    </Button>
+                  </>
+                )
+              )}
+            </div>
 
             <CartSheet>
               <Button variant="ghost" size="icon" className="relative">
@@ -158,18 +225,22 @@ export function Header() {
               </Button>
             </CartSheet>
 
-             {/* Mobile: Account Icon */}
-             <Link href="/login" className="lg:hidden">
-              <Button variant="ghost" size="icon">
-                  <UserCircle className="h-5 w-5" />
-                  <span className="sr-only">Account</span>
-              </Button>
-             </Link>
+             {/* Mobile: Account Icon shows user menu or login link */}
+             <div className="lg:hidden">
+              {!loading && (
+                user ? <UserMenu /> :
+                <Link href="/login">
+                  <Button variant="ghost" size="icon">
+                      <UserCircle className="h-5 w-5" />
+                      <span className="sr-only">Account</span>
+                  </Button>
+                </Link>
+              )}
+             </div>
           </div>
         </div>
       </div>
       
-      {/* Bottom Nav for Desktop */}
       <nav className="hidden lg:flex container items-center justify-center space-x-8 text-sm font-medium h-12 border-t">
         {navLinks.map((link) => (
           <Link
@@ -177,7 +248,7 @@ export function Header() {
             href={link.href}
             className={cn(
               'transition-colors hover:text-primary',
-              pathname === link.href ? 'text-primary' : 'text-foreground/80'
+              (pathname + searchParams.toString()).includes(link.href.substring(1)) ? 'text-primary' : 'text-foreground/80'
             )}
           >
             {link.label}
@@ -187,3 +258,5 @@ export function Header() {
     </header>
   );
 }
+
+    

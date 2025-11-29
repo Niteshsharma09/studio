@@ -1,3 +1,4 @@
+
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -17,7 +18,11 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useToast } from "@/hooks/use-toast";
-import { LogIn } from "lucide-react";
+import { Loader2, LogIn } from "lucide-react";
+import { useAuth } from "@/firebase/provider";
+import { signInWithEmailAndPassword } from "firebase/auth";
+import { useState } from "react";
+import { FirebaseError } from "firebase/app";
 
 const formSchema = z.object({
   email: z.string().email({
@@ -31,6 +36,8 @@ const formSchema = z.object({
 export default function LoginPage() {
   const router = useRouter();
   const { toast } = useToast();
+  const auth = useAuth();
+  const [isLoading, setIsLoading] = useState(false);
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -40,14 +47,40 @@ export default function LoginPage() {
     },
   });
 
-  function onSubmit(values: z.infer<typeof formSchema>) {
-    console.log(values);
-    // TODO: Implement actual login logic
-    toast({
-      title: "Logged In Successfully",
-      description: "Welcome back!",
-    });
-    router.push("/");
+  async function onSubmit(values: z.infer<typeof formSchema>) {
+    setIsLoading(true);
+    try {
+      await signInWithEmailAndPassword(auth, values.email, values.password);
+      toast({
+        title: "Logged In Successfully",
+        description: "Welcome back!",
+      });
+      router.push("/");
+    } catch (error) {
+        console.error("Login Error: ", error);
+        let description = "An unexpected error occurred. Please try again.";
+        if (error instanceof FirebaseError) {
+            switch(error.code) {
+                case 'auth/user-not-found':
+                case 'auth/wrong-password':
+                case 'auth/invalid-credential':
+                    description = "Invalid email or password. Please try again.";
+                    break;
+                case 'auth/invalid-email':
+                    description = "The email address is not valid.";
+                    break;
+                default:
+                    description = "Failed to log in. Please try again later.";
+            }
+        }
+        toast({
+            title: "Login Failed",
+            description: description,
+            variant: "destructive"
+        });
+    } finally {
+        setIsLoading(false);
+    }
   }
 
   return (
@@ -86,8 +119,8 @@ export default function LoginPage() {
                   </FormItem>
                 )}
               />
-              <Button type="submit" className="w-full" size="lg">
-                <LogIn className="mr-2" />
+              <Button type="submit" className="w-full" size="lg" disabled={isLoading}>
+                {isLoading ? <Loader2 className="animate-spin" /> : <LogIn />}
                 Log In
               </Button>
             </form>
@@ -103,3 +136,5 @@ export default function LoginPage() {
     </div>
   );
 }
+
+    
