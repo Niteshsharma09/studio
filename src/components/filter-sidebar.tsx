@@ -84,7 +84,7 @@ export function FilterSidebar() {
             max={maxProductPrice}
             step={10}
             defaultValue={[minPrice, maxPrice]}
-            onValueChangeCommitted={handlePriceChange}
+            onValueChange={handlePriceChange}
           />
           <div className="flex justify-between text-sm text-muted-foreground mt-2">
             <span>₹{minPrice}</span>
