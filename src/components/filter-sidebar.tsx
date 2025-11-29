@@ -56,7 +56,7 @@ export function FilterSidebar() {
 
 
   return (
-    <Card className="sticky top-20">
+    <Card>
       <CardHeader className="flex flex-row items-center justify-between">
         <CardTitle>Filters</CardTitle>
         <Button variant="ghost" size="sm" onClick={clearFilters}>Clear All</Button>

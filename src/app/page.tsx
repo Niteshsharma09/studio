@@ -8,53 +8,65 @@ import Image from 'next/image';
 import { PlaceHolderImages } from '@/lib/placeholder-images';
 import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
-import {
-  Carousel,
-  CarouselContent,
-  CarouselItem,
-  CarouselNext,
-  CarouselPrevious,
-} from "@/components/ui/carousel";
-import Autoplay from "embla-carousel-autoplay";
 import type { Product } from '@/lib/types';
-import { Separator } from '@/components/ui/separator';
 import { Button } from '@/components/ui/button';
 import { FilterSidebar } from '@/components/filter-sidebar';
+import { ArrowRight } from 'lucide-react';
+
+const HeroSection = () => {
+    const heroImage = PlaceHolderImages.find(p => p.id === 'hero-image');
+    return (
+        <section className="relative w-full h-[60vh] min-h-[400px] flex items-center justify-center text-center bg-secondary animate-fade-in">
+            {heroImage && (
+                 <Image
+                    src={heroImage.imageUrl}
+                    alt={heroImage.description}
+                    fill
+                    className="object-cover"
+                    data-ai-hint={heroImage.imageHint}
+                    priority
+                />
+            )}
+            <div className="absolute inset-0 bg-black/50" />
+            <div className="relative z-10 p-4 text-primary-foreground max-w-3xl">
+                <h1 className="text-4xl md:text-6xl font-bold tracking-tighter leading-tight">Clarity in Sight, Style in Mind</h1>
+                <p className="mt-4 text-lg md:text-xl max-w-xl mx-auto">Discover our exclusive collection of premium eyewear, crafted with precision for unparalleled comfort and style.</p>
+                <Button asChild size="lg" className="mt-8">
+                    <Link href="/#featured">Shop Now <ArrowRight className="ml-2"/></Link>
+                </Button>
+            </div>
+        </section>
+    )
+}
 
 const CategoryCard = ({ title, imageId, href }: { title: string, imageId: string, href: string }) => {
     const placeholder = PlaceHolderImages.find(p => p.id === imageId);
     return (
-        <Link href={href}>
-            <div className="text-center group flex flex-col items-center">
-                <div className="relative w-32 h-32 md:w-40 md:h-40 mb-2 transition-all duration-300 group-hover:shadow-lg rounded-full bg-gray-100 overflow-hidden">
-                    {placeholder && (
-                        <Image
-                            src={placeholder.imageUrl}
-                            alt={title}
-                            fill
-                            className="object-contain p-4 transition-transform duration-300 group-hover:scale-110"
-                            sizes="(max-width: 768px) 128px, 160px"
-                        />
-                    )}
-                </div>
-                <p className="font-medium text-sm text-foreground/90 transition-colors group-hover:text-primary">{title}</p>
+        <Link href={href} className="group relative block w-full h-48 md:h-64 overflow-hidden rounded-lg shadow-lg">
+             {placeholder && (
+                <Image
+                    src={placeholder.imageUrl}
+                    alt={title}
+                    fill
+                    className="object-cover transition-transform duration-300 group-hover:scale-110"
+                    sizes="(max-width: 768px) 100vw, 50vw"
+                />
+            )}
+            <div className="absolute inset-0 bg-black/40" />
+            <div className="absolute inset-0 flex items-center justify-center">
+                <h3 className="text-2xl font-bold text-white tracking-wider">{title}</h3>
             </div>
         </Link>
     )
 }
 
-const ProductCollection = ({ title, products, id, showAllLink }: { title: string, products: Product[], id: string, showAllLink?: string }) => (
+const ProductCollection = ({ title, products, id }: { title: string, products: Product[], id: string }) => (
     <section id={id} className="py-12 animate-fade-in-up">
-        <div className="flex justify-between items-center mb-8">
+        <div className="text-center mb-8">
             <h2 className="text-3xl font-bold tracking-tight">{title}</h2>
-            {showAllLink && (
-              <Button asChild variant="outline">
-                  <Link href={showAllLink}>Show All</Link>
-              </Button>
-            )}
         </div>
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-            {products.slice(0, 4).map(product => (
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-x-6 gap-y-10">
+            {products.map(product => (
                 <ProductCard key={product.id} product={product} />
             ))}
         </div>
@@ -94,19 +106,8 @@ function ProductList() {
     return products;
   }, [searchQuery, selectedBrands, minPrice, maxPrice]);
 
-  const { frameProducts, sunglassesProducts, lensesProducts } = useMemo(() => {
-    return {
-        frameProducts: filteredProducts.filter(p => p.type === 'Frames'),
-        sunglassesProducts: filteredProducts.filter(p => p.type === 'Sunglasses'),
-        lensesProducts: filteredProducts.filter(p => p.type === 'Lenses'),
-    }
-  }, [filteredProducts]);
-
   if (category) {
-    const productsToDisplay = category === 'frames' ? frameProducts 
-                            : category === 'sunglasses' ? sunglassesProducts 
-                            : category === 'lenses' ? lensesProducts 
-                            : [];
+    const productsToDisplay = filteredProducts.filter(p => p.type.toLowerCase().includes(category));
     const title = category.charAt(0).toUpperCase() + category.slice(1);
     
     return (
@@ -115,7 +116,7 @@ function ProductList() {
               <h2 className="text-3xl font-bold">{title}</h2>
               <p className="text-muted-foreground">{productsToDisplay?.length || 0} products found.</p>
             </div>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-x-6 gap-y-10">
                 {productsToDisplay?.map(product => (
                     <ProductCard key={product.id} product={product} />
                 ))}
@@ -130,19 +131,16 @@ function ProductList() {
     );
   }
   
+  const featuredProducts = filteredProducts.slice(0, 8);
+
   return (
     <div className="col-span-12 lg:col-span-9">
-        <ProductCollection id="frames" title="Frames" products={frameProducts} showAllLink="/?category=frames" />
-        <Separator />
-        <ProductCollection id="sunglasses" title="Sunglasses" products={sunglassesProducts} showAllLink="/?category=sunglasses" />
-        <Separator />
-        <ProductCollection id="lenses" title="Lenses" products={lensesProducts} showAllLink="/?category=lenses" />
+        <ProductCollection id="featured" title="Featured Products" products={featuredProducts} />
     </div>
   );
 }
 
 export default function Home() {
-  const heroCarouselImages = PlaceHolderImages.filter(p => p.id.startsWith('hero-carousel-'));
   const categories = [
       { title: 'Eyeglasses', imageId: 'category-eyeglasses', href: '/?category=frames' },
       { title: 'Sunglasses', imageId: 'category-sunglasses', href: '/?category=sunglasses' },
@@ -152,51 +150,24 @@ export default function Home() {
   const category = searchParams.get('category');
   const hasFilters = searchParams.has('brands') || searchParams.has('minPrice') || searchParams.has('maxPrice') || searchParams.has('q');
 
-  const shouldShowCollections = !category && !hasFilters;
+  const showCollections = !category && !hasFilters;
 
   return (
     <div>
-        {shouldShowCollections && (
-            <>
-                <section className="container mx-auto px-4 pt-12 pb-8 animate-fade-in">
-                    <div className="grid grid-cols-2 md:grid-cols-3 gap-x-4 gap-y-8 justify-items-center">
-                        {categories.map(cat => (
-                            <CategoryCard key={cat.title} {...cat} />
-                        ))}
-                    </div>
-                </section>
+        {showCollections && <HeroSection />}
 
-                <section className="w-full pb-12 animate-fade-in">
-                    <Carousel
-                    opts={{ loop: true }}
-                    plugins={[Autoplay({ delay: 5000 })]}
-                    className="w-full"
-                    >
-                    <CarouselContent>
-                        {heroCarouselImages.map(image => (
-                        <CarouselItem key={image.id}>
-                            <div className="relative w-full h-[50vh] min-h-[300px] bg-secondary">
-                            <Image
-                                src={image.imageUrl}
-                                alt={image.description}
-                                fill
-                                className="object-cover"
-                                data-ai-hint={image.imageHint}
-                                priority={heroCarouselImages.indexOf(image) === 0}
-                            />
-                            </div>
-                        </CarouselItem>
-                        ))}
-                    </CarouselContent>
-                    <CarouselPrevious className="left-4" />
-                    <CarouselNext className="right-4" />
-                    </Carousel>
-                </section>
-            </>
+        {showCollections && (
+            <section className="container mx-auto px-4 py-16">
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+                    {categories.map(cat => (
+                        <CategoryCard key={cat.title} {...cat} />
+                    ))}
+                </div>
+            </section>
         )}
 
       <div className="container mx-auto px-4 grid grid-cols-12 gap-8 items-start">
-        <aside className="hidden lg:block lg:col-span-3">
+        <aside className="hidden lg:block lg:col-span-3 sticky top-20">
           <Suspense fallback={<p>Loading filters...</p>}>
             <FilterSidebar />
           </Suspense>
