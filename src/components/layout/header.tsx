@@ -64,6 +64,7 @@ export function Header() {
   };
   
   const handleLogout = async () => {
+    if (!auth) return;
     await signOut(auth);
     toast({ title: 'Logged Out', description: 'You have been successfully logged out.' });
     router.push('/');
@@ -87,10 +88,10 @@ export function Header() {
       <DropdownMenuContent className="w-56" align="end" forceMount>
         <DropdownMenuLabel className="font-normal">
           <div className="flex flex-col space-y-1">
-            <p className="text-sm font-medium leading-none">{user?.displayName || 'User'}</p>
-            <p className="text-xs leading-none text-muted-foreground">
+            <p className="text-sm font-medium leading-none">{user?.displayName || user?.email}</p>
+            {user?.displayName && <p className="text-xs leading-none text-muted-foreground">
               {user?.email}
-            </p>
+            </p>}
           </div>
         </DropdownMenuLabel>
         <DropdownMenuSeparator />
@@ -231,7 +232,7 @@ export function Header() {
                 user ? <UserMenu /> :
                 <Link href="/login">
                   <Button variant="ghost" size="icon">
-                      <UserCircle className="h-5 w-5" />
+                      <Glasses className="h-5 w-5" />
                       <span className="sr-only">Account</span>
                   </Button>
                 </Link>
