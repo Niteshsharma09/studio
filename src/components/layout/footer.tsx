@@ -85,17 +85,6 @@ export function Footer() {
                 </a>
               </li>
             </ul>
-            <div className="space-y-2 pt-4">
-                <h4 className="font-semibold">Available Soon</h4>
-                <div className="flex items-center gap-2">
-                    <a href="#" aria-label="Download on Google Play">
-                        <Image src="https://placehold.co/135x40/ffffff/000000?text=Google+Play" alt="Google Play" width={135} height={40} className="rounded-md opacity-80 hover:opacity-100 transition-opacity" />
-                    </a>
-                    <a href="#" aria-label="Download on the App Store">
-                        <Image src="https://placehold.co/135x40/ffffff/000000?text=App+Store" alt="App Store" width={135} height={40} className="rounded-md opacity-80 hover:opacity-100 transition-opacity" />
-                    </a>
-                </div>
-            </div>
           </div>
         </div>
       </div>
