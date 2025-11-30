@@ -106,7 +106,7 @@ export default function ProductDetailPage() {
     } else {
         clearCart();
         addItem(product, quantity);
-        router.push('/checkout');
+        router.push('/order-summary');
     }
   };
 
@@ -125,7 +125,7 @@ export default function ProductDetailPage() {
     });
 
     if (actionType === 'buy') {
-        router.push('/checkout');
+        router.push('/order-summary');
     }
   };
 

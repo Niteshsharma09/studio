@@ -72,7 +72,7 @@ const checkoutSchema = shippingSchema.merge(paymentSchema).superRefine((data, ct
 });
 
 
-export default function CheckoutPage() {
+export default function PaymentPage() {
   const { cartItems, cartTotal, clearCart } = useCart();
   const { user, loading } = useUser();
   const firestore = useFirestore();
@@ -103,7 +103,7 @@ export default function CheckoutPage() {
   
   useEffect(() => {
     if (!loading && !user) {
-        router.push('/login?redirect=/checkout');
+        router.push('/login?redirect=/payment');
     }
   }, [user, loading, router]);
 

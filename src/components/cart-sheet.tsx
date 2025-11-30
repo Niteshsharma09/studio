@@ -1,3 +1,4 @@
+
 "use client";
 
 import Link from 'next/link';
@@ -98,7 +99,7 @@ export function CartSheet({ children }: { children: React.ReactNode }) {
                 <p className="text-sm text-muted-foreground">Shipping and taxes calculated at checkout.</p>
                 <SheetClose asChild>
                   <Button asChild size="lg" className="w-full">
-                    <Link href="/checkout">Proceed to Checkout</Link>
+                    <Link href="/order-summary">Proceed to Checkout</Link>
                   </Button>
                 </SheetClose>
                 <SheetClose asChild>
