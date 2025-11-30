@@ -40,19 +40,8 @@ const HeroSection = () => {
 }
 
 const PromoBanner = () => {
-    const bannerImage = PlaceHolderImages.find(p => p.id === 'promo-banner-image');
     return (
-        <section className="relative w-full bg-secondary py-20 my-16">
-            {bannerImage && (
-                <Image
-                    src={bannerImage.imageUrl}
-                    alt=""
-                    fill
-                    className="object-cover"
-                    data-ai-hint={bannerImage.imageHint}
-                />
-            )}
-            <div className="absolute inset-0 bg-black/60" />
+        <section className="relative w-full bg-primary py-20 my-16">
             <div className="relative z-10 container mx-auto px-4 text-center text-primary-foreground">
                 <h2 className="text-sm font-bold uppercase tracking-widest">Limited Time Offer</h2>
                 <p className="mt-2 text-4xl md:text-5xl font-extrabold tracking-tight">Buy One, Get One Free</p>
