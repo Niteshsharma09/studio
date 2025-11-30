@@ -35,10 +35,9 @@ export function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
           {/* Column 1: Logo and Description */}
           <div className="space-y-4">
-            <Link href="/" className="flex items-center space-x-2">
-                <Image src="/logo.png" alt="technoii Logo" width={140} height={40} className="dark:invert dark:[filter:drop-shadow(0_1px_1px_rgba(255,255,255,0.5))]" />
+            <Link href="/">
+              <Image src="/logo.png" alt="technoii Logo" width={140} height={40} className="dark:invert dark:brightness-200 dark:contrast-200" />
             </Link>
-            <h3 className="font-bold text-lg">Clear Vision Better Vision</h3>
             <p className="text-sm text-muted-foreground/80">
               Techno-i is an ophthalmic optics company that designs, manufactures and markets lenses to correct or protect eyesight. It has German lacquer coating with nominal price.
             </p>
