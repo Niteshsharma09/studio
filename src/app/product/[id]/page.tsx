@@ -14,7 +14,7 @@ import { Input } from '@/components/ui/input';
 import { useToast } from '@/hooks/use-toast';
 import { useIsMobile } from '@/hooks/use-mobile';
 import { VirtualTryOn } from '@/components/virtual-try-on';
-import type { Product } from '@/lib/types';
+import type { Product, Prescription } from '@/lib/types';
 import {
   Select,
   SelectContent,
@@ -26,6 +26,7 @@ import { Label } from '@/components/ui/label';
 import { addDays, format } from 'date-fns';
 import { ProductCard } from '@/components/product-card';
 import { Separator } from '@/components/ui/separator';
+import { PrescriptionDialog } from '@/components/prescription-dialog';
 
 
 export default function ProductDetailPage() {
@@ -41,6 +42,8 @@ export default function ProductDetailPage() {
   const [pincode, setPincode] = useState('');
   const [deliveryStatus, setDeliveryStatus] = useState<'idle' | 'checking' | 'available' | 'unavailable'>('idle');
   const [deliveryDate, setDeliveryDate] = useState<Date | null>(null);
+  const [isPrescriptionDialogOpen, setIsPrescriptionDialogOpen] = useState(false);
+  const [actionType, setActionType] = useState<'cart' | 'buy' | null>(null);
 
   const similarProducts = useMemo(() => {
     if (!product) return [];
@@ -84,17 +87,46 @@ export default function ProductDetailPage() {
   };
   
   const handleAddToCart = () => {
-    addItem(product, quantity, selectedLens ?? undefined);
-    toast({
-        title: "Success!",
-        description: `${quantity} x ${product.name} ${selectedLens ? `with ${selectedLens.name}`: ""} added to your cart.`
-    });
+    if (selectedLens) {
+        setActionType('cart');
+        setIsPrescriptionDialogOpen(true);
+    } else {
+        addItem(product, quantity);
+        toast({
+            title: "Success!",
+            description: `${quantity} x ${product.name} added to your cart.`
+        });
+    }
   };
 
   const handleBuyNow = () => {
-    clearCart();
-    addItem(product, quantity, selectedLens ?? undefined);
-    router.push('/checkout');
+    if (selectedLens) {
+        setActionType('buy');
+        setIsPrescriptionDialogOpen(true);
+    } else {
+        clearCart();
+        addItem(product, quantity);
+        router.push('/checkout');
+    }
+  };
+
+  const handlePrescriptionProceed = (prescription: Prescription) => {
+    if (!selectedLens) return;
+
+    if (actionType === 'buy') {
+        clearCart();
+    }
+
+    addItem(product, quantity, selectedLens, prescription);
+
+    toast({
+        title: "Success!",
+        description: `${quantity} x ${product.name} with ${selectedLens.name} added.`
+    });
+
+    if (actionType === 'buy') {
+        router.push('/checkout');
+    }
   };
 
   const handlePincodeCheck = () => {
@@ -254,6 +286,14 @@ export default function ProductDetailPage() {
             ))}
           </div>
         </div>
+      )}
+      {selectedLens && (
+          <PrescriptionDialog
+            isOpen={isPrescriptionDialogOpen}
+            onOpenChange={setIsPrescriptionDialogOpen}
+            lens={selectedLens}
+            onProceed={handlePrescriptionProceed}
+          />
       )}
     </>
   );

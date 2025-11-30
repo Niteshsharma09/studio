@@ -1,3 +1,4 @@
+
 export type Product = {
   id: string;
   name: string;
@@ -63,8 +64,17 @@ export type OrderItem = {
   priceAtPurchase: number;
 };
 
+export type Prescription = {
+    file?: string | null;
+    manual?: {
+        left?: string;
+        right?: string;
+    };
+};
+
 export type CartItem = {
   product: Product;
   quantity: number;
   lens?: Product;
+  prescription?: Prescription;
 };

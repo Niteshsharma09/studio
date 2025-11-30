@@ -1,0 +1,148 @@
+
+"use client";
+
+import { useState } from "react";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import * as z from "zod";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
+  DialogFooter,
+} from "@/components/ui/dialog";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import {
+    Form,
+    FormControl,
+    FormField,
+    FormItem,
+    FormLabel,
+    FormMessage,
+} from "@/components/ui/form";
+import type { Product, Prescription } from "@/lib/types";
+
+const prescriptionSchema = z.object({
+    prescriptionFile: z.any().optional(),
+    leftEye: z.string().optional(),
+    rightEye: z.string().optional(),
+}).refine(data => data.prescriptionFile || (data.leftEye && data.rightEye), {
+    message: "Either upload a prescription or enter values for both eyes.",
+    path: ["leftEye"], // Show error on one of the manual fields
+});
+
+interface PrescriptionDialogProps {
+  isOpen: boolean;
+  onOpenChange: (open: boolean) => void;
+  lens: Product;
+  onProceed: (prescription: Prescription) => void;
+}
+
+export function PrescriptionDialog({ isOpen, onOpenChange, lens, onProceed }: PrescriptionDialogProps) {
+  const [fileName, setFileName] = useState("");
+
+  const form = useForm<z.infer<typeof prescriptionSchema>>({
+    resolver: zodResolver(prescriptionSchema),
+    defaultValues: {
+        leftEye: "",
+        rightEye: "",
+    },
+  });
+
+  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (file) {
+      setFileName(file.name);
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        form.setValue("prescriptionFile", reader.result as string);
+        form.clearErrors(["leftEye", "rightEye"]);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
+  const onSubmit = (values: z.infer<typeof prescriptionSchema>) => {
+    onProceed({
+        file: values.prescriptionFile,
+        manual: {
+            left: values.leftEye,
+            right: values.rightEye,
+        },
+    });
+    onOpenChange(false);
+  };
+  
+  return (
+    <Dialog open={isOpen} onOpenChange={onOpenChange}>
+      <DialogContent className="sm:max-w-[480px]">
+        <DialogHeader>
+          <DialogTitle>Prescription for {lens.name}</DialogTitle>
+          <DialogDescription>
+            Upload a prescription or manually enter your eye vision details.
+          </DialogDescription>
+        </DialogHeader>
+        <Form {...form}>
+            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6 pt-4">
+                <div>
+                    <Label htmlFor="prescription-file">Upload Prescription</Label>
+                    <div className="flex items-center gap-2 mt-2">
+                        <Input id="prescription-file" type="file" onChange={handleFileChange} className="hidden" />
+                        <Button type="button" variant="outline" onClick={() => document.getElementById('prescription-file')?.click()}>
+                            Choose File
+                        </Button>
+                        <span className="text-sm text-muted-foreground truncate">{fileName || "No file chosen"}</span>
+                    </div>
+                </div>
+
+                <div className="flex items-center text-sm text-muted-foreground">
+                    <div className="flex-1 border-t"></div>
+                    <span className="px-4">OR</span>
+                    <div className="flex-1 border-t"></div>
+                </div>
+
+                <div className="space-y-4">
+                    <p className="font-medium text-center">Manually Enter Eye Vision</p>
+                    <div className="grid grid-cols-2 gap-4">
+                        <FormField
+                            control={form.control}
+                            name="leftEye"
+                            render={({ field }) => (
+                                <FormItem>
+                                    <FormLabel>Left Eye (DV-OD)</FormLabel>
+                                    <FormControl>
+                                        <Input placeholder="e.g., -2.00" {...field} />
+                                    </FormControl>
+                                    <FormMessage />
+                                </FormItem>
+                            )}
+                        />
+                        <FormField
+                            control={form.control}
+                            name="rightEye"
+                            render={({ field }) => (
+                                <FormItem>
+                                    <FormLabel>Right Eye (DV-OS)</FormLabel>
+                                    <FormControl>
+                                        <Input placeholder="e.g., -1.75" {...field} />
+                                    </FormControl>
+                                     <FormMessage />
+                                </FormItem>
+                            )}
+                        />
+                    </div>
+                </div>
+                <DialogFooter>
+                    <Button type="button" variant="outline" onClick={() => onOpenChange(false)}>Cancel</Button>
+                    <Button type="submit">Proceed to Buy</Button>
+                </DialogFooter>
+            </form>
+        </Form>
+      </DialogContent>
+    </Dialog>
+  );
+}

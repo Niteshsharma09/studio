@@ -1,11 +1,12 @@
+
 "use client";
 
 import React, { createContext, useContext, useState, ReactNode } from 'react';
-import type { CartItem, Product } from '@/lib/types';
+import type { CartItem, Product, Prescription } from '@/lib/types';
 
 interface CartContextType {
   cartItems: CartItem[];
-  addItem: (product: Product, quantity: number, lens?: Product) => void;
+  addItem: (product: Product, quantity: number, lens?: Product, prescription?: Prescription) => void;
   removeItem: (productId: string, lensId?: string) => void;
   updateQuantity: (productId: string, quantity: number, lensId?: string) => void;
   clearCart: () => void;
@@ -18,16 +19,19 @@ const CartContext = createContext<CartContextType | undefined>(undefined);
 export const CartProvider = ({ children }: { children: ReactNode }) => {
   const [cartItems, setCartItems] = useState<CartItem[]>([]);
 
-  const addItem = (product: Product, quantity: number, lens?: Product) => {
+  const addItem = (product: Product, quantity: number, lens?: Product, prescription?: Prescription) => {
     setCartItems(prevItems => {
       const existingItemIndex = prevItems.findIndex(item => item.product.id === product.id && item.lens?.id === lens?.id);
 
       if (existingItemIndex > -1) {
         const newItems = [...prevItems];
         newItems[existingItemIndex].quantity += quantity;
+        if(prescription) {
+            newItems[existingItemIndex].prescription = prescription;
+        }
         return newItems;
       } else {
-        return [...prevItems, { product, quantity, lens }];
+        return [...prevItems, { product, quantity, lens, prescription }];
       }
     });
   };
