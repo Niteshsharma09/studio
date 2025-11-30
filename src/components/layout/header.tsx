@@ -150,7 +150,7 @@ export function Header() {
               <SheetContent side="left" className="w-full max-w-sm">
                 <div className="px-4 py-6">
                   <Link href="/" className="mb-6" onClick={() => setIsMobileMenuOpen(false)}>
-                    <Image src="/logo.png" alt="technoii Logo" width={120} height={35} className="dark:invert dark:brightness-200 dark:contrast-200" />
+                    <Image src="/logo.png" alt="technoii Logo" width={120} height={35} />
                   </Link>
                   
                   <form onSubmit={handleSearchSubmit} className="w-full mb-6">
@@ -201,8 +201,8 @@ export function Header() {
           
           <div className="flex items-center">
             <Link href="/" className="flex items-center space-x-2">
-              <Image src="/logo.png" alt="technoii Logo" width={120} height={35} className="hidden lg:block dark:invert dark:brightness-200 dark:contrast-200" />
-              <Image src="/logo.png" alt="technoii Logo" width={100} height={30} className="lg:hidden dark:invert dark:brightness-200 dark:contrast-200" />
+              <Image src="/logo.png" alt="technoii Logo" width={120} height={35} className="hidden lg:block" />
+              <Image src="/logo.png" alt="technoii Logo" width={100} height={30} className="lg:hidden" />
             </Link>
           </div>
           

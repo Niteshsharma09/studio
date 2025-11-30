@@ -36,7 +36,7 @@ export function Footer() {
           {/* Column 1: Logo and Description */}
           <div className="space-y-4">
             <Link href="/">
-              <Image src="/logo.png" alt="technoii Logo" width={140} height={40} className="dark:invert dark:brightness-200 dark:contrast-200" />
+              <Image src="/logo.png" alt="technoii Logo" width={140} height={40} />
             </Link>
             <p className="text-sm text-muted-foreground/80">
               Techno-i is an ophthalmic optics company that designs, manufactures and markets lenses to correct or protect eyesight. It has German lacquer coating with nominal price.
