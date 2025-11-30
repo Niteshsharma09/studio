@@ -78,3 +78,15 @@ export type CartItem = {
   lens?: Product;
   prescription?: Prescription;
 };
+
+export type Review = {
+    id: string;
+    productId: string;
+    userId: string;
+    userName: string;
+    userImage?: string;
+    rating: number;
+    comment: string;
+    imageUrl?: string;
+    createdAt: any; // Firestore Timestamp
+};

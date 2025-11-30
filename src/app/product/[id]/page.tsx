@@ -27,13 +27,14 @@ import { addDays, format } from 'date-fns';
 import { ProductCard } from '@/components/product-card';
 import { Separator } from '@/components/ui/separator';
 import { PrescriptionDialog } from '@/components/prescription-dialog';
+import { ReviewList } from '@/components/review-list';
 
 
 export default function ProductDetailPage() {
   const params = useParams();
   const router = useRouter();
   const { id } = params;
-  const product = PRODUCTS.find(p => p.id === id);
+  const product = PRODUCTS.find(p => p.id === id as string);
   const { addItem, clearCart } = useCart();
   const { toast } = useToast();
   const [quantity, setQuantity] = useState(1);
@@ -276,6 +277,10 @@ export default function ProductDetailPage() {
         </div>
       </div>
     </div>
+     <div className="container mx-auto px-4 py-16">
+        <Separator className="my-8" />
+        <ReviewList productId={product.id} />
+      </div>
     {similarProducts.length > 0 && (
         <div className="container mx-auto px-4 py-16">
           <Separator className="my-8" />
