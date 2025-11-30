@@ -96,6 +96,15 @@ export const LENS_TYPES: Product[] = [
     imageId: 'photochromic-lenses',
   },
   {
+    id: 'lens-progressive-photochromic',
+    name: 'Progressive - Photochromic',
+    description: 'Progressive lenses that darken in sunlight and lighten indoors.',
+    price: 2450.00,
+    brand: 'Generic',
+    type: 'Lenses',
+    imageId: 'photochromic-lenses',
+  },
+  {
     id: 'lens-progressive-antifog',
     name: 'Progressive - Antifog',
     description: 'Progressive lenses with an anti-fog coating for clear vision in all conditions.',
