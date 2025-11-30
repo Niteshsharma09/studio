@@ -56,9 +56,9 @@ const PromoBanner = () => {
             <div className="relative z-10 container mx-auto px-4 text-center text-primary-foreground">
                 <h2 className="text-sm font-bold uppercase tracking-widest">Limited Time Offer</h2>
                 <p className="mt-2 text-4xl md:text-5xl font-extrabold tracking-tight">Buy One, Get One Free</p>
-                <p className="mt-4 max-w-xl mx-auto text-lg">Select two frames, and get the second one on us. Perfect for a new look or a spare pair.</p>
+                <p className="mt-4 max-w-xl mx-auto text-lg">Select two frames from Titan or Fastrack, and get the second one on us. Perfect for a new look or a spare pair.</p>
                  <Button asChild size="lg" className="mt-8 bg-accent text-accent-foreground hover:bg-accent/90">
-                    <Link href="/?category=frames">Shop The BOGO Sale <ShoppingBag className="ml-2"/></Link>
+                    <Link href="/?category=frames&brands=titan,fastrack">Shop The BOGO Sale <ShoppingBag className="ml-2"/></Link>
                 </Button>
             </div>
         </section>
