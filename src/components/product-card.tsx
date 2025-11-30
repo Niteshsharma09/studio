@@ -4,7 +4,7 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import type { Product } from '@/lib/types';
 import { PlaceHolderImages } from '@/lib/placeholder-images';
-import { Eye, ShoppingCart } from 'lucide-react';
+import { Eye, ShoppingBag } from 'lucide-react';
 import { useCart } from '@/context/cart-context';
 import { useToast } from '@/hooks/use-toast';
 
@@ -57,7 +57,7 @@ export function ProductCard({ product }: ProductCardProps) {
                 </Button>
                 {product.type !== "Lenses" &&
                     <Button size="icon" variant="secondary" className="h-9 w-9" onClick={handleAddToCart}>
-                        <ShoppingCart className="h-4 w-4"/>
+                        <ShoppingBag className="h-4 w-4"/>
                     </Button>
                 }
             </div>
