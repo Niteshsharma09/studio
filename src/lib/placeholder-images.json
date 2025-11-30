@@ -131,6 +131,12 @@
       "description": "A collection of different styles of glasses.",
       "imageUrl": "https://images.unsplash.com/photo-1663190579915-6677c4aaec4b?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxMHx8Z2xhc3NlcyUyMGNvbGxlY3Rpb258ZW58MHx8fHwxNzY0MzQ1MjUyfDA&ixlib=rb-4.1.0&q=80&w=1080",
       "imageHint": "glasses collection"
+    },
+    {
+      "id": "promo-banner-image",
+      "description": "A stylish setting with multiple pairs of glasses on display.",
+      "imageUrl": "https://images.unsplash.com/photo-1526642289423-893e141a4645?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw1fHxleWV3ZWFyJTIwc2FsZXxlbnwwfHx8fDE3NjQzOTI2MTd8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "eyewear sale"
     }
   ]
 }

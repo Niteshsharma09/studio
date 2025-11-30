@@ -11,7 +11,7 @@ import { useSearchParams } from 'next/navigation';
 import type { Product } from '@/lib/types';
 import { Button } from '@/components/ui/button';
 import { FilterSidebar } from '@/components/filter-sidebar';
-import { ArrowRight } from 'lucide-react';
+import { ArrowRight, ShoppingBag } from 'lucide-react';
 
 const HeroSection = () => {
     const heroImage = PlaceHolderImages.find(p => p.id === 'hero-image');
@@ -33,6 +33,32 @@ const HeroSection = () => {
                 <p className="mt-4 text-lg md:text-xl max-w-xl mx-auto">Discover our exclusive collection of premium eyewear, crafted with precision for unparalleled comfort and style.</p>
                 <Button asChild size="lg" className="mt-8">
                     <Link href="/#featured">Shop Now <ArrowRight className="ml-2"/></Link>
+                </Button>
+            </div>
+        </section>
+    )
+}
+
+const PromoBanner = () => {
+    const bannerImage = PlaceHolderImages.find(p => p.id === 'promo-banner-image');
+    return (
+        <section className="relative w-full bg-secondary py-20 my-16">
+            {bannerImage && (
+                <Image
+                    src={bannerImage.imageUrl}
+                    alt={bannerImage.description}
+                    fill
+                    className="object-cover"
+                    data-ai-hint={bannerImage.imageHint}
+                />
+            )}
+            <div className="absolute inset-0 bg-black/60" />
+            <div className="relative z-10 container mx-auto px-4 text-center text-primary-foreground">
+                <h2 className="text-sm font-bold uppercase tracking-widest">Limited Time Offer</h2>
+                <p className="mt-2 text-4xl md:text-5xl font-extrabold tracking-tight">Buy One, Get One Free</p>
+                <p className="mt-4 max-w-xl mx-auto text-lg">Select two frames, and get the second one on us. Perfect for a new look or a spare pair.</p>
+                 <Button asChild size="lg" className="mt-8 bg-accent text-accent-foreground hover:bg-accent/90">
+                    <Link href="/?category=frames">Shop The BOGO Sale <ShoppingBag className="ml-2"/></Link>
                 </Button>
             </div>
         </section>
@@ -176,6 +202,7 @@ export default function Home() {
             <ProductList />
         </Suspense>
       </div>
+      {showCollections && <PromoBanner />}
     </div>
   );
 }
