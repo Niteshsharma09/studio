@@ -60,15 +60,42 @@ export const LENS_TYPES: Product[] = [
     imageId: 'clearblue-lenses',
   },
   {
-    id: 'lens-progressive',
-    name: 'Progressive',
+    id: 'lens-progressive-basic',
+    name: 'Progressive - Basic',
     description: 'Seamless multifocal lenses for clear vision at all distances. Includes anti-glare coating.',
     price: 2999.00,
     brand: 'Generic',
     type: 'Lenses',
     imageId: 'photochromic-lenses',
   },
-    {
+  {
+    id: 'lens-progressive-premium',
+    name: 'Progressive - Premium',
+    description: 'Thinner and lighter progressive lenses for enhanced comfort and aesthetics.',
+    price: 3500.00,
+    brand: 'Generic',
+    type: 'Lenses',
+    imageId: 'photochromic-lenses',
+  },
+  {
+    id: 'lens-progressive-ultra-premium',
+    name: 'Progressive - Ultra Premium',
+    description: 'Digitally surfaced progressive lenses for the widest and clearest viewing zones.',
+    price: 4200.00,
+    brand: 'Generic',
+    type: 'Lenses',
+    imageId: 'photochromic-lenses',
+  },
+  {
+    id: 'lens-progressive-ultra-thin',
+    name: 'Progressive - Ultra Thin',
+    description: 'The thinnest progressive lenses available, perfect for strong prescriptions.',
+    price: 5500.00,
+    brand: 'Generic',
+    type: 'Lenses',
+    imageId: 'photochromic-lenses',
+  },
+  {
     id: 'lens-bifocal',
     name: 'Bifocal',
     description: 'Lenses with two distinct optical powers, for both near and distant vision. Includes anti-glare coating.',
@@ -77,6 +104,24 @@ export const LENS_TYPES: Product[] = [
     type: 'Lenses',
     imageId: 'polarized-pro-lenses',
   },
+  {
+    id: 'lens-tinted-single',
+    name: 'Tinted Glass - Single',
+    description: 'Lenses with a single, uniform tint for sun protection and style.',
+    price: 800.00,
+    brand: 'Generic',
+    type: 'Lenses',
+    imageId: 'polarized-pro-lenses',
+  },
+  {
+    id: 'lens-tinted-double',
+    name: 'Tinted Glass - Double',
+    description: 'Gradient tinted lenses, transitioning from a darker top to a lighter bottom.',
+    price: 1200.00,
+    brand: 'Generic',
+    type: 'Lenses',
+    imageId: 'polarized-pro-lenses',
+  }
 ];
 
 
