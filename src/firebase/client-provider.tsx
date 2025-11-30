@@ -6,6 +6,7 @@ import {getAuth, type Auth} from 'firebase/auth';
 import {getFirestore, type Firestore} from 'firebase/firestore';
 import {firebaseConfig} from './config';
 import {FirebaseProvider} from './provider';
+import { Loader2 } from 'lucide-react';
 
 let firebaseApp: FirebaseApp | null = null;
 let auth: Auth | null = null;
@@ -42,7 +43,11 @@ export function FirebaseClientProvider({children}: {children: React.ReactNode}) 
   if (!instances.firebaseApp || !instances.auth || !instances.firestore) {
     // You can return a loading spinner here if you want.
     // Returning null until Firebase is initialized.
-    return null;
+    return (
+        <div className="flex h-screen w-full items-center justify-center">
+            <Loader2 className="h-16 w-16 animate-spin" />
+        </div>
+    );
   }
 
   return (

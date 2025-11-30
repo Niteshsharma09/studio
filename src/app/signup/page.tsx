@@ -70,9 +70,9 @@ export default function SignUpPage() {
         try {
             // 1. Create user in Firebase Auth
             const userCredential = await createUserWithEmailAndPassword(auth, values.email, values.password);
-            const user = userCredential.user;
+            const newUser = userCredential.user;
 
-            await updateProfile(user, { displayName: values.name });
+            await updateProfile(newUser, { displayName: values.name });
 
 
             const nameParts = values.name.trim().split(/\s+/);
@@ -80,21 +80,20 @@ export default function SignUpPage() {
             const lastName = nameParts.slice(1).join(" ");
 
             // 2. Create user profile in Firestore
-            const userRef = doc(firestore, "users", user.uid);
+            const userRef = doc(firestore, "users", newUser.uid);
             await setDoc(userRef, {
-                id: user.uid,
+                id: newUser.uid,
                 email: values.email,
                 firstName: firstName,
                 lastName: lastName || "",
                 createdAt: serverTimestamp(),
-                displayName: values.name,
             });
 
             toast({
                 title: "Account Created",
                 description: "You have successfully signed up.",
             });
-            // The useEffect will handle the redirect
+            // The useEffect will handle the redirect, no need to push here
         } catch (error) {
             console.error("Signup Error: ", error);
             let description = "An unexpected error occurred. Please try again.";
@@ -123,7 +122,7 @@ export default function SignUpPage() {
         }
     }
 
-    if (userLoading || user) {
+    if (userLoading || (!userLoading && user)) {
         return (
             <div className="flex h-screen items-center justify-center">
                 <Loader2 className="h-16 w-16 animate-spin" />
