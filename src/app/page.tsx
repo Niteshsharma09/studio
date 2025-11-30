@@ -46,7 +46,7 @@ const PromoBanner = () => {
             {bannerImage && (
                 <Image
                     src={bannerImage.imageUrl}
-                    alt={bannerImage.description}
+                    alt=""
                     fill
                     className="object-cover"
                     data-ai-hint={bannerImage.imageHint}
