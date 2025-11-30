@@ -96,6 +96,24 @@ export const LENS_TYPES: Product[] = [
     imageId: 'photochromic-lenses',
   },
   {
+    id: 'lens-tinted-single',
+    name: 'Progressive - Tinted Single',
+    description: 'Progressive lenses with a single, uniform tint for sun protection and style.',
+    price: 800.00,
+    brand: 'Generic',
+    type: 'Lenses',
+    imageId: 'polarized-pro-lenses',
+  },
+  {
+    id: 'lens-tinted-double',
+    name: 'Progressive - Tinted Double',
+    description: 'Progressive lenses with a gradient tint, transitioning from a darker top to a lighter bottom.',
+    price: 1200.00,
+    brand: 'Generic',
+    type: 'Lenses',
+    imageId: 'polarized-pro-lenses',
+  },
+  {
     id: 'lens-bifocal',
     name: 'Bifocal',
     description: 'Lenses with two distinct optical powers, for both near and distant vision. Includes anti-glare coating.',
@@ -104,24 +122,6 @@ export const LENS_TYPES: Product[] = [
     type: 'Lenses',
     imageId: 'polarized-pro-lenses',
   },
-  {
-    id: 'lens-tinted-single',
-    name: 'Tinted Glass - Single',
-    description: 'Lenses with a single, uniform tint for sun protection and style.',
-    price: 800.00,
-    brand: 'Generic',
-    type: 'Lenses',
-    imageId: 'polarized-pro-lenses',
-  },
-  {
-    id: 'lens-tinted-double',
-    name: 'Tinted Glass - Double',
-    description: 'Gradient tinted lenses, transitioning from a darker top to a lighter bottom.',
-    price: 1200.00,
-    brand: 'Generic',
-    type: 'Lenses',
-    imageId: 'polarized-pro-lenses',
-  }
 ];
 
 
