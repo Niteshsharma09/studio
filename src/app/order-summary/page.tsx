@@ -7,7 +7,7 @@ import { Separator } from "@/components/ui/separator";
 import Image from "next/image";
 import { PlaceHolderImages } from "@/lib/placeholder-images";
 import { Card, CardContent, CardHeader, CardTitle, CardFooter } from "@/components/ui/card";
-import { ArrowRight, Loader2 } from "lucide-react";
+import { ArrowRight, Loader2, MapPin, Pencil } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useToast } from "@/hooks/use-toast";
 import { useEffect } from "react";
@@ -20,6 +20,9 @@ export default function OrderSummaryPage() {
   const { user, loading } = useUser();
   const router = useRouter();
   const { toast } = useToast();
+
+  const lensCharges = cartItems.reduce((total, item) => total + (item.lens?.price ?? 0) * item.quantity, 0);
+  const productTotal = cartTotal - lensCharges;
 
   useEffect(() => {
     if (!loading && cartItems.length === 0) {
@@ -49,51 +52,89 @@ export default function OrderSummaryPage() {
   };
 
   return (
-    <div className="container mx-auto px-4 py-12">
-        <div className="max-w-3xl mx-auto">
-            <Card>
-                <CardHeader>
-                    <CardTitle className="text-center text-3xl">Order Summary</CardTitle>
-                </CardHeader>
-                <CardContent className="space-y-6">
-                    {cartItems.map(item => {
-                        const placeholder = PlaceHolderImages.find(p => p.id === item.product.imageId);
-                        const itemPrice = item.product.price + (item.lens?.price ?? 0);
-                        return (
-                            <div key={`${item.product.id}-${item.lens?.id || ''}`} className="flex justify-between items-center">
-                                <div className="flex items-center gap-4">
-                                    {placeholder && <Image
-                                        src={placeholder.imageUrl}
-                                        alt={item.product.name}
-                                        width={80}
-                                        height={80}
-                                        className="rounded-md"
-                                    />}
-                                    <div>
-                                        <p className="font-medium">{item.product.name}</p>
-                                        {item.lens && <p className="text-sm text-muted-foreground">+ {item.lens.name}</p>}
-                                        <p className="text-sm text-muted-foreground">Qty: {item.quantity}</p>
-                                    </div>
-                                </div>
-                                <p className="font-medium">{formatPrice(itemPrice * item.quantity)}</p>
+    <div className="bg-secondary/50">
+        <div className="container mx-auto px-4 py-12">
+            <div className="max-w-xl mx-auto space-y-6">
+                <Card>
+                    <CardHeader className="flex flex-row items-center justify-between">
+                        <CardTitle className="text-xl">Shipping Address</CardTitle>
+                        <Button variant="ghost" size="icon" disabled>
+                            <Pencil className="h-4 w-4" />
+                        </Button>
+                    </CardHeader>
+                    <CardContent>
+                        <div className="flex items-start gap-4">
+                            <MapPin className="h-5 w-5 text-muted-foreground mt-1" />
+                            <div>
+                                {user?.displayName && <p className="font-semibold">{user.displayName}</p>}
+                                <p className="text-muted-foreground">Your shipping address will be confirmed on the next step.</p>
                             </div>
-                        )
-                    })}
-                    <Separator/>
-                    <div className="flex justify-between font-semibold text-xl">
-                        <p>Total</p>
-                        <p>{formatPrice(cartTotal)}</p>
-                    </div>
-                </CardContent>
-                <CardFooter className="flex-col gap-4">
+                        </div>
+                    </CardContent>
+                </Card>
+
+                <Card>
+                    <CardHeader>
+                        <CardTitle className="text-xl">Order Items</CardTitle>
+                    </CardHeader>
+                    <CardContent className="space-y-4">
+                        {cartItems.map(item => {
+                            const placeholder = PlaceHolderImages.find(p => p.id === item.product.imageId);
+                            const itemPrice = item.product.price + (item.lens?.price ?? 0);
+                            return (
+                                <div key={`${item.product.id}-${item.lens?.id || ''}`} className="flex justify-between items-center">
+                                    <div className="flex items-center gap-4">
+                                        {placeholder && <Image
+                                            src={placeholder.imageUrl}
+                                            alt={item.product.name}
+                                            width={60}
+                                            height={60}
+                                            className="rounded-md border"
+                                        />}
+                                        <div>
+                                            <p className="font-medium">{item.product.name}</p>
+                                            {item.lens && <p className="text-sm text-muted-foreground">+ {item.lens.name}</p>}
+                                            <p className="text-sm text-muted-foreground">Qty: {item.quantity}</p>
+                                        </div>
+                                    </div>
+                                    <p className="font-medium">{formatPrice(itemPrice * item.quantity)}</p>
+                                </div>
+                            )
+                        })}
+                    </CardContent>
+                </Card>
+                
+                <Card>
+                    <CardHeader>
+                        <CardTitle className="text-xl">Price Details</CardTitle>
+                    </CardHeader>
+                    <CardContent className="space-y-3">
+                         <div className="flex justify-between">
+                            <p>Total Amount</p>
+                            <p>{formatPrice(productTotal)}</p>
+                        </div>
+                        <div className="flex justify-between">
+                            <p>Lens Charges</p>
+                            <p>+ {formatPrice(lensCharges)}</p>
+                        </div>
+                        <div className="flex justify-between">
+                            <p>Net Amount</p>
+                            <p>{formatPrice(cartTotal)}</p>
+                        </div>
+                        <Separator />
+                        <div className="flex justify-between font-bold text-lg">
+                            <p>Total Payable</p>
+                            <p>{formatPrice(cartTotal)}</p>
+                        </div>
+                    </CardContent>
+                </Card>
+
+                <div className="pt-4">
                      <Button size="lg" className="w-full" onClick={handleProceed}>
-                        Proceed to Payment <ArrowRight className="ml-2" />
+                        Make Payment <ArrowRight className="ml-2" />
                     </Button>
-                    <Button variant="outline" className="w-full" asChild>
-                        <Link href="/">Continue Shopping</Link>
-                    </Button>
-                </CardFooter>
-            </Card>
+                </div>
+            </div>
         </div>
     </div>
   );
