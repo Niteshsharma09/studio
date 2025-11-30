@@ -1,8 +1,9 @@
+
 "use client";
 
 import { useState, useRef, useEffect } from "react";
 import { Button } from "@/components/ui/button";
-import { Input }s "@/components/ui/input";
+import { Input } from "@/components/ui/input";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { MessageSquare, Send, X, Loader2, Bot } from "lucide-react";
 import { cn } from "@/lib/utils";
