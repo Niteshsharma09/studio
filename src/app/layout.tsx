@@ -7,7 +7,6 @@ import { Footer } from '@/components/layout/footer';
 import { cn } from '@/lib/utils';
 import { Suspense } from 'react';
 import { FirebaseClientProvider } from '@/firebase/client-provider';
-import { Chatbot } from '@/components/chatbot';
 
 export const metadata: Metadata = {
   title: 'technoii',
@@ -40,7 +39,6 @@ export default function RootLayout({
               <Header />
               <main className="flex-1 bg-background">{children}</main>
               <Footer />
-              <Chatbot />
             </CartProvider>
           </FirebaseClientProvider>
         </Suspense>
