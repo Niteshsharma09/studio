@@ -1,3 +1,4 @@
+
 import { Mail, Phone, ChevronsRight } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
@@ -35,7 +36,7 @@ export function Footer() {
           {/* Column 1: Logo and Description */}
           <div className="space-y-4">
             <Link href="/" className="flex items-center space-x-2">
-                <Image src="/logo.png" alt="Techno-i Logo" width={140} height={40} />
+                <Image src="/logo.png" alt="technoii Logo" width={140} height={40} className="dark:invert dark:[filter:drop-shadow(0_1px_1px_rgba(255,255,255,0.5))]" />
             </Link>
             <h3 className="font-bold text-lg">Clear Vision Better Vision</h3>
             <p className="text-sm text-muted-foreground/80">
