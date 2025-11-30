@@ -74,7 +74,7 @@ const checkoutSchema = shippingSchema.merge(paymentSchema).superRefine((data, ct
 
 export default function CheckoutPage() {
   const { cartItems, cartTotal, clearCart } = useCart();
-  const { user } = useUser();
+  const { user, loading } = useUser();
   const firestore = useFirestore();
   const router = useRouter();
   const { toast } = useToast();
@@ -102,10 +102,10 @@ export default function CheckoutPage() {
   const paymentMethod = form.watch("paymentMethod");
   
   useEffect(() => {
-      if (!user) {
-          router.push('/login');
-      }
-  }, [user, router]);
+    if (!loading && !user) {
+        router.push('/login?redirect=/checkout');
+    }
+  }, [user, loading, router]);
 
   useEffect(() => {
     if (cartItems.length === 0 && !isProcessing) {
@@ -120,7 +120,7 @@ export default function CheckoutPage() {
     }
   }, [user, form]);
   
-  if (cartItems.length === 0 || !user) {
+  if (loading || !user || cartItems.length === 0) {
     return (
         <div className="flex h-screen items-center justify-center">
             <Loader2 className="h-16 w-16 animate-spin" />

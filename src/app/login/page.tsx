@@ -16,7 +16,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useToast } from "@/hooks/use-toast";
 import { Loader2, LogIn } from "lucide-react";
 import { useAuth } from "@/firebase/provider";
@@ -35,6 +35,7 @@ const formSchema = z.object({
 
 export default function LoginPage() {
   const router = useRouter();
+  const searchParams = useSearchParams();
   const { toast } = useToast();
   const auth = useAuth();
   const [isLoading, setIsLoading] = useState(false);
@@ -55,7 +56,8 @@ export default function LoginPage() {
         title: "Logged In Successfully",
         description: "Welcome back!",
       });
-      router.push("/");
+      const redirectUrl = searchParams.get('redirect') || '/';
+      router.push(redirectUrl);
     } catch (error) {
         console.error("Login Error: ", error);
         let description = "An unexpected error occurred. Please try again.";
@@ -136,3 +138,5 @@ export default function LoginPage() {
     </div>
   );
 }
+
+    
