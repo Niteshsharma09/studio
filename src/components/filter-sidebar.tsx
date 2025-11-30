@@ -8,7 +8,8 @@ import { Checkbox } from '@/components/ui/checkbox';
 import { Label } from '@/components/ui/label';
 import { Slider } from '@/components/ui/slider';
 import { Button } from '@/components/ui/button';
-import { PRODUCTS, BRANDS } from '@/lib/data';
+import { PRODUCTS, BRANDS, PRODUCT_TYPES } from '@/lib/data';
+import { Separator } from './ui/separator';
 
 export function FilterSidebar() {
   const router = useRouter();
@@ -16,6 +17,7 @@ export function FilterSidebar() {
   const searchParams = useSearchParams();
 
   const selectedBrands = useMemo(() => searchParams.get('brands')?.split(',') || [], [searchParams]);
+  const selectedCategory = searchParams.get('category') || '';
   const minPrice = useMemo(() => Number(searchParams.get('minPrice') || 0), [searchParams]);
   const maxPrice = useMemo(() => Number(searchParams.get('maxPrice') || 9999), [searchParams]);
 
@@ -39,6 +41,16 @@ export function FilterSidebar() {
     router.replace(`${pathname}?${newParams.toString()}`);
   };
 
+  const handleCategoryChange = (category: string) => {
+    const newParams = new URLSearchParams(searchParams);
+    if (selectedCategory === category.toLowerCase()) {
+      newParams.delete('category');
+    } else {
+      newParams.set('category', category.toLowerCase());
+    }
+    router.replace(`${pathname}?${newParams.toString()}`);
+  };
+
   const handlePriceChange = (value: number[]) => {
      const newParams = new URLSearchParams(searchParams);
      newParams.set('minPrice', value[0].toString());
@@ -51,6 +63,7 @@ export function FilterSidebar() {
     newParams.delete('brands');
     newParams.delete('minPrice');
     newParams.delete('maxPrice');
+    newParams.delete('category');
     router.replace(`${pathname}?${newParams.toString()}`);
   };
 
@@ -62,6 +75,22 @@ export function FilterSidebar() {
         <Button variant="ghost" size="sm" onClick={clearFilters}>Clear All</Button>
       </CardHeader>
       <CardContent className="space-y-6">
+        <div>
+          <h3 className="font-semibold mb-4">Product</h3>
+           <div className="space-y-2">
+            {PRODUCT_TYPES.map(category => (
+              <div key={category} className="flex items-center space-x-2">
+                <Checkbox
+                  id={`cat-${category}`}
+                  checked={selectedCategory === category.toLowerCase()}
+                  onCheckedChange={() => handleCategoryChange(category)}
+                />
+                <Label htmlFor={`cat-${category}`} className="font-normal">{category}</Label>
+              </div>
+            ))}
+          </div>
+        </div>
+        <Separator />
         <div>
           <h3 className="font-semibold mb-4">Brand</h3>
           <div className="space-y-2">
@@ -77,6 +106,7 @@ export function FilterSidebar() {
             ))}
           </div>
         </div>
+        <Separator />
         <div>
           <h3 className="font-semibold mb-4">Price Range</h3>
           <Slider
