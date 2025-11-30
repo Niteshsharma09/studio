@@ -1,7 +1,7 @@
 
 import type { Product } from './types';
 
-export const BRANDS = ['titan faastrack', 'titan', 'technoii', 'velocity', 'x ford', 'lauredale NVG'] as const;
+export const BRANDS = ['titan', 'fastrack', 'Technoii', 'velocity', 'X-Ford', 'Lauredale Eyewear', 'NVG'] as const;
 export const PRODUCT_TYPES = ['Frames', 'Lenses', 'Sunglasses'] as const;
 
 export const LENS_TYPES: Product[] = [
@@ -194,7 +194,7 @@ export const PRODUCTS: Product[] = [
     name: 'Classic Aviator',
     description: 'Timeless aviator style with a modern twist. Perfect for any occasion.',
     price: 150.00,
-    brand: 'titan faastrack',
+    brand: 'fastrack',
     type: 'Sunglasses',
     imageId: 'classic-aviator',
   },
@@ -212,7 +212,7 @@ export const PRODUCTS: Product[] = [
     name: 'Holbrook Prizm',
     description: 'A timeless, classic design fused with modern Oakley technology. Prizm™ lenses enhance color and contrast.',
     price: 195.00,
-    brand: 'technoii',
+    brand: 'Technoii',
     type: 'Sunglasses',
     imageId: 'holbrook-prizm',
   },
@@ -230,7 +230,7 @@ export const PRODUCTS: Product[] = [
     name: 'Urban Lite Frames',
     description: 'Sleek, minimalist frames crafted from lightweight titanium. Ideal for everyday wear.',
     price: 220.00,
-    brand: 'x ford',
+    brand: 'X-Ford',
     type: 'Frames',
     imageId: 'urban-lite-frames',
   },
@@ -239,7 +239,7 @@ export const PRODUCTS: Product[] = [
     name: 'Chic Cat-Eye',
     description: 'A bold, vintage-inspired cat-eye frame that makes a statement.',
     price: 310.00,
-    brand: 'lauredale NVG',
+    brand: 'Lauredale Eyewear',
     type: 'Frames',
     imageId: 'chic-cat-eye',
   },
@@ -257,7 +257,7 @@ export const PRODUCTS: Product[] = [
     name: 'ClearBlue Lenses',
     description: 'Advanced lenses with blue light filtering technology to reduce eye strain from digital screens.',
     price: 120.00,
-    brand: 'technoii',
+    brand: 'Technoii',
     type: 'Lenses',
     imageId: 'clearblue-lenses',
   },
@@ -275,7 +275,7 @@ export const PRODUCTS: Product[] = [
     name: 'Polarized Pro',
     description: 'Top-tier polarized lenses that cut glare and enhance clarity for unparalleled visual comfort.',
     price: 250.00,
-    brand: 'x ford',
+    brand: 'X-Ford',
     type: 'Lenses',
     imageId: 'polarized-pro-lenses',
   },
@@ -284,7 +284,7 @@ export const PRODUCTS: Product[] = [
     name: 'Retro Round',
     description: 'Iconic round metal frames that capture a vintage, intellectual vibe.',
     price: 175.00,
-    brand: 'titan faastrack',
+    brand: 'fastrack',
     type: 'Frames',
     imageId: 'retro-round-frames',
   },
@@ -293,7 +293,7 @@ export const PRODUCTS: Product[] = [
     name: 'Minimalist Square',
     description: 'Clean lines and a sophisticated square shape define these modern frames.',
     price: 350.00,
-    brand: 'lauredale NVG',
+    brand: 'Lauredale Eyewear',
     type: 'Frames',
     imageId: 'minimalist-square-frames',
   },
