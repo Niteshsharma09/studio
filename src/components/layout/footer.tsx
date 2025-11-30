@@ -1,5 +1,6 @@
-import { Glasses, Mail, Phone, ChevronsRight } from "lucide-react";
+import { Mail, Phone, ChevronsRight } from "lucide-react";
 import Link from "next/link";
+import Image from "next/image";
 
 export function Footer() {
   const quickLinks = [
@@ -34,8 +35,7 @@ export function Footer() {
           {/* Column 1: Logo and Description */}
           <div className="space-y-4">
             <Link href="/" className="flex items-center space-x-2">
-                <Glasses className="h-10 w-10 text-accent" />
-                <span className="font-bold text-2xl">Techno-i</span>
+                <Image src="/logo.png" alt="Techno-i Logo" width={140} height={40} />
             </Link>
             <h3 className="font-bold text-lg">Clear Vision Better Vision</h3>
             <p className="text-sm text-muted-foreground/80">

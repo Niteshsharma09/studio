@@ -2,7 +2,7 @@
 "use client";
 
 import Link from 'next/link';
-import { ShoppingBag, Search, Menu, LogOut, LayoutDashboard, Glasses } from 'lucide-react';
+import { ShoppingBag, Search, Menu, LogOut, LayoutDashboard } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { CartSheet } from '@/components/cart-sheet';
 import { useCart } from '@/context/cart-context';
@@ -29,6 +29,7 @@ import { useAuth } from '@/firebase/provider';
 import { Avatar, AvatarFallback, AvatarImage } from '../ui/avatar';
 import { useToast } from '@/hooks/use-toast';
 import { Skeleton } from '../ui/skeleton';
+import Image from 'next/image';
 
 export function Header() {
   const { cartCount } = useCart();
@@ -149,8 +150,7 @@ export function Header() {
               <SheetContent side="left" className="w-full max-w-sm">
                 <div className="px-4 py-6">
                   <Link href="/" className="flex items-center space-x-2 mb-6" onClick={() => setIsMobileMenuOpen(false)}>
-                    <Glasses className="h-8 w-8 text-primary" />
-                    <span className="font-bold text-2xl">technoii</span>
+                    <Image src="/logo.png" alt="technoii Logo" width={140} height={40} />
                   </Link>
                   
                   <form onSubmit={handleSearchSubmit} className="w-full mb-6">
@@ -201,10 +201,8 @@ export function Header() {
           
           <div className="flex items-center">
             <Link href="/" className="flex items-center space-x-2">
-              <Glasses className="h-8 w-8 text-primary" />
-              <span className="font-bold text-2xl">
-                technoii
-              </span>
+                <Image src="/logo.png" alt="technoii Logo" width={140} height={40} className="hidden lg:block"/>
+                <Image src="/logo.png" alt="technoii Logo" width={100} height={30} className="lg:hidden"/>
             </Link>
           </div>
           
@@ -242,7 +240,11 @@ export function Header() {
               { !user && !loading && (
                 <Link href="/login">
                   <Button variant="ghost" size="icon">
-                      <Glasses className="h-5 w-5" />
+                      <Avatar className="h-8 w-8">
+                        <AvatarFallback>
+                            U
+                        </AvatarFallback>
+                      </Avatar>
                       <span className="sr-only">Account</span>
                   </Button>
                 </Link>
