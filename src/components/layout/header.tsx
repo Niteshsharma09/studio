@@ -199,7 +199,7 @@ export function Header() {
             </Sheet>
           </div>
           
-          <Link href="/" className="flex items-center space-x-2 mr-4">
+          <Link href="/" className="mr-4">
             <Image src="/logo.png" alt="technoii Logo" width={120} height={35} className="hidden lg:block" />
             <Image src="/logo.png" alt="technoii Logo" width={100} height={30} className="lg:hidden" />
           </Link>
