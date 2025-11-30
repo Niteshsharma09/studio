@@ -153,18 +153,6 @@ export function Header() {
                     <Image src="/logo.png" alt="technoii Logo" width={120} height={35} />
                   </Link>
                   
-                  <form onSubmit={handleSearchSubmit} className="w-full mb-6">
-                    <div className="relative">
-                      <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-                      <Input 
-                        placeholder="Search for products..." 
-                        className="pl-10"
-                        value={searchQuery}
-                        onChange={(e) => setSearchQuery(e.target.value)}
-                      />
-                    </div>
-                  </form>
-
                   <nav className="flex flex-col space-y-4 text-lg">
                     {navLinks.map((link) => (
                       <Link
@@ -199,18 +187,20 @@ export function Header() {
             </Sheet>
           </div>
           
-          <Link href="/" className="mr-4">
-            <Image src="/logo.png" alt="technoii Logo" width={120} height={35} className="hidden lg:block" />
-            <Image src="/logo.png" alt="technoii Logo" width={100} height={30} className="lg:hidden" />
+          <Link href="/" className="mr-4 lg:hidden">
+             <Image src="/logo.png" alt="technoii Logo" width={80} height={28} />
+          </Link>
+           <Link href="/" className="mr-4 hidden lg:block">
+            <Image src="/logo.png" alt="technoii Logo" width={120} height={35} />
           </Link>
           
-           <div className="flex-1 flex justify-center px-4 sm:px-8">
-             <form onSubmit={handleSearchSubmit} className="w-full max-w-md hidden lg:block">
+           <div className="flex-1 flex justify-center px-2 sm:px-8">
+             <form onSubmit={handleSearchSubmit} className="w-full max-w-md">
                <div className="relative">
                  <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
                  <Input 
-                   placeholder="Search for products..." 
-                   className="pl-10"
+                   placeholder="Search..." 
+                   className="pl-10 h-9"
                    value={searchQuery}
                    onChange={(e) => setSearchQuery(e.target.value)}
                  />
