@@ -6,7 +6,7 @@ import { Header } from '@/components/layout/header';
 import { Footer } from '@/components/layout/footer';
 import { cn } from '@/lib/utils';
 import { Suspense } from 'react';
-import { FirebaseClientProvider } from '@/firebase/client-provider';
+import { FirebaseProvider } from '@/firebase/provider';
 
 export const metadata: Metadata = {
   title: 'technoii',
@@ -34,13 +34,13 @@ export default function RootLayout({
       </head>
       <body className={cn('font-body antialiased h-full flex flex-col')}>
         <Suspense>
-          <FirebaseClientProvider>
+          <FirebaseProvider>
             <CartProvider>
               <Header />
               <main className="flex-1 bg-background">{children}</main>
               <Footer />
             </CartProvider>
-          </FirebaseClientProvider>
+          </FirebaseProvider>
         </Suspense>
         <Toaster />
       </body>

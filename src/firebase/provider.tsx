@@ -1,29 +1,36 @@
 'use client';
 
-import {createContext, useContext, type ReactNode} from 'react';
-import type {FirebaseApp} from 'firebase/app';
-import type {Auth} from 'firebase/auth';
-import type {Firestore} from 'firebase/firestore';
+import {createContext, useContext, type ReactNode, useState, useEffect} from 'react';
+import { initializeApp, type FirebaseApp } from 'firebase/app';
+import { getAuth, type Auth } from 'firebase/auth';
+import { getFirestore, type Firestore } from 'firebase/firestore';
+import { firebaseConfig } from './config';
+
 
 interface FirebaseContextType {
-  firebaseApp: FirebaseApp;
-  auth: Auth;
-  firestore: Firestore;
+  firebaseApp: FirebaseApp | null;
+  auth: Auth | null;
+  firestore: Firestore | null;
 }
 
 const FirebaseContext = createContext<FirebaseContextType | undefined>(undefined);
 
+let firebaseApp: FirebaseApp | null = null;
+let auth: Auth | null = null;
+let firestore: Firestore | null = null;
+
+if (typeof window !== 'undefined' && !firebaseApp) {
+    firebaseApp = initializeApp(firebaseConfig);
+    auth = getAuth(firebaseApp);
+    firestore = getFirestore(firebaseApp);
+}
+
 export function FirebaseProvider({
   children,
-  firebaseApp,
-  auth,
-  firestore,
 }: {
   children: ReactNode;
-  firebaseApp: FirebaseApp;
-  auth: Auth;
-  firestore: Firestore;
 }) {
+
   return (
     <FirebaseContext.Provider value={{firebaseApp, auth, firestore}}>
       {children}

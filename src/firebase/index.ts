@@ -10,13 +10,11 @@ import {
   useAuth,
   useFirestore,
 } from './provider';
-import { FirebaseClientProvider } from './client-provider';
 import { useUser } from './auth/use-user';
 
 
 export {
     FirebaseProvider,
-    FirebaseClientProvider,
     useFirebase,
     useFirebaseApp,
     useAuth,

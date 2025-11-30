@@ -2,7 +2,7 @@
 "use client";
 
 import Link from 'next/link';
-import { ShoppingBag, Search, Menu, UserCircle, LogOut, LayoutDashboard, Glasses } from 'lucide-react';
+import { ShoppingBag, Search, Menu, LogOut, LayoutDashboard, Glasses } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { CartSheet } from '@/components/cart-sheet';
 import { useCart } from '@/context/cart-context';
@@ -28,6 +28,7 @@ import { signOut } from 'firebase/auth';
 import { useAuth } from '@/firebase/provider';
 import { Avatar, AvatarFallback, AvatarImage } from '../ui/avatar';
 import { useToast } from '@/hooks/use-toast';
+import { Skeleton } from '../ui/skeleton';
 
 export function Header() {
   const { cartCount } = useCart();
@@ -65,9 +66,14 @@ export function Header() {
   
   const handleLogout = async () => {
     if (!auth) return;
-    await signOut(auth);
-    toast({ title: 'Logged Out', description: 'You have been successfully logged out.' });
-    router.push('/');
+    try {
+      await signOut(auth);
+      toast({ title: 'Logged Out', description: 'You have been successfully logged out.' });
+      router.push('/');
+    } catch (error) {
+      console.error("Logout error", error);
+      toast({ title: 'Logout Failed', description: 'Could not log you out. Please try again.', variant: "destructive" });
+    }
   }
 
   const getInitials = (name?: string | null) => {
@@ -75,38 +81,58 @@ export function Header() {
     return name.split(' ').map(n => n[0]).join('').toUpperCase();
   }
 
-  const UserMenu = () => (
-    <DropdownMenu>
-      <DropdownMenuTrigger asChild>
-        <Button variant="ghost" className="relative h-8 w-8 rounded-full">
-            <Avatar className="h-8 w-8">
-              <AvatarImage src={user?.photoURL || ''} alt={user?.displayName || 'User'} />
-              <AvatarFallback>{getInitials(user?.displayName || user?.email)}</AvatarFallback>
-            </Avatar>
+  const UserMenu = () => {
+    if (loading) {
+      return <Skeleton className="h-8 w-8 rounded-full" />;
+    }
+    
+    if (user) {
+      return (
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button variant="ghost" className="relative h-8 w-8 rounded-full">
+                <Avatar className="h-8 w-8">
+                  <AvatarImage src={user.photoURL || ''} alt={user.displayName || 'User'} />
+                  <AvatarFallback>{getInitials(user.displayName || user.email)}</AvatarFallback>
+                </Avatar>
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent className="w-56" align="end" forceMount>
+            <DropdownMenuLabel className="font-normal">
+              <div className="flex flex-col space-y-1">
+                <p className="text-sm font-medium leading-none">{user.displayName || user.email}</p>
+                {user.displayName && <p className="text-xs leading-none text-muted-foreground">
+                  {user.email}
+                </p>}
+              </div>
+            </DropdownMenuLabel>
+            <DropdownMenuSeparator />
+            <DropdownMenuItem onSelect={() => router.push('/my-orders')}>
+              <LayoutDashboard className="mr-2 h-4 w-4" />
+              <span>My Orders</span>
+            </DropdownMenuItem>
+            <DropdownMenuSeparator />
+            <DropdownMenuItem onClick={handleLogout}>
+              <LogOut className="mr-2 h-4 w-4" />
+              <span>Log out</span>
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
+      );
+    }
+
+    return (
+      <div className="hidden lg:flex items-center gap-2">
+        <Button asChild variant="outline">
+          <Link href="/login">Log In</Link>
         </Button>
-      </DropdownMenuTrigger>
-      <DropdownMenuContent className="w-56" align="end" forceMount>
-        <DropdownMenuLabel className="font-normal">
-          <div className="flex flex-col space-y-1">
-            <p className="text-sm font-medium leading-none">{user?.displayName || user?.email}</p>
-            {user?.displayName && <p className="text-xs leading-none text-muted-foreground">
-              {user?.email}
-            </p>}
-          </div>
-        </DropdownMenuLabel>
-        <DropdownMenuSeparator />
-        <DropdownMenuItem>
-          <LayoutDashboard className="mr-2 h-4 w-4" />
-          <span>My Orders</span>
-        </DropdownMenuItem>
-        <DropdownMenuSeparator />
-        <DropdownMenuItem onClick={handleLogout}>
-          <LogOut className="mr-2 h-4 w-4" />
-          <span>Log out</span>
-        </DropdownMenuItem>
-      </DropdownMenuContent>
-    </DropdownMenu>
-  );
+        <Button asChild>
+          <Link href="/signup">Sign Up</Link>
+        </Button>
+      </div>
+    );
+  };
+
 
   return (
     <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
@@ -197,22 +223,7 @@ export function Header() {
            </div>
 
           <div className="flex flex-shrink-0 items-center justify-end space-x-2">
-            <div className="hidden lg:flex items-center gap-2">
-              {!loading && (
-                user ? (
-                  <UserMenu />
-                ) : (
-                  <>
-                    <Button asChild variant="outline">
-                      <Link href="/login">Log In</Link>
-                    </Button>
-                    <Button asChild>
-                      <Link href="/signup">Sign Up</Link>
-                    </Button>
-                  </>
-                )
-              )}
-            </div>
+            <UserMenu />
 
             <CartSheet>
               <Button variant="ghost" size="icon" className="relative">
@@ -228,8 +239,7 @@ export function Header() {
 
              {/* Mobile: Account Icon shows user menu or login link */}
              <div className="lg:hidden">
-              {!loading && (
-                user ? <UserMenu /> :
+              { !user && !loading && (
                 <Link href="/login">
                   <Button variant="ghost" size="icon">
                       <Glasses className="h-5 w-5" />

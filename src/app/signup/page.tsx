@@ -16,14 +16,15 @@ import {
 import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useToast } from "@/hooks/use-toast";
 import { Loader2, UserPlus } from "lucide-react";
 import { useAuth, useFirestore } from "@/firebase/provider";
-import { createUserWithEmailAndPassword } from "firebase/auth";
+import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
 import { doc, setDoc, serverTimestamp } from "firebase/firestore";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { FirebaseError } from "firebase/app";
+import { useUser } from "@/firebase";
 
 const formSchema = z.object({
     name: z.string().min(2, { message: "Name must be at least 2 characters." }),
@@ -37,10 +38,21 @@ const formSchema = z.object({
 
 export default function SignUpPage() {
     const router = useRouter();
+    const searchParams = useSearchParams();
     const { toast } = useToast();
     const auth = useAuth();
     const firestore = useFirestore();
+    const { user, loading: userLoading } = useUser();
     const [isLoading, setIsLoading] = useState(false);
+
+    const redirectUrl = searchParams.get('redirect') || '/';
+
+    useEffect(() => {
+        if (!userLoading && user) {
+          router.push(redirectUrl);
+        }
+    }, [user, userLoading, router, redirectUrl]);
+
 
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
@@ -53,11 +65,15 @@ export default function SignUpPage() {
     });
 
     async function onSubmit(values: z.infer<typeof formSchema>) {
+        if (!auth || !firestore) return;
         setIsLoading(true);
         try {
             // 1. Create user in Firebase Auth
             const userCredential = await createUserWithEmailAndPassword(auth, values.email, values.password);
             const user = userCredential.user;
+
+            await updateProfile(user, { displayName: values.name });
+
 
             const nameParts = values.name.trim().split(/\s+/);
             const firstName = nameParts[0];
@@ -69,15 +85,16 @@ export default function SignUpPage() {
                 id: user.uid,
                 email: values.email,
                 firstName: firstName,
-                lastName: lastName,
-                createdAt: serverTimestamp()
+                lastName: lastName || "",
+                createdAt: serverTimestamp(),
+                displayName: values.name,
             });
 
             toast({
                 title: "Account Created",
                 description: "You have successfully signed up.",
             });
-            router.push("/");
+            // The useEffect will handle the redirect
         } catch (error) {
             console.error("Signup Error: ", error);
             let description = "An unexpected error occurred. Please try again.";
@@ -104,6 +121,14 @@ export default function SignUpPage() {
         } finally {
             setIsLoading(false);
         }
+    }
+
+    if (userLoading || user) {
+        return (
+            <div className="flex h-screen items-center justify-center">
+                <Loader2 className="h-16 w-16 animate-spin" />
+            </div>
+        );
     }
 
     return (
@@ -176,7 +201,7 @@ export default function SignUpPage() {
                 </Form>
                 <div className="mt-6 text-center text-sm">
                     Already have an account?{" "}
-                    <Link href="/login" className="font-medium text-primary hover:underline">
+                    <Link href={`/login?redirect=${encodeURIComponent(redirectUrl)}`} className="font-medium text-primary hover:underline">
                         Log In
                     </Link>
                 </div>

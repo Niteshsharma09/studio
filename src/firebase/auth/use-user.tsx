@@ -11,6 +11,12 @@ export function useUser() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    if (!auth) {
+        // Auth is not initialized yet.
+        // We will be re-called once it is.
+        setLoading(true);
+        return;
+    }
     const unsubscribe = onAuthStateChanged(auth, (user) => {
       setUser(user);
       setLoading(false);
@@ -21,5 +27,3 @@ export function useUser() {
 
   return { user, loading };
 }
-
-    

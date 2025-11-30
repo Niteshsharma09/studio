@@ -83,7 +83,7 @@ export default function CheckoutPage() {
   const form = useForm<z.infer<typeof checkoutSchema>>({
     resolver: zodResolver(checkoutSchema),
     defaultValues: {
-      email: user?.email || "",
+      email: "",
       firstName: "",
       lastName: "",
       address: "",
@@ -118,6 +118,13 @@ export default function CheckoutPage() {
     if (user?.email) {
       form.setValue('email', user.email);
     }
+    if (user?.displayName) {
+        const nameParts = user.displayName.trim().split(/\s+/);
+        const firstName = nameParts[0];
+        const lastName = nameParts.slice(1).join(" ");
+        form.setValue('firstName', firstName);
+        form.setValue('lastName', lastName);
+    }
   }, [user, form]);
   
   if (loading || !user || cartItems.length === 0) {
@@ -133,6 +140,7 @@ export default function CheckoutPage() {
   };
 
   const onSubmit = async (values: z.infer<typeof checkoutSchema>) => {
+    if (!firestore) return;
     console.log("Form submitted", values);
     setIsProcessing(true);
 
@@ -353,5 +361,3 @@ export default function CheckoutPage() {
     </div>
   );
 }
-
-    

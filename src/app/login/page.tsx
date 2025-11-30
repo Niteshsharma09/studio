@@ -21,8 +21,9 @@ import { useToast } from "@/hooks/use-toast";
 import { Loader2, LogIn } from "lucide-react";
 import { useAuth } from "@/firebase/provider";
 import { signInWithEmailAndPassword } from "firebase/auth";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { FirebaseError } from "firebase/app";
+import { useUser } from "@/firebase";
 
 const formSchema = z.object({
   email: z.string().email({
@@ -38,7 +39,16 @@ export default function LoginPage() {
   const searchParams = useSearchParams();
   const { toast } = useToast();
   const auth = useAuth();
+  const { user, loading: userLoading } = useUser();
   const [isLoading, setIsLoading] = useState(false);
+
+  const redirectUrl = searchParams.get('redirect') || '/';
+
+  useEffect(() => {
+    if (!userLoading && user) {
+      router.push(redirectUrl);
+    }
+  }, [user, userLoading, router, redirectUrl]);
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -49,6 +59,7 @@ export default function LoginPage() {
   });
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
+    if (!auth) return;
     setIsLoading(true);
     try {
       await signInWithEmailAndPassword(auth, values.email, values.password);
@@ -56,8 +67,7 @@ export default function LoginPage() {
         title: "Logged In Successfully",
         description: "Welcome back!",
       });
-      const redirectUrl = searchParams.get('redirect') || '/';
-      router.push(redirectUrl);
+      // The useEffect will handle the redirect
     } catch (error) {
         console.error("Login Error: ", error);
         let description = "An unexpected error occurred. Please try again.";
@@ -83,6 +93,14 @@ export default function LoginPage() {
     } finally {
         setIsLoading(false);
     }
+  }
+
+  if (userLoading || user) {
+    return (
+        <div className="flex h-screen items-center justify-center">
+            <Loader2 className="h-16 w-16 animate-spin" />
+        </div>
+    );
   }
 
   return (
@@ -129,7 +147,7 @@ export default function LoginPage() {
           </Form>
           <div className="mt-6 text-center text-sm">
             Don&apos;t have an account?{" "}
-            <Link href="/signup" className="font-medium text-primary hover:underline">
+            <Link href={`/signup?redirect=${encodeURIComponent(redirectUrl)}`} className="font-medium text-primary hover:underline">
               Sign Up
             </Link>
           </div>
@@ -138,5 +156,3 @@ export default function LoginPage() {
     </div>
   );
 }
-
-    
