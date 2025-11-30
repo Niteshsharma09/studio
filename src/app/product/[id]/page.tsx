@@ -1,5 +1,4 @@
 
-
 "use client";
 
 import { useParams, useRouter } from 'next/navigation';
@@ -159,12 +158,12 @@ export default function ProductDetailPage() {
     <>
     <div className="container mx-auto px-4 py-12">
       <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-start">
-        <div className="aspect-[4/3] relative bg-card rounded-lg shadow-lg overflow-hidden">
+        <div className="group aspect-[4/3] relative bg-card rounded-lg shadow-lg overflow-hidden">
           <Image
             src={imageUrl}
             alt={product.name}
             fill
-            className="object-cover"
+            className="object-cover transition-transform duration-500 ease-in-out group-hover:scale-125"
             data-ai-hint={imageHint}
             sizes="(max-width: 768px) 100vw, 50vw"
             priority
@@ -303,3 +302,5 @@ export default function ProductDetailPage() {
     </>
   );
 }
+
+    
