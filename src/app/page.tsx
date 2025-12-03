@@ -1,9 +1,10 @@
 
+
 "use client";
 
 import { useMemo, Suspense, useRef, useState, useEffect } from 'react';
 import { ProductCard } from '@/components/product-card';
-import { getProducts, getLenses, PRODUCTS } from '@/lib/data';
+import { getProducts } from '@/lib/data';
 import Image from 'next/image';
 import { PlaceHolderImages } from '@/lib/placeholder-images';
 import Link from 'next/link';
@@ -12,7 +13,6 @@ import type { Product } from '@/lib/types';
 import { Button } from '@/components/ui/button';
 import { FilterSidebar } from '@/components/filter-sidebar';
 import { ArrowRight, ShoppingBag } from 'lucide-react';
-import { cn } from '@/lib/utils';
 import {
     Carousel,
     CarouselContent,
@@ -64,7 +64,7 @@ const HeroSection = () => {
     ];
 
     return (
-        <section className="relative w-full h-[80vh] min-h-[500px] md:h-[60vh] text-primary-foreground overflow-hidden">
+        <section className="relative w-full h-[80vh] min-h-[500px] md:h-[60vh] overflow-hidden">
             <Carousel
                 plugins={[plugin.current]}
                 className="w-full h-full"
@@ -189,6 +189,8 @@ function ProductList() {
   const minPrice = useMemo(() => Number(searchParams.get('minPrice') || 0), [searchParams]);
   const maxPrice = useMemo(() => Number(searchParams.get('maxPrice') || 9999), [searchParams]);
   const [products, setProducts] = useState<Product[]>([]);
+  const hasFilters = searchParams.has('brands') || searchParams.has('minPrice') || searchParams.has('maxPrice') || searchParams.has('q') || searchParams.has('category');
+
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -212,23 +214,26 @@ function ProductList() {
         prods = prods.filter(product => selectedBrands.includes(product.brand));
     }
 
+    if(category){
+        prods = prods.filter(p => p.type.toLowerCase().includes(category));
+    }
+
     prods = prods.filter(product => product.price >= minPrice && product.price <= maxPrice);
 
     return prods;
-  }, [searchQuery, selectedBrands, minPrice, maxPrice, products]);
+  }, [searchQuery, category, selectedBrands, minPrice, maxPrice, products]);
 
-  if (category) {
-    const productsToDisplay = filteredProducts.filter(p => p.type.toLowerCase().includes(category));
-    const title = category.charAt(0).toUpperCase() + category.slice(1);
+  if (hasFilters) {
+    const title = category ? category.charAt(0).toUpperCase() + category.slice(1) : "Search Results";
     
     return (
         <div className="col-span-12 lg:col-span-9">
             <div className="mb-8 text-center animate-fade-in">
               <h2 className="text-3xl font-bold">{title}</h2>
-              <p className="text-muted-foreground">{productsToDisplay?.length || 0} products found.</p>
+              <p className="text-muted-foreground">{filteredProducts.length} products found.</p>
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-x-6 gap-y-10">
-                {productsToDisplay?.map((product, index) => (
+                {filteredProducts.map((product, index) => (
                     <ProductCard 
                         key={product.id} 
                         product={product} 
@@ -237,7 +242,7 @@ function ProductList() {
                     />
                 ))}
             </div>
-            {productsToDisplay?.length === 0 && (
+            {filteredProducts.length === 0 && (
                 <div className="col-span-full flex flex-col items-center justify-center text-center h-96 bg-card rounded-lg border mt-8 animate-fade-in">
                     <h3 className="text-2xl font-semibold">No Products Found</h3>
                     <p className="text-muted-foreground mt-2">Try adjusting your search or filters.</p>
@@ -247,7 +252,7 @@ function ProductList() {
     );
   }
   
-  const featuredProducts = filteredProducts.slice(0, 8);
+  const featuredProducts = products.slice(0, 8);
 
   return (
     <div className="col-span-12 lg:col-span-9">
@@ -263,10 +268,9 @@ export default function Home() {
       { title: 'Lenses', imageId: 'category-lenses', href: '/?category=lenses' },
   ]
   const searchParams = useSearchParams();
-  const category = searchParams.get('category');
-  const hasFilters = searchParams.has('brands') || searchParams.has('minPrice') || searchParams.has('maxPrice') || searchParams.has('q');
+  const hasFilters = searchParams.has('brands') || searchParams.has('minPrice') || searchParams.has('maxPrice') || searchParams.has('q') || searchParams.has('category');
 
-  const showCollections = !category && !hasFilters;
+  const showCollections = !hasFilters;
 
   return (
     <div className="animate-fade-in">
