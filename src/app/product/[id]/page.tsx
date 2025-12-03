@@ -8,7 +8,7 @@ import { Button } from '@/components/ui/button';
 import { useCart } from '@/context/cart-context';
 import { PlaceHolderImages } from '@/lib/placeholder-images';
 import { Star, ShieldCheck, Zap, MapPin, Loader2, Undo2, ShoppingCart } from 'lucide-react';
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import { Input } from '@/components/ui/input';
 import { useToast } from '@/hooks/use-toast';
 import type { Product, Prescription } from '@/lib/types';
@@ -26,10 +26,15 @@ import { Separator } from '@/components/ui/separator';
 import { PrescriptionDialog } from '@/components/prescription-dialog';
 import { ReviewList } from '@/components/review-list';
 import Image from 'next/image';
-import { ImageZoom } from '@/components/image-zoom';
 import { cn } from '@/lib/utils';
-import { useIsMobile } from '@/hooks/use-mobile';
-import { Dialog, DialogContent, DialogTrigger } from '@/components/ui/dialog';
+import type { CarouselApi } from "@/components/ui/carousel"
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+  CarouselNext,
+  CarouselPrevious,
+} from "@/components/ui/carousel"
 
 export default function ProductDetailPage() {
   const params = useParams();
@@ -45,21 +50,40 @@ export default function ProductDetailPage() {
   const [deliveryDate, setDeliveryDate] = useState<Date | null>(null);
   const [isPrescriptionDialogOpen, setIsPrescriptionDialogOpen] = useState(false);
   const [actionType, setActionType] = useState<'cart' | 'buy' | null>(null);
-  const isMobile = useIsMobile();
+
+  const [api, setApi] = useState<CarouselApi>()
+  const [current, setCurrent] = useState(0)
+ 
+  useEffect(() => {
+    if (!api) {
+      return
+    }
+ 
+    setCurrent(api.selectedScrollSnap())
+ 
+    const handleSelect = (api: CarouselApi) => {
+      setCurrent(api.selectedScrollSnap())
+    }
+
+    api.on("select", handleSelect)
+ 
+    return () => {
+      api.off("select", handleSelect)
+    }
+  }, [api])
+
 
   const placeholder = PlaceHolderImages.find(p => p.id === product?.imageId);
   const mainImageUrl = placeholder?.imageUrl ?? `https://picsum.photos/seed/${product?.id}/600/400`;
-
-  const [activeImage, setActiveImage] = useState(mainImageUrl);
 
    const thumbnails = useMemo(() => {
     if (!product) return [];
     // Using placeholder images for thumbnails. In a real app, these would be different product shots.
     return [
       mainImageUrl,
-      `https://picsum.photos/seed/${product.id}a/100/100`,
-      `https://picsum.photos/seed/${product.id}b/100/100`,
-      `https://picsum.photos/seed/${product.id}c/100/100`,
+      `https://picsum.photos/seed/${product.id}a/600/400`,
+      `https://picsum.photos/seed/${product.id}b/600/400`,
+      `https://picsum.photos/seed/${product.id}c/600/400`,
     ];
   }, [product, mainImageUrl]);
 
@@ -166,63 +190,52 @@ export default function ProductDetailPage() {
     }, 1000);
   };
 
-
-  const MainImage = () => {
-    if (isMobile) {
-      return (
-        <Dialog>
-          <DialogTrigger asChild>
-            <div className="relative aspect-[4/3] w-full cursor-zoom-in">
-              <Image 
-                src={activeImage}
-                alt={product.name}
-                fill
-                className="object-contain rounded-lg"
-                sizes="(max-width: 1023px) 100vw, 50vw"
-                priority
-              />
-            </div>
-          </DialogTrigger>
-          <DialogContent className="max-w-full h-full max-h-full w-full p-0 bg-black/80 border-none">
-             <ImageZoom imageUrl={activeImage} />
-          </DialogContent>
-        </Dialog>
-      )
-    }
-
-    return (
-      <div className="aspect-[4/3] relative">
-          <ImageZoom imageUrl={activeImage} zoomLevel={2.5}/>
-      </div>
-    )
-  }
-
   return (
     <>
       <div className="animate-fade-in">
           <div className="container mx-auto px-4 py-12">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start">
-            <div className="grid grid-cols-1 lg:grid-cols-[80px_1fr] gap-4 items-start animate-fade-in lg:col-span-1">
-                  <div className="flex flex-col gap-3 order-first lg:order-none">
-                      {thumbnails.map((thumbUrl, index) => (
-                          <button
-                              key={index}
-                              onClick={() => setActiveImage(thumbUrl)}
-                              className={cn(
-                                  'relative aspect-square w-full rounded-md border-2 transition-all duration-200',
-                                  activeImage === thumbUrl ? 'border-primary shadow-md' : 'border-transparent opacity-70 hover:opacity-100'
-                              )}
-                          >
-                              <Image
-                                  src={thumbUrl}
-                                  alt={`Thumbnail ${index + 1}`}
-                                  fill
-                                  className="object-cover rounded-sm"
-                              />
-                          </button>
-                      ))}
-                  </div>
-                  <MainImage />
+            <div className="space-y-4">
+                 <Carousel setApi={setApi} className="w-full">
+                    <CarouselContent>
+                        {thumbnails.map((imgUrl, index) => (
+                        <CarouselItem key={index}>
+                            <div className="relative aspect-[4/3] w-full">
+                                <Image 
+                                    src={imgUrl}
+                                    alt={`${product.name} image ${index + 1}`}
+                                    fill
+                                    className="object-contain rounded-lg"
+                                    sizes="(max-width: 1023px) 100vw, 50vw"
+                                    priority={index === 0}
+                                />
+                            </div>
+                        </CarouselItem>
+                        ))}
+                    </CarouselContent>
+                    <CarouselPrevious className="absolute left-4 top-1/2 -translate-y-1/2 z-10" />
+                    <CarouselNext className="absolute right-4 top-1/2 -translate-y-1/2 z-10" />
+                </Carousel>
+                <div className="grid grid-cols-4 gap-4">
+                    {thumbnails.map((thumbUrl, index) => (
+                        <button
+                            key={index}
+                            onClick={() => api?.scrollTo(index)}
+                            className={cn(
+                                'relative aspect-square w-full rounded-md border-2 transition-all duration-200',
+                                current === index ? 'border-primary shadow-md' : 'border-transparent opacity-70 hover:opacity-100'
+                            )}
+                        >
+                            <Image
+                                src={thumbUrl}
+                                alt={`Thumbnail ${index + 1}`}
+                                fill
+                                className="object-cover rounded-sm"
+                                sizes="20vw"
+                            />
+                        </button>
+                    ))}
+                </div>
             </div>
               
               <div className="animate-fade-in-up lg:col-span-1">
@@ -357,3 +370,5 @@ export default function ProductDetailPage() {
     </>
   );
 }
+
+    
