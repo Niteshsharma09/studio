@@ -86,12 +86,9 @@ export function ReviewForm({ productId, onReviewSubmit }: ReviewFormProps) {
         // Upload image if present
         if (values.image) {
             const storage = getStorage();
-            const imageRef = ref(storage, `reviews/${productId}/${user.uid}-${Date.now()}`);
-            const snapshot = await uploadString(imageRef, values.image, 'data_url', {
-                customMetadata: {
-                    uid: user.uid
-                }
-            });
+            // The path now includes the user's UID to match the security rule
+            const imageRef = ref(storage, `reviews/${productId}/${user.uid}/${Date.now()}-${fileName}`);
+            const snapshot = await uploadString(imageRef, values.image, 'data_url');
             imageUrl = await getDownloadURL(snapshot.ref);
         }
 
