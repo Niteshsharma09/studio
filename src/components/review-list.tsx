@@ -10,7 +10,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Star, Loader2 } from "lucide-react";
 import { formatDistanceToNow } from 'date-fns';
 import { ReviewForm } from "./review-form";
-import { Separator } from "./ui/separator";
+import { cn } from "@/lib/utils";
 
 interface ReviewListProps {
   productId: string;
@@ -21,11 +21,11 @@ export function ReviewList({ productId }: ReviewListProps) {
   const [loading, setLoading] = useState(true);
   const firestore = useFirestore();
 
-  const getInitials = (name: string) => name.split(' ').map(n => n[0]).join('').toUpperCase();
+  const getInitials = (name: string) => name ? name.split(' ').map(n => n[0]).join('').toUpperCase() : '';
 
   const fetchReviews = useCallback(() => {
     if (!firestore) return;
-    setLoading(true);
+    
     const reviewsCol = collection(firestore, `products/${productId}/reviews`);
     const q = query(reviewsCol, orderBy("createdAt", "desc"), limit(20));
 
@@ -45,8 +45,13 @@ export function ReviewList({ productId }: ReviewListProps) {
   }, [firestore, productId]);
 
   useEffect(() => {
+    setLoading(true);
     const unsubscribe = fetchReviews();
-    return () => unsubscribe && unsubscribe();
+    return () => {
+      if (unsubscribe) {
+        unsubscribe();
+      }
+    };
   }, [fetchReviews]);
 
   return (
@@ -76,7 +81,7 @@ export function ReviewList({ productId }: ReviewListProps) {
                             <div className="flex items-center justify-between">
                                 <p className="font-semibold">{review.userName}</p>
                                 <p className="text-xs text-muted-foreground">
-                                    {review.createdAt ? formatDistanceToNow(review.createdAt.toDate(), { addSuffix: true }) : ''}
+                                    {review.createdAt?.toDate ? formatDistanceToNow(review.createdAt.toDate(), { addSuffix: true }) : 'just now'}
                                 </p>
                             </div>
                             <div className="flex items-center gap-1 my-1">

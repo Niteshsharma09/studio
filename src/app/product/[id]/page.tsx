@@ -275,8 +275,7 @@ export default function ProductDetailPage() {
           </div>
         </div>
       </div>
-    </div>
-     <div className="container mx-auto px-4 py-16">
+      <div className="container mx-auto px-4 py-16">
         <Separator className="my-8" />
         <ReviewList productId={product.id} />
       </div>
