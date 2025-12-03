@@ -172,24 +172,24 @@ export function Header() {
                     {navLinks.map((link) => 
                       link.submenu ? (
                         <Collapsible key={link.href} className="flex flex-col space-y-1">
-                          <CollapsibleTrigger asChild>
-                            <div className='flex items-center justify-between'>
-                              <Link
+                           <div className='flex items-center justify-between'>
+                            <Link
                                 href={link.href}
-                                onClick={() => setIsMobileMenuOpen(false)}
+                                onClick={(e) => { e.preventDefault(); router.push(link.href); setIsMobileMenuOpen(false); }}
                                 className={cn(
-                                'font-medium transition-colors hover:text-foreground/80 flex-1',
+                                'font-medium transition-colors hover:text-foreground/80 flex-1 py-2',
                                 (pathname + '?' + searchParams.toString()).includes('category=frames') ? 'text-foreground' : 'text-foreground/60'
                                 )}
                               >
                                 {link.label}
                               </Link>
+                            <CollapsibleTrigger asChild>
                               <Button variant="ghost" size="sm" className="w-9 p-0 [&[data-state=open]>svg]:rotate-180">
                                 <ChevronDown className="h-5 w-5 transition-transform" />
                                 <span className="sr-only">Toggle</span>
                               </Button>
-                            </div>
-                          </CollapsibleTrigger>
+                            </CollapsibleTrigger>
+                          </div>
                           <CollapsibleContent>
                             <div className="flex flex-col pl-6 space-y-2 mt-2 border-l-2 ml-2">
                                 {link.submenu.map(sublink => (
