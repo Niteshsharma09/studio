@@ -171,7 +171,7 @@
     {
       "id": "nvg-shield-pro",
       "description": "Professional-grade shield sunglasses for maximum protection and a bold look.",
-      "imageUrl": "https://images.unsplash.com/photo-1577992933098-f3d9a69152a5?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHxzaGllZGQlMjBzdW5nbGFzc2VzfGVufDB8fHx8MTc2NDg4NDEzM3ww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageUrl": "https://images.unsplash.com/photo-1577992933098-f3d9a69152a5?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHxzaGllZGQlMjBzdW5nbGFzc2VzfGVufDB8fHx8MTc2NDg4NDEzM3ww&ixlib-rb-4.1.0&q=80&w=1080",
       "imageHint": "professional sunglasses"
     },
     {
@@ -231,13 +231,13 @@
     {
       "id": "checkout-image",
       "description": "A collection of stylish glasses.",
-      "imageUrl": "https://images.unsplash.com/photo-1611012595366-18cf16280487?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw1fHxleWV3ZWFyJTIwY29sbGVjdGlvbnxlbnwwfHx8fDE3NjM5NzU2Mzl8MA&ixlib-rb-4.1.0&q=80&w=1080",
+      "imageUrl": "https://images.unsplash.com/photo-1611012595366-18cf16280487?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw1fHxleWV3ZWFyJTIwY29sbGVjdGlvbnxlbnwwfHx8fDE3NjM5NzU2Mzl8MA&ixlib=rb-4.1.0&q=80&w=1080",
       "imageHint": "eyewear collection"
     },
     {
       "id": "style-guide-hero",
       "description": "A person trying on different glasses.",
-      "imageUrl": "https://images.unsplash.com/photo-1574494349420-ecf8ccbff974?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw0fHxjaG9vc2luZyUyMGdsYXNzZXN8ZW58MHx8fHwxNzYzOTc1NjM5fDA&ixlib-rb-4.1.0&q=80&w=1080",
+      "imageUrl": "https://images.unsplash.com/photo-1574494349420-ecf8ccbff974?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw0fHxjaG9vc2luZyUyMGdsYXNzZXN8ZW58MHx8fHwxNzYzOTc1NjM5fDA&ixlib=rb-4.1.0&q=80&w=1080",
       "imageHint": "choosing glasses"
     },
     {
@@ -255,7 +255,7 @@
     {
       "id": "category-lenses",
       "description": "A close-up of different eyeglass lenses.",
-      "imageUrl": "https://images.unsplash.com/photo-1631049339673-c1e5ba4849fb?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxlbnwwfHx8fDE3NjQ4ODQxMzN8MA&ixlib-rb-4.1.0&q=80&w=1080",
+      "imageUrl": "https://images.unsplash.com/photo-1631049339673-c1e5ba4849fb?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxlbnwwfHx8fDE3NjQ4ODQxMzN8MA&ixlib=rb-4.1.0&q=80&w=1080",
       "imageHint": "eyeglass lenses"
     },
     {
@@ -279,7 +279,7 @@
     {
       "id": "contact-multifocal",
       "description": "A diagram showing how a multifocal contact lens works.",
-      "imageUrl": "https://images.unsplash.com/photo-1607957233158-d2f349c04b48?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHxibHVlJTIwZXllc3xlbnwwfHx8fDE3NjQ5Nzc2NzZ8MA&ixlib-rb-4.1.0&q=80&w=1080",
+      "imageUrl": "https://images.unsplash.com/photo-1607957233158-d2f349c04b48?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHxibHVlJTIwZXllc3xlbnwwfHx8fDE3NjQ5Nzc2NzZ8MA&ixlib=rb-4.1.0&q=80&w=1080",
       "imageHint": "blue eye"
     },
     {
