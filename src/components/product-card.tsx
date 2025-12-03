@@ -1,3 +1,4 @@
+
 import Image from 'next/image';
 import Link from 'next/link';
 import { Card, CardContent } from '@/components/ui/card';
@@ -7,13 +8,15 @@ import { PlaceHolderImages } from '@/lib/placeholder-images';
 import { Eye, ShoppingCart } from 'lucide-react';
 import { useCart } from '@/context/cart-context';
 import { useToast } from '@/hooks/use-toast';
+import { cn } from '@/lib/utils';
 
 
 interface ProductCardProps {
   product: Product;
+  className?: string;
 }
 
-export function ProductCard({ product }: ProductCardProps) {
+export function ProductCard({ product, className }: ProductCardProps) {
   const placeholder = PlaceHolderImages.find(p => p.id === product.imageId);
   const imageUrl = placeholder?.imageUrl ?? `https://picsum.photos/seed/${product.id}/600/400`;
   const imageHint = placeholder?.imageHint ?? '';
@@ -38,18 +41,18 @@ export function ProductCard({ product }: ProductCardProps) {
   };
 
   return (
-    <Card className="overflow-hidden group transition-all duration-300 border hover:shadow-xl hover:-translate-y-1">
+    <Card className={cn("overflow-hidden group transition-all duration-300 border hover:shadow-xl hover:-translate-y-1", className)}>
       <Link href={`/product/${product.id}`} aria-label={`View details for ${product.name}`} className="block">
         <div className="relative aspect-[4/3] w-full bg-secondary/30">
             <Image
               src={imageUrl}
               alt={product.name}
               fill
-              className="object-cover transition-transform duration-300 group-hover:scale-105"
+              className="object-cover transition-transform duration-500 ease-in-out group-hover:scale-105"
               data-ai-hint={imageHint}
               sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
             />
-            <div className="absolute top-2 right-2 flex flex-col gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+            <div className="absolute top-2 right-2 flex flex-col gap-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
                 <Button size="icon" variant="secondary" className="h-9 w-9" asChild>
                      <div tabIndex={0} role="button">
                         <Eye className="h-4 w-4"/>

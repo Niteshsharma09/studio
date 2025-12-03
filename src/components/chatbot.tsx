@@ -62,18 +62,18 @@ export function Chatbot() {
   return (
     <>
       <div className={cn(
-          "fixed bottom-4 right-4 z-50 transition-transform duration-300 ease-in-out",
-          isOpen ? "translate-x-[calc(100%+2rem)]" : "translate-x-0"
+          "fixed bottom-4 right-4 z-50 transition-all duration-300 ease-in-out",
+          isOpen ? "translate-x-full scale-50 opacity-0" : "translate-x-0 scale-100 opacity-100"
       )}>
-        <Button onClick={() => setIsOpen(true)} size="icon" className="w-14 h-14 rounded-full shadow-lg">
+        <Button onClick={() => setIsOpen(true)} size="icon" className="w-14 h-14 rounded-full shadow-lg animate-fade-in-up">
           <MessageSquare className="w-6 h-6" />
         </Button>
       </div>
 
       <div
         className={cn(
-          "fixed bottom-4 right-4 z-50 w-[calc(100vw-2rem)] h-[calc(100vh-5rem)] max-w-sm max-h-[600px] flex flex-col bg-card border rounded-lg shadow-xl transition-transform duration-300 ease-in-out",
-          isOpen ? "translate-y-0 opacity-100" : "translate-y-full opacity-0",
+          "fixed bottom-4 right-4 z-50 w-[calc(100vw-2rem)] h-[calc(100vh-5rem)] max-w-sm max-h-[600px] flex flex-col bg-card border rounded-lg shadow-xl origin-bottom-right transition-all duration-300 ease-in-out",
+          isOpen ? "translate-y-0 opacity-100 scale-100" : "translate-y-8 opacity-0 scale-95",
           "sm:w-full sm:h-auto"
         )}
       >
@@ -93,7 +93,7 @@ export function Chatbot() {
               <div
                 key={index}
                 className={cn(
-                  "flex items-start gap-3",
+                  "flex items-start gap-3 animate-fade-in-up",
                   message.role === "user" ? "justify-end" : "justify-start"
                 )}
               >
@@ -123,7 +123,7 @@ export function Chatbot() {
               </div>
             ))}
             {isLoading && (
-              <div className="flex items-start gap-3 justify-start">
+              <div className="flex items-start gap-3 justify-start animate-fade-in-up">
                  <Avatar className="w-8 h-8">
                     <AvatarFallback>
                         <Bot className="w-5 h-5"/>

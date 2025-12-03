@@ -12,23 +12,24 @@ import type { Product } from '@/lib/types';
 import { Button } from '@/components/ui/button';
 import { FilterSidebar } from '@/components/filter-sidebar';
 import { ArrowRight, ShoppingBag } from 'lucide-react';
+import { cn } from '@/lib/utils';
 
 const HeroSection = () => {
     const heroImage = PlaceHolderImages.find(p => p.id === 'hero-image');
     return (
-        <section className="relative w-full h-[60vh] min-h-[400px] flex items-center justify-center text-center bg-secondary animate-fade-in">
+        <section className="relative w-full h-[60vh] min-h-[400px] flex items-center justify-center text-center bg-secondary overflow-hidden">
             {heroImage && (
                  <Image
                     src={heroImage.imageUrl}
                     alt={heroImage.description}
                     fill
-                    className="object-cover"
+                    className="object-cover animate-zoom-in"
                     data-ai-hint={heroImage.imageHint}
                     priority
                 />
             )}
             <div className="absolute inset-0 bg-black/50" />
-            <div className="relative z-10 p-4 text-primary-foreground max-w-3xl">
+            <div className="relative z-10 p-4 text-primary-foreground max-w-3xl animate-fade-in-up">
                 <h1 className="text-4xl md:text-6xl font-bold tracking-tighter leading-tight">Clarity in Sight, Style in Mind</h1>
                 <p className="mt-4 text-lg md:text-xl max-w-xl mx-auto">Discover our exclusive collection of premium eyewear, crafted with precision for unparalleled comfort and style.</p>
                 <Button asChild size="lg" className="mt-8">
@@ -41,8 +42,8 @@ const HeroSection = () => {
 
 const PromoBanner = () => {
     return (
-        <section className="relative w-full bg-primary py-20 my-16">
-            <div className="relative z-10 container mx-auto px-4 text-center text-primary-foreground">
+        <section className="relative w-full bg-primary py-20 my-16 overflow-hidden">
+            <div className="relative z-10 container mx-auto px-4 text-center text-primary-foreground animate-fade-in-up">
                 <h2 className="text-sm font-bold uppercase tracking-widest">Limited Time Offer</h2>
                 <p className="mt-2 text-4xl md:text-5xl font-extrabold tracking-tight">Buy One, Get One Free</p>
                 <p className="mt-4 max-w-xl mx-auto text-lg">Select two frames from Titan or Fastrack, and get the second one on us. Perfect for a new look or a spare pair.</p>
@@ -57,17 +58,17 @@ const PromoBanner = () => {
 const CategoryCard = ({ title, imageId, href }: { title: string, imageId: string, href: string }) => {
     const placeholder = PlaceHolderImages.find(p => p.id === imageId);
     return (
-        <Link href={href} className="group relative block w-full h-48 md:h-64 overflow-hidden rounded-lg shadow-lg">
+        <Link href={href} className="group relative block w-full h-48 md:h-64 overflow-hidden rounded-lg shadow-lg animate-fade-in-up">
              {placeholder && (
                 <Image
                     src={placeholder.imageUrl}
                     alt={title}
                     fill
-                    className="object-cover transition-transform duration-300 group-hover:scale-110"
+                    className="object-cover transition-transform duration-500 ease-in-out group-hover:scale-110"
                     sizes="(max-width: 768px) 100vw, 50vw"
                 />
             )}
-            <div className="absolute inset-0 bg-black/40" />
+            <div className="absolute inset-0 bg-black/40 transition-colors duration-300 group-hover:bg-black/20" />
             <div className="absolute inset-0 flex items-center justify-center">
                 <h3 className="text-2xl font-bold text-white tracking-wider">{title}</h3>
             </div>
@@ -76,17 +77,22 @@ const CategoryCard = ({ title, imageId, href }: { title: string, imageId: string
 }
 
 const ProductCollection = ({ title, products, id }: { title: string, products: Product[], id: string }) => (
-    <section id={id} className="py-12 animate-fade-in-up">
-        <div className="text-center mb-8">
+    <section id={id} className="py-12">
+        <div className="text-center mb-8 animate-fade-in-up">
             <h2 className="text-3xl font-bold tracking-tight">{title}</h2>
         </div>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-x-6 gap-y-10">
-            {products.map(product => (
-                <ProductCard key={product.id} product={product} />
+            {products.map((product, index) => (
+                <ProductCard 
+                    key={product.id} 
+                    product={product} 
+                    className="animate-fade-in-up"
+                    style={{ animationDelay: `${index * 100}ms`}}
+                />
             ))}
         </div>
         {products.length === 0 && (
-            <div className="col-span-full flex flex-col items-center justify-center text-center h-64 bg-card rounded-lg border">
+            <div className="col-span-full flex flex-col items-center justify-center text-center h-64 bg-card rounded-lg border animate-fade-in">
                 <h3 className="text-2xl font-semibold">No Products Found</h3>
                 <p className="text-muted-foreground mt-2">Try adjusting your search or filters.</p>
             </div>
@@ -126,18 +132,23 @@ function ProductList() {
     const title = category.charAt(0).toUpperCase() + category.slice(1);
     
     return (
-        <div className="col-span-12 lg:col-span-9 animate-fade-in">
-            <div className="mb-8 text-center">
+        <div className="col-span-12 lg:col-span-9">
+            <div className="mb-8 text-center animate-fade-in">
               <h2 className="text-3xl font-bold">{title}</h2>
               <p className="text-muted-foreground">{productsToDisplay?.length || 0} products found.</p>
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-x-6 gap-y-10">
-                {productsToDisplay?.map(product => (
-                    <ProductCard key={product.id} product={product} />
+                {productsToDisplay?.map((product, index) => (
+                    <ProductCard 
+                        key={product.id} 
+                        product={product} 
+                        className="animate-fade-in-up"
+                        style={{ animationDelay: `${index * 100}ms`}}
+                    />
                 ))}
             </div>
             {productsToDisplay?.length === 0 && (
-                <div className="col-span-full flex flex-col items-center justify-center text-center h-96 bg-card rounded-lg border mt-8">
+                <div className="col-span-full flex flex-col items-center justify-center text-center h-96 bg-card rounded-lg border mt-8 animate-fade-in">
                     <h3 className="text-2xl font-semibold">No Products Found</h3>
                     <p className="text-muted-foreground mt-2">Try adjusting your search or filters.</p>
                 </div>
@@ -168,21 +179,23 @@ export default function Home() {
   const showCollections = !category && !hasFilters;
 
   return (
-    <div>
+    <div className="animate-fade-in">
         {showCollections && <HeroSection />}
 
         {showCollections && (
             <section className="container mx-auto px-4 py-16">
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-                    {categories.map(cat => (
-                        <CategoryCard key={cat.title} {...cat} />
+                    {categories.map((cat, index) => (
+                        <div key={cat.title} style={{animationDelay: `${index * 150}ms`}}>
+                             <CategoryCard {...cat} />
+                        </div>
                     ))}
                 </div>
             </section>
         )}
 
       <div className="container mx-auto px-4 grid grid-cols-12 gap-8 items-start">
-        <aside className="hidden lg:block lg:col-span-3 sticky top-20">
+        <aside className="hidden lg:block lg:col-span-3 sticky top-20 animate-fade-in">
           <Suspense fallback={<p>Loading filters...</p>}>
             <FilterSidebar />
           </Suspense>

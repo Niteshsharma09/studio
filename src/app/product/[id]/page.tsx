@@ -26,6 +26,7 @@ import { PrescriptionDialog } from '@/components/prescription-dialog';
 import { ReviewList } from '@/components/review-list';
 import Image from 'next/image';
 import { ImageZoom } from '@/components/image-zoom';
+import { cn } from '@/lib/utils';
 
 export default function ProductDetailPage() {
   const params = useParams();
@@ -163,154 +164,162 @@ export default function ProductDetailPage() {
 
 
   return (
-    <>
-    <div className="container mx-auto px-4 py-12">
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start">
-        <div className="grid grid-cols-[80px_1fr] gap-4 items-start">
-            <div className="flex flex-col gap-3">
-                {thumbnails.map((thumbUrl, index) => (
-                    <button
-                        key={index}
-                        onClick={() => setActiveImage(thumbUrl)}
-                        className={`relative aspect-square w-full rounded-md border-2 transition-all ${activeImage === thumbUrl ? 'border-primary' : 'border-transparent'}`}
-                    >
-                        <Image
-                            src={thumbUrl}
-                            alt={`Thumbnail ${index + 1}`}
-                            fill
-                            className="object-cover rounded-sm"
+    <div className="animate-fade-in">
+        <div className="container mx-auto px-4 py-12">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start">
+            <div className="grid grid-cols-[80px_1fr] gap-4 items-start animate-fade-in">
+                <div className="flex flex-col gap-3">
+                    {thumbnails.map((thumbUrl, index) => (
+                        <button
+                            key={index}
+                            onClick={() => setActiveImage(thumbUrl)}
+                            className={cn(
+                                'relative aspect-square w-full rounded-md border-2 transition-all duration-200',
+                                activeImage === thumbUrl ? 'border-primary shadow-md' : 'border-transparent opacity-70 hover:opacity-100'
+                            )}
+                        >
+                            <Image
+                                src={thumbUrl}
+                                alt={`Thumbnail ${index + 1}`}
+                                fill
+                                className="object-cover rounded-sm"
+                            />
+                        </button>
+                    ))}
+                </div>
+                <div className="aspect-[4/3] relative">
+                    <ImageZoom imageUrl={activeImage} zoomLevel={2.5}/>
+                </div>
+            </div>
+            
+            <div className="animate-fade-in-up">
+            <p className="text-sm font-medium text-primary">{product.brand}</p>
+            <h1 className="text-4xl font-bold tracking-tight mt-1">{product.name}</h1>
+            
+            <div className="flex items-center mt-4">
+                <p className="text-3xl font-light">{formatPrice(total_price)}</p>
+            </div>
+
+            <div className="flex items-center mt-2">
+                <div className="flex items-center">
+                {[...Array(5)].map((_, i) => (
+                    <Star key={i} className="w-5 h-5 text-yellow-400 fill-current" />
+                ))}
+                </div>
+                <span className="ml-2 text-sm text-muted-foreground">(123 reviews)</span>
+            </div>
+            
+            <p className="mt-6 text-foreground/80 leading-relaxed">{product.description}</p>
+
+            {product.type === 'Frames' && (
+                <div className="mt-8 space-y-2">
+                <Label htmlFor="lens-select">Select Lenses (Optional)</Label>
+                <Select onValueChange={handleLensChange} defaultValue="none">
+                    <SelectTrigger id="lens-select">
+                    <SelectValue placeholder="No lenses" />
+                    </SelectTrigger>
+                    <SelectContent>
+                    <SelectItem value="none">No lenses</SelectItem>
+                    {lenses.map(lens => (
+                        <SelectItem key={lens.id} value={lens.id}>
+                        {lens.name} {lens.price > 0 ? `(+${formatPrice(lens.price)})` : ''}
+                        </SelectItem>
+                    ))}
+                    </SelectContent>
+                </Select>
+                </div>
+            )}
+            
+            <div className="mt-8 space-y-4">
+                <div className="flex items-center gap-4">
+                <Input
+                    type="number"
+                    min="1"
+                    value={quantity}
+                    onChange={(e) => setQuantity(Math.max(1, parseInt(e.target.value, 10) || 1))}
+                    className="w-20"
+                    aria-label="Quantity"
+                />
+                <Button size="lg" className="flex-1" onClick={handleAddToCart} variant="secondary">
+                    <ShoppingCart className="mr-2 h-5 w-5" />
+                    Add to Cart
+                </Button>
+                </div>
+                <Button size="lg" variant="default" className="w-full" onClick={handleBuyNow}>
+                <Zap className="mr-2 h-5 w-5" />
+                Buy Now
+                </Button>
+            </div>
+
+            <div className="mt-8 space-y-4">
+                <div>
+                <Label htmlFor="pincode">Check Delivery Availability</Label>
+                <div className="flex items-center gap-2 mt-2">
+                    <div className="relative flex-1">
+                        <MapPin className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                        <Input
+                            id="pincode"
+                            placeholder="Enter 6-digit pincode"
+                            value={pincode}
+                            onChange={(e) => {
+                                setPincode(e.target.value);
+                                setDeliveryStatus('idle');
+                            }}
+                            className="pl-10"
+                            maxLength={6}
                         />
-                    </button>
+                    </div>
+                    <Button onClick={handlePincodeCheck} disabled={deliveryStatus === 'checking'}>
+                        {deliveryStatus === 'checking' ? <Loader2 className="h-4 w-4 animate-spin" /> : 'Check'}
+                    </Button>
+                </div>
+                {deliveryStatus === 'available' && deliveryDate && (
+                        <p className="mt-2 text-sm text-green-600 animate-fade-in">Great! Delivery available. Expected by {format(deliveryDate, "eeee, MMMM d")}.</p>
+                    )}
+                    {deliveryStatus === 'unavailable' && (
+                        <p className="mt-2 text-sm text-destructive animate-fade-in">Sorry, delivery is not available to this pincode.</p>
+                    )}
+                </div>
+
+                <div className="flex items-center gap-3 text-sm">
+                    <ShieldCheck className="w-5 h-5 text-accent"/>
+                    <p>6 Months Warranty Included</p>
+                </div>
+                <div className="flex items-center gap-3 text-sm">
+                    <Undo2 className="w-5 h-5 text-accent"/>
+                    <p>5-day return policy for unused products</p>
+                </div>
+            </div>
+            </div>
+        </div>
+        <div className="container mx-auto px-4 py-16">
+            <ReviewList productId={product.id} />
+        </div>
+        {similarProducts.length > 0 && (
+            <div className="container mx-auto px-4 py-16">
+            <Separator className="my-8" />
+            <h2 className="text-3xl font-bold tracking-tight text-center mb-8">Similar Products</h2>
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+                {similarProducts.map((p, index) => (
+                <ProductCard 
+                    key={p.id} 
+                    product={p} 
+                    className="animate-fade-in-up"
+                    style={{ animationDelay: `${index * 100}ms`}}
+                />
                 ))}
             </div>
-            <div className="aspect-[4/3] relative">
-                 <ImageZoom imageUrl={activeImage} zoomLevel={2.5}/>
             </div>
+        )}
+        {selectedLens && (
+            <PrescriptionDialog
+                isOpen={isPrescriptionDialogOpen}
+                onOpenChange={setIsPrescriptionDialogOpen}
+                lens={selectedLens}
+                onProceed={handlePrescriptionProceed}
+            />
+        )}
         </div>
-        
-        <div>
-          <p className="text-sm font-medium text-primary">{product.brand}</p>
-          <h1 className="text-4xl font-bold tracking-tight mt-1">{product.name}</h1>
-          
-          <div className="flex items-center mt-4">
-            <p className="text-3xl font-light">{formatPrice(total_price)}</p>
-          </div>
-
-          <div className="flex items-center mt-2">
-            <div className="flex items-center">
-              {[...Array(5)].map((_, i) => (
-                <Star key={i} className="w-5 h-5 text-yellow-400 fill-current" />
-              ))}
-            </div>
-            <span className="ml-2 text-sm text-muted-foreground">(123 reviews)</span>
-          </div>
-          
-          <p className="mt-6 text-foreground/80 leading-relaxed">{product.description}</p>
-
-          {product.type === 'Frames' && (
-            <div className="mt-8 space-y-2">
-              <Label htmlFor="lens-select">Select Lenses (Optional)</Label>
-              <Select onValueChange={handleLensChange} defaultValue="none">
-                <SelectTrigger id="lens-select">
-                  <SelectValue placeholder="No lenses" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="none">No lenses</SelectItem>
-                  {lenses.map(lens => (
-                    <SelectItem key={lens.id} value={lens.id}>
-                      {lens.name} {lens.price > 0 ? `(+${formatPrice(lens.price)})` : ''}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            </div>
-          )}
-          
-          <div className="mt-8 space-y-4">
-            <div className="flex items-center gap-4">
-              <Input
-                type="number"
-                min="1"
-                value={quantity}
-                onChange={(e) => setQuantity(Math.max(1, parseInt(e.target.value, 10) || 1))}
-                className="w-20"
-                aria-label="Quantity"
-              />
-              <Button size="lg" className="flex-1" onClick={handleAddToCart} variant="secondary">
-                <ShoppingCart className="mr-2 h-5 w-5" />
-                Add to Cart
-              </Button>
-            </div>
-            <Button size="lg" variant="default" className="w-full" onClick={handleBuyNow}>
-              <Zap className="mr-2 h-5 w-5" />
-              Buy Now
-            </Button>
-          </div>
-
-          <div className="mt-8 space-y-4">
-            <div>
-              <Label htmlFor="pincode">Check Delivery Availability</Label>
-              <div className="flex items-center gap-2 mt-2">
-                  <div className="relative flex-1">
-                      <MapPin className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-                      <Input
-                          id="pincode"
-                          placeholder="Enter 6-digit pincode"
-                          value={pincode}
-                          onChange={(e) => {
-                            setPincode(e.target.value);
-                            setDeliveryStatus('idle');
-                          }}
-                          className="pl-10"
-                          maxLength={6}
-                      />
-                  </div>
-                  <Button onClick={handlePincodeCheck} disabled={deliveryStatus === 'checking'}>
-                      {deliveryStatus === 'checking' ? <Loader2 className="h-4 w-4 animate-spin" /> : 'Check'}
-                  </Button>
-              </div>
-               {deliveryStatus === 'available' && deliveryDate && (
-                    <p className="mt-2 text-sm text-green-600">Great! Delivery available. Expected by {format(deliveryDate, "eeee, MMMM d")}.</p>
-                )}
-                {deliveryStatus === 'unavailable' && (
-                    <p className="mt-2 text-sm text-destructive">Sorry, delivery is not available to this pincode.</p>
-                )}
-            </div>
-
-            <div className="flex items-center gap-3 text-sm">
-                <ShieldCheck className="w-5 h-5 text-accent"/>
-                <p>6 Months Warranty Included</p>
-            </div>
-            <div className="flex items-center gap-3 text-sm">
-                <Undo2 className="w-5 h-5 text-accent"/>
-                <p>5-day return policy for unused products</p>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div className="container mx-auto px-4 py-16">
-        <ReviewList productId={product.id} />
-      </div>
-    {similarProducts.length > 0 && (
-        <div className="container mx-auto px-4 py-16">
-          <Separator className="my-8" />
-          <h2 className="text-3xl font-bold tracking-tight text-center mb-8">Similar Products</h2>
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-            {similarProducts.map(p => (
-              <ProductCard key={p.id} product={p} />
-            ))}
-          </div>
-        </div>
-      )}
-      {selectedLens && (
-          <PrescriptionDialog
-            isOpen={isPrescriptionDialogOpen}
-            onOpenChange={setIsPrescriptionDialogOpen}
-            lens={selectedLens}
-            onProceed={handlePrescriptionProceed}
-          />
-      )}
     </div>
-    </>
   );
 }
