@@ -1,8 +1,9 @@
 
+
 "use client";
 
 import { useParams, useRouter } from 'next/navigation';
-import { PRODUCTS, LENS_TYPES } from '@/lib/data';
+import { LENS_TYPES, PRODUCTS } from '@/lib/data';
 import { Button } from '@/components/ui/button';
 import { useCart } from '@/context/cart-context';
 import { PlaceHolderImages } from '@/lib/placeholder-images';

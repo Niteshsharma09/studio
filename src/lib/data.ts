@@ -1,10 +1,40 @@
 
 import type { Product } from './types';
+import { unstable_cache as cache } from 'next/cache';
 
 export const BRANDS = ['titan', 'fastrack', 'Technoii', 'velocity', 'X-Ford', 'Lauredale Eyewear', 'NVG'] as const;
 export const PRODUCT_TYPES = ['Frames', 'Lenses', 'Sunglasses'] as const;
 
-export const LENS_TYPES: Product[] = [
+export const getLenses = cache(
+    async () => {
+        console.log('Fetching lenses...');
+        // In a real app, this would be a database call.
+        return LENS_TYPES_DATA;
+    },
+    ['lenses'],
+    { revalidate: 3600 } // Revalidate every hour
+);
+
+export const getProducts = cache(
+    async () => {
+        console.log('Fetching products...');
+        return PRODUCTS_DATA;
+    },
+    ['products'],
+    { revalidate: 3600 }
+);
+
+export const getProduct = cache(
+    async (id: string) => {
+        console.log(`Fetching product ${id}...`);
+        return PRODUCTS_DATA.find(p => p.id === id);
+    },
+    ['product'],
+    { revalidate: 3600 }
+);
+
+
+const LENS_TYPES_DATA: Product[] = [
   {
     id: 'lens-zero',
     name: 'Zero Power',
@@ -188,7 +218,7 @@ export const LENS_TYPES: Product[] = [
 ];
 
 
-export const PRODUCTS: Product[] = [
+const PRODUCTS_DATA: Product[] = [
   {
     id: '1',
     name: 'Classic Aviator',
@@ -298,3 +328,7 @@ export const PRODUCTS: Product[] = [
     imageId: 'minimalist-square-frames',
   },
 ];
+
+// For backwards compatibility before caching was introduced
+export const PRODUCTS = PRODUCTS_DATA;
+export const LENS_TYPES = LENS_TYPES_DATA;
