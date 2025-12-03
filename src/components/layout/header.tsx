@@ -50,6 +50,7 @@ export function Header() {
     { href: '/?category=frames', label: 'Eyeglasses' },
     { href: '/?category=sunglasses', label: 'Sunglasses' },
     { href: '/?category=lenses', label: 'Lenses' },
+    { href: '/?category=contact-lenses', label: 'Contact Lenses' },
     { href: '/style-guide', label: 'Style Guide' },
   ];
 
@@ -251,7 +252,7 @@ export function Header() {
             href={link.href}
             className={cn(
               'transition-colors hover:text-primary',
-              (pathname + searchParams.toString()).includes(link.href.substring(1)) ? 'text-primary' : 'text-foreground/80'
+              (pathname + '?' + searchParams.toString()).includes(link.href.substring(1)) ? 'text-primary' : 'text-foreground/80'
             )}
           >
             {link.label}

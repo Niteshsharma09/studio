@@ -269,6 +269,36 @@
       "description": "Fashionable sunglasses with gradient lenses that are dark on top and lighter on the bottom.",
       "imageUrl": "https://images.unsplash.com/photo-1572635196237-14b3f281503f?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxncmFkaWVudCUyMHN1bmdsYXNzZXN8ZW58MHx8fHwxNzY0ODg0MTMzfDA&ixlib=rb-4.1.0&q=80&w=1080",
       "imageHint": "gradient sunglasses"
+    },
+    {
+      "id": "contact-daily-comfort",
+      "description": "Daily disposable contact lenses.",
+      "imageUrl": "https://images.unsplash.com/photo-1628872477382-a72a744d3b37?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxjb250YWN0JTIwbGVuc2VzfGVufDB8fHx8MTc2NDk3NzY3Nnww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "contact lenses"
+    },
+    {
+      "id": "contact-monthly-wear",
+      "description": "Monthly disposable contact lenses.",
+      "imageUrl": "https://images.unsplash.com/photo-1588863668858-3d7b63e9f45a?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwzfHxjb250YWN0JTIwbGVuc2VzfGVufDB8fHx8MTc2NDk3NzY3Nnww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "contact lenses"
+    },
+    {
+      "id": "contact-toric",
+      "description": "Toric contact lenses for astigmatism.",
+      "imageUrl": "https://images.unsplash.com/photo-1621641529845-56708304b49b?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw1fHxjb250YWN0JTIwbGVuc2VzfGVufDB8fHx8MTc2NDk3NzY3Nnww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "contact lenses"
+    },
+    {
+      "id": "contact-multifocal",
+      "description": "Multifocal contact lenses.",
+      "imageUrl": "https://images.unsplash.com/photo-1621641529845-56708304b49b?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw1fHxjb250YWN0JTIwbGVuc2VzfGVufDB8fHx8MTc2NDk3NzY3Nnww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "contact lenses"
+    },
+    {
+      "id": "contact-color-blue",
+      "description": "Blue colored contact lenses.",
+      "imageUrl": "https://images.unsplash.com/photo-1607957233158-d2f349c04b48?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxibHVlJTIwZXllc3xlbnwwfHx8fDE3NjQ5Nzc2NzZ8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "blue eyes"
     }
   ]
 }

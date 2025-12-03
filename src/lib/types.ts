@@ -5,7 +5,7 @@ export type Product = {
   description: string;
   price: number;
   brand: string;
-  type: 'Frames' | 'Lenses' | 'Sunglasses';
+  type: 'Frames' | 'Lenses' | 'Sunglasses' | 'Contact Lenses';
   imageId: string;
   material?: string;
   color?: string;

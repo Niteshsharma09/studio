@@ -1,4 +1,5 @@
 
+
 "use client";
 
 import { Suspense, useMemo } from 'react';
@@ -203,7 +204,7 @@ function ProductList({ allProducts }: { allProducts: Product[] }) {
     }
 
     if(category){
-        prods = prods.filter(p => p.type.toLowerCase().includes(category));
+        prods = prods.filter(p => p.type.toLowerCase().replace(/\s/g, '-') === category.toLowerCase());
     }
 
     prods = prods.filter(product => product.price >= minPrice && product.price <= maxPrice);
@@ -211,7 +212,7 @@ function ProductList({ allProducts }: { allProducts: Product[] }) {
     return prods;
   }, [searchQuery, category, selectedBrands, minPrice, maxPrice, allProducts]);
 
-  const title = category ? category.charAt(0).toUpperCase() + category.slice(1) : "Search Results";
+  const title = category ? category.replace(/-/g, ' ').split(' ').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ') : "Search Results";
   
   return (
       <div className="col-span-12 lg:col-span-9">
@@ -255,6 +256,7 @@ export function HomePageContent({ allProducts }: { allProducts: Product[] }) {
         { title: 'Eyeglasses', imageId: 'category-eyeglasses', href: '/?category=frames' },
         { title: 'Sunglasses', imageId: 'category-sunglasses', href: '/?category=sunglasses' },
         { title: 'Lenses', imageId: 'category-lenses', href: '/?category=lenses' },
+        { title: 'Contact Lenses', imageId: 'contact-monthly-wear', href: '/?category=contact-lenses' },
     ]
     const searchParams = useSearchParams();
     const hasFilters = searchParams.has('brands') || searchParams.has('minPrice') || searchParams.has('maxPrice') || searchParams.has('q') || searchParams.has('category');
@@ -267,7 +269,7 @@ export function HomePageContent({ allProducts }: { allProducts: Product[] }) {
   
           {showCollections && (
               <section className="container mx-auto px-4 py-16">
-                  <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
                       {categories.map((cat, index) => (
                           <div key={cat.title} style={{animationDelay: `$\{index * 150}ms`}}>
                                <CategoryCard {...cat} />

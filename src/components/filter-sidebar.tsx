@@ -43,10 +43,11 @@ export function FilterSidebar() {
 
   const handleCategoryChange = (category: string) => {
     const newParams = new URLSearchParams(searchParams);
-    if (selectedCategory === category.toLowerCase()) {
+    const formattedCategory = category.toLowerCase().replace(/\s/g, '-');
+    if (selectedCategory === formattedCategory) {
       newParams.delete('category');
     } else {
-      newParams.set('category', category.toLowerCase());
+      newParams.set('category', formattedCategory);
     }
     router.replace(`${pathname}?${newParams.toString()}`);
   };
@@ -82,7 +83,7 @@ export function FilterSidebar() {
               <div key={category} className="flex items-center space-x-2">
                 <Checkbox
                   id={`cat-${category}`}
-                  checked={selectedCategory === category.toLowerCase()}
+                  checked={selectedCategory === category.toLowerCase().replace(/\s/g, '-')}
                   onCheckedChange={() => handleCategoryChange(category)}
                 />
                 <Label htmlFor={`cat-${category}`} className="font-normal">{category}</Label>

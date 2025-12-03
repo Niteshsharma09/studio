@@ -3,7 +3,7 @@ import type { Product } from './types';
 import { unstable_cache as cache } from 'next/cache';
 
 export const BRANDS = ['titan', 'fastrack', 'Technoii', 'velocity', 'X-Ford', 'Lauredale Eyewear', 'NVG'] as const;
-export const PRODUCT_TYPES = ['Frames', 'Lenses', 'Sunglasses'] as const;
+export const PRODUCT_TYPES = ['Frames', 'Lenses', 'Sunglasses', 'Contact Lenses'] as const;
 
 export const getLenses = cache(
     async () => {
@@ -488,7 +488,52 @@ const PRODUCTS_DATA: Product[] = [
     brand: 'fastrack',
     type: 'Sunglasses',
     imageId: 'fastrack-gradient',
-  }
+  },
+  {
+    id: '31',
+    name: 'Daily Comfort',
+    description: 'Daily disposable contact lenses for maximum comfort and convenience.',
+    price: 30.00,
+    brand: 'Technoii',
+    type: 'Contact Lenses',
+    imageId: 'contact-daily-comfort',
+  },
+  {
+    id: '32',
+    name: 'Monthly Wear',
+    description: 'Durable monthly contact lenses for consistent vision and comfort.',
+    price: 25.00,
+    brand: 'velocity',
+    type: 'Contact Lenses',
+    imageId: 'contact-monthly-wear',
+  },
+  {
+    id: '33',
+    name: 'Toric for Astigmatism',
+    description: 'Specialized toric lenses to correct astigmatism for clear, stable vision.',
+    price: 45.00,
+    brand: 'X-Ford',
+    type: 'Contact Lenses',
+    imageId: 'contact-toric',
+  },
+  {
+    id: '34',
+    name: 'Multifocal Contacts',
+    description: 'Multifocal lenses for clear vision at all distances, from near to far.',
+    price: 55.00,
+    brand: 'titan',
+    type: 'Contact Lenses',
+    imageId: 'contact-multifocal',
+  },
+  {
+    id: '35',
+    name: 'Color Contacts - Blue',
+    description: 'Enhance your natural eye color with these vibrant blue contact lenses.',
+    price: 35.00,
+    brand: 'fastrack',
+    type: 'Contact Lenses',
+    imageId: 'contact-color-blue',
+  },
 ];
 
 // For backwards compatibility before caching was introduced
