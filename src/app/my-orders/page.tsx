@@ -4,8 +4,8 @@
 import { useOrders, useUser } from "@/firebase";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
-import { Loader2, PackageOpen, ChevronDown } from "lucide-react";
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
+import { Loader2, PackageOpen } from "lucide-react";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import {
   Accordion,
   AccordionContent,
@@ -14,8 +14,6 @@ import {
 } from "@/components/ui/accordion"
 import { Badge } from "@/components/ui/badge";
 import { format } from "date-fns";
-import Image from 'next/image';
-import { PlaceHolderImages } from "@/lib/placeholder-images";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { Separator } from "@/components/ui/separator";
@@ -82,7 +80,7 @@ export default function MyOrdersPage() {
                                     <div className="space-y-1">
                                         <p className="font-bold text-lg">Order #{order.id.slice(0, 7)}</p>
                                         <p className="text-sm text-muted-foreground">
-                                            {order.orderDate ? format(order.orderDate.toDate(), 'MMMM d, yyyy') : 'Date not available'}
+                                            {order.orderDate?.toDate ? format(order.orderDate.toDate(), 'MMMM d, yyyy') : 'Date not available'}
                                         </p>
                                     </div>
                                     <div className="flex items-center gap-4">
@@ -95,7 +93,7 @@ export default function MyOrdersPage() {
                                 <Separator className="mb-4" />
                                 <h4 className="font-semibold mb-4">Order Items</h4>
                                 <div className="space-y-4">
-                                    {order.items.map(item => (
+                                    {order.items?.map(item => (
                                          <div key={item.id} className="flex justify-between items-center">
                                             <p>{item.productName} {item.lensName ? `w/ ${item.lensName}` : ''} (x{item.quantity})</p>
                                             <p>{formatPrice(item.priceAtPurchase * item.quantity)}</p>

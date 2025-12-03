@@ -3,9 +3,8 @@
 
 import { useState, useEffect, useCallback } from 'react';
 import { useFirestore, useUser } from '@/firebase';
-import { collection, query, where, onSnapshot, orderBy, collectionGroup, getDocs } from 'firebase/firestore';
+import { collection, query, onSnapshot, orderBy, getDocs } from 'firebase/firestore';
 import type { Order, OrderItem } from '@/lib/types';
-import { useMemo } from 'react';
 
 export function useOrders() {
   const { user, loading: userLoading } = useUser();
@@ -13,11 +12,10 @@ export function useOrders() {
   const [orders, setOrders] = useState<Order[]>([]);
   const [loading, setLoading] = useState(true);
 
-  const memoizedUserId = useMemo(() => user?.uid, [user?.uid]);
-
   const fetchOrders = useCallback(() => {
-    if (!firestore || !memoizedUserId) {
+    if (!firestore || !user?.uid) {
         if (!userLoading) {
+            setOrders([]);
             setLoading(false);
         }
         return;
@@ -26,7 +24,7 @@ export function useOrders() {
     setLoading(true);
     
     const ordersQuery = query(
-        collection(firestore, `users/${memoizedUserId}/orders`),
+        collection(firestore, `users/${user.uid}/orders`),
         orderBy('orderDate', 'desc')
     );
 
@@ -39,10 +37,14 @@ export function useOrders() {
 
             // Fetch order items subcollection for each order
             const itemsQuery = query(collection(doc.ref, 'orderItems'));
-            const itemsSnapshot = await getDocs(itemsQuery);
-            itemsSnapshot.forEach((itemDoc) => {
-                orderData.items.push({ id: itemDoc.id, ...itemDoc.data() } as OrderItem);
-            });
+            try {
+                const itemsSnapshot = await getDocs(itemsQuery);
+                itemsSnapshot.forEach((itemDoc) => {
+                    orderData.items.push({ id: itemDoc.id, ...itemDoc.data() } as OrderItem);
+                });
+            } catch (itemsError) {
+                console.error(`Error fetching items for order ${doc.id}:`, itemsError);
+            }
             
             fetchedOrders.push(orderData);
         }
@@ -50,11 +52,12 @@ export function useOrders() {
         setLoading(false);
     }, (error) => {
         console.error("Error fetching orders:", error);
+        setOrders([]);
         setLoading(false);
     });
 
     return unsubscribe;
-  }, [firestore, memoizedUserId, userLoading]);
+  }, [firestore, user?.uid, userLoading]);
 
   useEffect(() => {
     const unsubscribe = fetchOrders();
