@@ -47,7 +47,16 @@ export function Header() {
   }, [searchParams]);
 
   const navLinks = [
-    { href: '/?category=frames', label: 'Eyeglasses' },
+    { 
+      href: '/?category=frames', 
+      label: 'Eyeglasses',
+      submenu: [
+        { href: '/?category=frames&gender=men', label: 'Men' },
+        { href: '/?category=frames&gender=women', label: 'Women' },
+        { href: '/?category=frames&gender=kids', label: 'Kids' },
+        { href: '/?category=frames&gender=unisex', label: 'Unisex' },
+      ]
+    },
     { href: '/?category=sunglasses', label: 'Sunglasses' },
     { href: '/?category=lenses', label: 'Lenses' },
     { href: '/?category=contact-lenses', label: 'Contact Lenses' },
@@ -156,17 +165,32 @@ export function Header() {
                   
                   <nav className="flex flex-col space-y-4 text-lg">
                     {navLinks.map((link) => (
-                      <Link
-                        key={link.href}
-                        href={link.href}
-                        onClick={() => setIsMobileMenuOpen(false)}
-                        className={cn(
-                          'font-medium transition-colors hover:text-foreground/80',
-                          pathname === link.href ? 'text-foreground' : 'text-foreground/60'
-                        )}
-                      >
-                        {link.label}
-                      </Link>
+                      <div key={link.href}>
+                         <Link
+                            href={link.href}
+                            onClick={() => !link.submenu && setIsMobileMenuOpen(false)}
+                            className={cn(
+                              'font-medium transition-colors hover:text-foreground/80',
+                              pathname === link.href ? 'text-foreground' : 'text-foreground/60'
+                            )}
+                          >
+                            {link.label}
+                          </Link>
+                          {link.submenu && (
+                            <div className="flex flex-col pl-4 mt-2 space-y-2">
+                              {link.submenu.map(sublink => (
+                                <Link
+                                  key={sublink.href}
+                                  href={sublink.href}
+                                  onClick={() => setIsMobileMenuOpen(false)}
+                                  className="text-base text-foreground/60 hover:text-foreground/80"
+                                >
+                                  {sublink.label}
+                                </Link>
+                              ))}
+                            </div>
+                          )}
+                      </div>
                     ))}
                   </nav>
                   <div className="mt-8 space-y-2">
@@ -246,7 +270,32 @@ export function Header() {
       </div>
       
       <nav className="hidden lg:flex container items-center justify-center space-x-8 text-sm font-medium h-12 border-t">
-        {navLinks.map((link) => (
+        {navLinks.map((link) => {
+          if (link.submenu) {
+            return (
+              <DropdownMenu key={link.href}>
+                <DropdownMenuTrigger asChild>
+                  <Link
+                    href={link.href}
+                     className={cn(
+                      'flex items-center gap-1 transition-colors hover:text-primary',
+                      (pathname + '?' + searchParams.toString()).includes('category=frames') ? 'text-primary' : 'text-foreground/80'
+                    )}
+                  >
+                    {link.label}
+                  </Link>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent>
+                  {link.submenu.map(sublink => (
+                    <DropdownMenuItem key={sublink.href} asChild>
+                       <Link href={sublink.href}>{sublink.label}</Link>
+                    </DropdownMenuItem>
+                  ))}
+                </DropdownMenuContent>
+              </DropdownMenu>
+            )
+          }
+          return (
           <Link
             key={link.href}
             href={link.href}
@@ -257,7 +306,7 @@ export function Header() {
           >
             {link.label}
           </Link>
-        ))}
+        )})}
       </nav>
     </header>
   );

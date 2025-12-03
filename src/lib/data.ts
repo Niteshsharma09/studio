@@ -3,7 +3,7 @@ import type { Product } from './types';
 import { unstable_cache as cache } from 'next/cache';
 
 export const BRANDS = ['titan', 'fastrack', 'Technoii', 'velocity', 'X-Ford', 'Lauredale Eyewear', 'NVG'] as const;
-export const PRODUCT_TYPES = ['Frames', 'Lenses', 'Sunglasses', 'Contact Lenses'] as const;
+export const PRODUCT_TYPES = ['Frames', 'Lenses', 'Sunglasses', 'Contact Lenses', 'Men', 'Women', 'Kids', 'Unisex'] as const;
 
 export const getLenses = cache(
     async () => {
@@ -227,6 +227,7 @@ const PRODUCTS_DATA: Product[] = [
     brand: 'fastrack',
     type: 'Sunglasses',
     imageId: 'classic-aviator',
+    gender: 'Unisex',
   },
   {
     id: '2',
@@ -236,6 +237,7 @@ const PRODUCTS_DATA: Product[] = [
     brand: 'titan',
     type: 'Sunglasses',
     imageId: 'wayfarer-ease',
+    gender: 'Unisex',
   },
   {
     id: '3',
@@ -245,6 +247,7 @@ const PRODUCTS_DATA: Product[] = [
     brand: 'Technoii',
     type: 'Sunglasses',
     imageId: 'holbrook-prizm',
+    gender: 'Men',
   },
   {
     id: '4',
@@ -254,6 +257,7 @@ const PRODUCTS_DATA: Product[] = [
     brand: 'velocity',
     type: 'Sunglasses',
     imageId: '714-steve-mcqueen',
+    gender: 'Men',
   },
   {
     id: '5',
@@ -263,6 +267,7 @@ const PRODUCTS_DATA: Product[] = [
     brand: 'X-Ford',
     type: 'Frames',
     imageId: 'urban-lite-frames',
+    gender: 'Unisex',
   },
   {
     id: '6',
@@ -272,6 +277,7 @@ const PRODUCTS_DATA: Product[] = [
     brand: 'Lauredale Eyewear',
     type: 'Frames',
     imageId: 'chic-cat-eye',
+    gender: 'Women',
   },
   {
     id: '7',
@@ -281,6 +287,7 @@ const PRODUCTS_DATA: Product[] = [
     brand: 'titan',
     type: 'Frames',
     imageId: 'sport-performance-frames',
+    gender: 'Men',
   },
   {
     id: '8',
@@ -317,6 +324,7 @@ const PRODUCTS_DATA: Product[] = [
     brand: 'fastrack',
     type: 'Frames',
     imageId: 'retro-round-frames',
+    gender: 'Unisex',
   },
   {
     id: '12',
@@ -326,6 +334,7 @@ const PRODUCTS_DATA: Product[] = [
     brand: 'Lauredale Eyewear',
     type: 'Frames',
     imageId: 'minimalist-square-frames',
+    gender: 'Unisex',
   },
   {
     id: '13',
@@ -335,6 +344,7 @@ const PRODUCTS_DATA: Product[] = [
     brand: 'NVG',
     type: 'Sunglasses',
     imageId: 'stealth-blade',
+    gender: 'Unisex',
   },
   {
     id: '14',
@@ -344,6 +354,7 @@ const PRODUCTS_DATA: Product[] = [
     brand: 'titan',
     type: 'Frames',
     imageId: 'titanium-hexa',
+    gender: 'Women',
   },
   {
     id: '15',
@@ -353,6 +364,7 @@ const PRODUCTS_DATA: Product[] = [
     brand: 'NVG',
     type: 'Sunglasses',
     imageId: 'oceanic-round',
+    gender: 'Women',
   },
   {
     id: '16',
@@ -362,6 +374,7 @@ const PRODUCTS_DATA: Product[] = [
     brand: 'velocity',
     type: 'Frames',
     imageId: 'velocity-clubmaster',
+    gender: 'Unisex',
   },
   {
     id: '17',
@@ -371,6 +384,7 @@ const PRODUCTS_DATA: Product[] = [
     brand: 'fastrack',
     type: 'Sunglasses',
     imageId: 'fastrack-sport-wrap',
+    gender: 'Men',
   },
   {
     id: '18',
@@ -380,6 +394,7 @@ const PRODUCTS_DATA: Product[] = [
     brand: 'X-Ford',
     type: 'Frames',
     imageId: 'x-ford-browline',
+    gender: 'Men',
   },
   {
     id: '19',
@@ -398,6 +413,7 @@ const PRODUCTS_DATA: Product[] = [
     brand: 'Lauredale Eyewear',
     type: 'Sunglasses',
     imageId: 'lauredale-glam',
+    gender: 'Women',
   },
   {
     id: '21',
@@ -407,6 +423,7 @@ const PRODUCTS_DATA: Product[] = [
     brand: 'titan',
     type: 'Frames',
     imageId: 'titan-airflex',
+    gender: 'Kids',
   },
   {
     id: '22',
@@ -425,6 +442,7 @@ const PRODUCTS_DATA: Product[] = [
     brand: 'fastrack',
     type: 'Frames',
     imageId: 'fastrack-urban',
+    gender: 'Kids',
   },
   {
     id: '24',
@@ -434,6 +452,7 @@ const PRODUCTS_DATA: Product[] = [
     brand: 'velocity',
     type: 'Sunglasses',
     imageId: 'velocity-aviator-2',
+    gender: 'Unisex',
   },
   {
     id: '25',
@@ -443,6 +462,7 @@ const PRODUCTS_DATA: Product[] = [
     brand: 'X-Ford',
     type: 'Frames',
     imageId: 'x-ford-executive',
+    gender: 'Men',
   },
   {
     id: '26',
@@ -452,6 +472,7 @@ const PRODUCTS_DATA: Product[] = [
     brand: 'Lauredale Eyewear',
     type: 'Frames',
     imageId: 'lauredale-tortoise',
+    gender: 'Women',
   },
   {
     id: '27',
@@ -461,6 +482,7 @@ const PRODUCTS_DATA: Product[] = [
     brand: 'titan',
     type: 'Frames',
     imageId: 'titan-rimless',
+    gender: 'Unisex',
   },
   {
     id: '28',
@@ -479,6 +501,7 @@ const PRODUCTS_DATA: Product[] = [
     brand: 'NVG',
     type: 'Sunglasses',
     imageId: 'nvg-shield-pro',
+    gender: 'Unisex',
   },
   {
     id: '30',
@@ -488,6 +511,7 @@ const PRODUCTS_DATA: Product[] = [
     brand: 'fastrack',
     type: 'Sunglasses',
     imageId: 'fastrack-gradient',
+    gender: 'Women',
   },
   {
     id: '31',

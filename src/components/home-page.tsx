@@ -185,6 +185,7 @@ function ProductList({ allProducts }: { allProducts: Product[] }) {
   const searchParams = useSearchParams();
   const searchQuery = searchParams.get('q');
   const category = searchParams.get('category');
+  const gender = searchParams.get('gender');
   const selectedBrands = useMemo(() => searchParams.get('brands')?.split(',') || [], [searchParams]);
   const minPrice = useMemo(() => Number(searchParams.get('minPrice') || 0), [searchParams]);
   const maxPrice = useMemo(() => Number(searchParams.get('maxPrice') || 9999), [searchParams]);
@@ -207,10 +208,14 @@ function ProductList({ allProducts }: { allProducts: Product[] }) {
         prods = prods.filter(p => p.type.toLowerCase().replace(/\s/g, '-') === category.toLowerCase());
     }
 
+    if (gender) {
+        prods = prods.filter(p => p.gender?.toLowerCase() === gender.toLowerCase());
+    }
+
     prods = prods.filter(product => product.price >= minPrice && product.price <= maxPrice);
 
     return prods;
-  }, [searchQuery, category, selectedBrands, minPrice, maxPrice, allProducts]);
+  }, [searchQuery, category, gender, selectedBrands, minPrice, maxPrice, allProducts]);
 
   const title = category ? category.replace(/-/g, ' ').split(' ').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ') : "Search Results";
   
@@ -259,7 +264,7 @@ export function HomePageContent({ allProducts }: { allProducts: Product[] }) {
         { title: 'Contact Lenses', imageId: 'contact-monthly-wear', href: '/?category=contact-lenses' },
     ]
     const searchParams = useSearchParams();
-    const hasFilters = searchParams.has('brands') || searchParams.has('minPrice') || searchParams.has('maxPrice') || searchParams.has('q') || searchParams.has('category');
+    const hasFilters = searchParams.has('brands') || searchParams.has('minPrice') || searchParams.has('maxPrice') || searchParams.has('q') || searchParams.has('category') || searchParams.has('gender');
   
     const showCollections = !hasFilters;
   

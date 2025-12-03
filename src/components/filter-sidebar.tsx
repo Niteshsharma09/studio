@@ -18,10 +18,13 @@ export function FilterSidebar() {
 
   const selectedBrands = useMemo(() => searchParams.get('brands')?.split(',') || [], [searchParams]);
   const selectedCategory = searchParams.get('category') || '';
+  const selectedGender = searchParams.get('gender') || '';
   const minPrice = useMemo(() => Number(searchParams.get('minPrice') || 0), [searchParams]);
   const maxPrice = useMemo(() => Number(searchParams.get('maxPrice') || 9999), [searchParams]);
 
   const maxProductPrice = useMemo(() => Math.max(...PRODUCTS.map(p => p.price), 500), []);
+  const genders = ['Men', 'Women', 'Kids', 'Unisex'];
+  const mainCategories = ['Frames', 'Sunglasses', 'Lenses', 'Contact Lenses'];
 
   const handleBrandChange = (brand: string) => {
     const newParams = new URLSearchParams(searchParams);
@@ -52,6 +55,17 @@ export function FilterSidebar() {
     router.replace(`${pathname}?${newParams.toString()}`);
   };
 
+  const handleGenderChange = (gender: string) => {
+    const newParams = new URLSearchParams(searchParams);
+    const formattedGender = gender.toLowerCase();
+    if (selectedGender === formattedGender) {
+      newParams.delete('gender');
+    } else {
+      newParams.set('gender', formattedGender);
+    }
+    router.replace(`${pathname}?${newParams.toString()}`);
+  };
+
   const handlePriceChange = (value: number[]) => {
      const newParams = new URLSearchParams(searchParams);
      newParams.set('minPrice', value[0].toString());
@@ -65,6 +79,7 @@ export function FilterSidebar() {
     newParams.delete('minPrice');
     newParams.delete('maxPrice');
     newParams.delete('category');
+    newParams.delete('gender');
     router.replace(`${pathname}?${newParams.toString()}`);
   };
 
@@ -79,7 +94,7 @@ export function FilterSidebar() {
         <div>
           <h3 className="font-semibold mb-4">Product</h3>
            <div className="space-y-2">
-            {PRODUCT_TYPES.map(category => (
+            {mainCategories.map(category => (
               <div key={category} className="flex items-center space-x-2">
                 <Checkbox
                   id={`cat-${category}`}
@@ -90,6 +105,22 @@ export function FilterSidebar() {
               </div>
             ))}
           </div>
+        </div>
+        <Separator />
+        <div>
+            <h3 className="font-semibold mb-4">Gender</h3>
+            <div className="space-y-2">
+                {genders.map(gender => (
+                <div key={gender} className="flex items-center space-x-2">
+                    <Checkbox
+                    id={`gender-${gender}`}
+                    checked={selectedGender === gender.toLowerCase()}
+                    onCheckedChange={() => handleGenderChange(gender)}
+                    />
+                    <Label htmlFor={`gender-${gender}`} className="font-normal">{gender}</Label>
+                </div>
+                ))}
+            </div>
         </div>
         <Separator />
         <div>
