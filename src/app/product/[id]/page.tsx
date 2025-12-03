@@ -27,6 +27,8 @@ import { ReviewList } from '@/components/review-list';
 import Image from 'next/image';
 import { ImageZoom } from '@/components/image-zoom';
 import { cn } from '@/lib/utils';
+import { useIsMobile } from '@/hooks/use-mobile';
+import { Dialog, DialogContent, DialogTrigger } from '@/components/ui/dialog';
 
 export default function ProductDetailPage() {
   const params = useParams();
@@ -42,6 +44,7 @@ export default function ProductDetailPage() {
   const [deliveryDate, setDeliveryDate] = useState<Date | null>(null);
   const [isPrescriptionDialogOpen, setIsPrescriptionDialogOpen] = useState(false);
   const [actionType, setActionType] = useState<'cart' | 'buy' | null>(null);
+  const isMobile = useIsMobile();
 
   const placeholder = PlaceHolderImages.find(p => p.id === product?.imageId);
   const mainImageUrl = placeholder?.imageUrl ?? `https://picsum.photos/seed/${product?.id}/600/400`;
@@ -163,6 +166,36 @@ export default function ProductDetailPage() {
   };
 
 
+  const MainImage = () => {
+    if (isMobile) {
+      return (
+        <Dialog>
+          <DialogTrigger asChild>
+            <div className="relative aspect-[4/3] w-full cursor-zoom-in">
+              <Image 
+                src={activeImage}
+                alt={product.name}
+                fill
+                className="object-contain rounded-lg"
+                sizes="(max-width: 1023px) 100vw, 50vw"
+                priority
+              />
+            </div>
+          </DialogTrigger>
+          <DialogContent className="max-w-full h-full max-h-full w-full p-2 bg-black/80 border-none">
+             <ImageZoom imageUrl={activeImage} zoomLevel={2.5} mobileZoom/>
+          </DialogContent>
+        </Dialog>
+      )
+    }
+
+    return (
+      <div className="aspect-[4/3] relative">
+          <ImageZoom imageUrl={activeImage} zoomLevel={2.5}/>
+      </div>
+    )
+  }
+
   return (
     <>
       <div className="animate-fade-in">
@@ -188,9 +221,7 @@ export default function ProductDetailPage() {
                           </button>
                       ))}
                   </div>
-                  <div className="aspect-[4/3] relative">
-                      <ImageZoom imageUrl={activeImage} zoomLevel={2.5}/>
-                  </div>
+                  <MainImage />
               </div>
               
               <div className="animate-fade-in-up">
@@ -241,12 +272,12 @@ export default function ProductDetailPage() {
                       className="w-20"
                       aria-label="Quantity"
                   />
-                  <Button size="lg" className="flex-1" onClick={handleAddToCart} variant="secondary">
+                  <Button size="lg" className="flex-1" onClick={handleAddToCart} variant="default">
                       <ShoppingCart className="mr-2 h-5 w-5" />
                       Add to Cart
                   </Button>
                   </div>
-                  <Button size="lg" variant="default" className="w-full" onClick={handleBuyNow}>
+                  <Button size="lg" variant="secondary" className="w-full" onClick={handleBuyNow}>
                   <Zap className="mr-2 h-5 w-5" />
                   Buy Now
                   </Button>
