@@ -1,7 +1,7 @@
 
 "use client";
 
-import { useMemo, Suspense, useRef } from 'react';
+import { useMemo, Suspense, useRef, useState, useEffect } from 'react';
 import { ProductCard } from '@/components/product-card';
 import { getProducts, getLenses, PRODUCTS } from '@/lib/data';
 import Image from 'next/image';
@@ -298,5 +298,3 @@ export default function Home() {
     </div>
   );
 }
-
-    
