@@ -10,7 +10,7 @@ service firebase.storage {
     // Allow write access to the 'reviews' folder only for authenticated users
     // Users can only write to a path that starts with their own UID
     match /reviews/{productId}/{fileName} {
-      allow write: if request.auth != null && fileName.startsWith(request.auth.uid);
+      allow write: if request.auth != null && request.auth.uid == fileName.split('-')[0];
     }
   }
 }
