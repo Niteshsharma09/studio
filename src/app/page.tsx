@@ -1,7 +1,7 @@
 
 "use client";
 
-import { useMemo, Suspense } from 'react';
+import { useMemo, Suspense, useRef } from 'react';
 import { ProductCard } from '@/components/product-card';
 import { PRODUCTS } from '@/lib/data';
 import Image from 'next/image';
@@ -13,32 +13,105 @@ import { Button } from '@/components/ui/button';
 import { FilterSidebar } from '@/components/filter-sidebar';
 import { ArrowRight, ShoppingBag } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import {
+    Carousel,
+    CarouselContent,
+    CarouselItem,
+    CarouselNext,
+    CarouselPrevious,
+} from "@/components/ui/carousel"
+import Autoplay from "embla-carousel-autoplay"
+
 
 const HeroSection = () => {
-    const heroImage = PlaceHolderImages.find(p => p.id === 'hero-image');
+    const plugin = useRef(
+        Autoplay({ delay: 5000, stopOnInteraction: true })
+    );
+
+    const slides = [
+        {
+            desktopImageId: 'hero-carousel-1-desktop',
+            mobileImageId: 'hero-carousel-1-mobile',
+            title: 'Clarity in Sight, Style in Mind',
+            subtitle: 'Discover our exclusive collection of premium eyewear, crafted with precision for unparalleled comfort and style.',
+            buttonText: 'Shop The Collection',
+            buttonLink: '/#featured',
+        },
+        {
+            desktopImageId: 'hero-carousel-2-desktop',
+            mobileImageId: 'hero-carousel-2-mobile',
+            title: 'Advanced Lens Technology',
+            subtitle: 'Experience the world in high definition with our cutting-edge lens options, from blue light filtering to photochromic.',
+            buttonText: 'Explore Lenses',
+            buttonLink: '/?category=lenses',
+        },
+        {
+            desktopImageId: 'hero-carousel-3-desktop',
+            mobileImageId: 'hero-carousel-3-mobile',
+            title: 'Sunglasses for Every Season',
+            subtitle: 'Protect your eyes and elevate your look with our diverse range of sunglasses, featuring 100% UV protection.',
+            buttonText: 'View Sunglasses',
+            buttonLink: '/?category=sunglasses',
+        },
+    ];
+
     return (
-        <section className="relative w-full h-[60vh] min-h-[400px] flex items-center justify-center text-center bg-secondary overflow-hidden">
-            {heroImage && (
-                 <Image
-                    src={heroImage.imageUrl}
-                    alt={heroImage.description}
-                    fill
-                    className="object-cover animate-zoom-in"
-                    data-ai-hint={heroImage.imageHint}
-                    priority
-                />
-            )}
-            <div className="absolute inset-0 bg-black/50" />
-            <div className="relative z-10 p-4 text-primary-foreground max-w-3xl animate-fade-in-up">
-                <h1 className="text-4xl md:text-6xl font-bold tracking-tighter leading-tight">Clarity in Sight, Style in Mind</h1>
-                <p className="mt-4 text-lg md:text-xl max-w-xl mx-auto">Discover our exclusive collection of premium eyewear, crafted with precision for unparalleled comfort and style.</p>
-                <Button asChild size="lg" className="mt-8">
-                    <Link href="/#featured">Shop Now <ArrowRight className="ml-2"/></Link>
-                </Button>
-            </div>
+        <section className="relative w-full h-[80vh] min-h-[500px] md:h-[60vh] text-primary-foreground overflow-hidden">
+            <Carousel
+                plugins={[plugin.current]}
+                className="w-full h-full"
+                onMouseEnter={plugin.current.stop}
+                onMouseLeave={plugin.current.reset}
+            >
+                <CarouselContent className="h-full">
+                    {slides.map((slide, index) => {
+                        const desktopImage = PlaceHolderImages.find(p => p.id === slide.desktopImageId);
+                        const mobileImage = PlaceHolderImages.find(p => p.id === slide.mobileImageId);
+                        return (
+                            <CarouselItem key={index} className="h-full">
+                                <div className="w-full h-full relative">
+                                    {desktopImage && (
+                                        <Image
+                                            src={desktopImage.imageUrl}
+                                            alt={desktopImage.description}
+                                            fill
+                                            className="object-cover hidden md:block animate-zoom-in"
+                                            data-ai-hint={desktopImage.imageHint}
+                                            priority={index === 0}
+                                        />
+                                    )}
+                                    {mobileImage && (
+                                        <Image
+                                            src={mobileImage.imageUrl}
+                                            alt={mobileImage.description}
+                                            fill
+                                            className="object-cover md:hidden animate-zoom-in"
+                                            data-ai-hint={mobileImage.imageHint}
+                                            priority={index === 0}
+                                        />
+                                    )}
+                                    <div className="absolute inset-0 bg-black/50" />
+                                    <div className="absolute inset-0 z-10 flex flex-col items-center justify-center text-center p-4">
+                                        <div className="max-w-3xl animate-fade-in-up">
+                                            <h1 className="text-4xl md:text-6xl font-bold tracking-tighter leading-tight">{slide.title}</h1>
+                                            <p className="mt-4 text-lg md:text-xl max-w-xl mx-auto">{slide.subtitle}</p>
+                                            <Button asChild size="lg" className="mt-8">
+                                                <Link href={slide.buttonLink}>{slide.buttonText} <ArrowRight className="ml-2"/></Link>
+                                            </Button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </CarouselItem>
+                        );
+                    })}
+                </CarouselContent>
+                <CarouselPrevious className="absolute left-4 top-1/2 -translate-y-1/2 z-20 text-white bg-black/30 hover:bg-black/50 border-white/50 hover:border-white" />
+                <CarouselNext className="absolute right-4 top-1/2 -translate-y-1/2 z-20 text-white bg-black/30 hover:bg-black/50 border-white/50 hover:border-white" />
+            </Carousel>
         </section>
-    )
-}
+    );
+};
+
 
 const PromoBanner = () => {
     return (
