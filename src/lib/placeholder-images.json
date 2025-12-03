@@ -45,19 +45,19 @@
     {
       "id": "clearblue-lenses",
       "description": "A pair of lenses with blue light filtering.",
-      "imageUrl": "https://images.unsplash.com/photo-1631049339673-c1e5ba4849fb?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxlbnwwfHx8fDE3NjQ4ODQxMzN8MA&ixlib=rb-4.1.0&q=80&w=1080",
-      "imageHint": "eyeglass lenses"
+      "imageUrl": "https://images.unsplash.com/photo-1608498522396-18d45a7e6b48?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxibHVlJTIwbGlnaHQlMjBnbGFzc2VzJTIwbGVuc3xlbnwwfHx8fDE3NjQ5OTI4NTV8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "blue-light lens"
     },
     {
       "id": "photochromic-lenses",
       "description": "A pair of photochromic lenses that darken in the sun.",
-      "imageUrl": "https://images.unsplash.com/photo-1577992933098-f3d9a69152a5?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHx0cmFuc2l0aW9uJTIwbGVuc2VzfGVufDB8fHx8MTc2NDg4NDEzM3ww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageUrl": "https://images.unsplash.com/photo-1614716494363-3b283182a46e?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHx0cmFuc2l0aW9uJTIwbGVuc2VzJTJDZ3JleXxlbnwwfHx8fDE3NjQ5OTI4NTV8MA&ixlib=rb-4.1.0&q=80&w=1080",
       "imageHint": "transition lenses"
     },
     {
       "id": "polarized-pro-lenses",
       "description": "A pair of high-quality polarized lenses.",
-      "imageUrl": "https://images.unsplash.com/photo-1568475004576-f05a3903642f?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxwb2xhcml6ZWQlMjBsZW5zZXN8ZW58MHx8fHwxNzY0ODg0MTMzfDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageUrl": "https://images.unsplash.com/photo-1628872477382-a72a744d3b37?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxleWVnbGFzcyUyMGxlbnNlcyUyMG9uJTIwdGFibGV8ZW58MHx8fHwxNzY0OTkyODU1fDA&ixlib=rb-4.1.0&q=80&w=1080",
       "imageHint": "polarized lenses"
     },
     {
@@ -111,7 +111,7 @@
     {
       "id": "technoii-digital-lens",
       "description": "High-definition lenses optimized for digital screen usage, reducing fatigue.",
-      "imageUrl": "https://images.unsplash.com/photo-1666249246601-b8bb20b21b3f?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxlbnwwfHx8fDE3NjQ4ODQxMzN8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageUrl": "https://images.unsplash.com/photo-1526656098433-2e7b0e535237?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxzbWFydCUyMGdsYXNzZXMlMjBsZW5zZXN8ZW58MHx8fHwxNzY0OTkyODU1fDA&ixlib=rb-4.1.0&q=80&w=1080",
       "imageHint": "digital lenses"
     },
     {
@@ -129,8 +129,8 @@
     {
       "id": "nvg-night-vision",
       "description": "Specialized lenses designed to reduce glare and improve clarity for night driving.",
-      "imageUrl": "https://images.unsplash.com/photo-1631049339673-c1e5ba4849fb?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHxuaWdodCUyMGRyaXZpbmclMjBnbGFzc2VzfGVufDB8fHx8MTc2NDg4NDEzM3ww&ixlib=rb-4.1.0&q=80&w=1080",
-      "imageHint": "night driving glasses"
+      "imageUrl": "https://images.unsplash.com/photo-1621285819729-2391a44c9b13?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxuaWdodCUyMHZpc2lvbiUyMGdsYXNzZXMlMjBsZW5zZXN8ZW58MHx8fHwxNzY0OTkyODU1fDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "night-vision lenses"
     },
     {
       "id": "fastrack-urban",
@@ -165,8 +165,8 @@
     {
       "id": "technoii-drive-lens",
       "description": "Lenses with a specialized tint and polarization to enhance contrast while driving.",
-      "imageUrl": "https://images.unsplash.com/photo-1568475004576-f05a3903642f?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHxkcml2aW5nJTIwbGVuc2VzfGVufDB8fHx8MTc2NDg4NDEzM3ww&ixlibrb-4.1.0&q=80&w=1080",
-      "imageHint": "driving lenses"
+      "imageUrl": "https://images.unsplash.com/photo-1625983792078-4a5700779839?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxkcml2aW5nJTIwZ2xhc3NlcyUyMGxlbnN8ZW58MHx8fHwxNzY0OTkyODU1fDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "driving lens"
     },
     {
       "id": "nvg-shield-pro",
@@ -255,7 +255,7 @@
     {
       "id": "category-lenses",
       "description": "A close-up of different eyeglass lenses.",
-      "imageUrl": "https://images.unsplash.com/photo-1631049339673-c1e5ba4849fb?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxlbnwwfHx8fDE3NjQ4ODQxMzN8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageUrl": "https://images.unsplash.com/photo-1608498522396-18d45a7e6b48?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxleWVnbGFzcyUyMGxlbnNlcyUyMHN0YWNrfGVufDB8fHx8MTc2NDk5Mjk0Nnww&ixlib=rb-4.1.0&q=80&w=1080",
       "imageHint": "eyeglass lenses"
     },
     {
