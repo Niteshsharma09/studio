@@ -58,7 +58,7 @@ export function ReviewForm({ productId, onReviewSubmit }: ReviewFormProps) {
             <CardDescription>You must be logged in to write a review.</CardDescription>
         </CardHeader>
         <CardContent>
-            <Button asChild><Link href="/login">Log In to Review</Link></Button>
+            <Button asChild><Link href="/login?redirect=/product/${productId}">Log In to Review</Link></Button>
         </CardContent>
       </Card>
     );
