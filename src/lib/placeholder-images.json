@@ -179,6 +179,96 @@
       "description": "Round sunglasses with blue lenses.",
       "imageUrl": "https://images.unsplash.com/photo-1572635196237-14b3f281503f?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxyb3VuZCUyMHN1bmdsYXNzZXN8ZW58MHx8fHwxNzY0ODg0MTMzfDA&ixlib=rb-4.1.0&q=80&w=1080",
       "imageHint": "round sunglasses"
+    },
+    {
+      "id": "velocity-clubmaster",
+      "description": "A retro and timeless design, the Clubmaster is a symbol of sophistication.",
+      "imageUrl": "https://images.unsplash.com/photo-1636458939465-9209848a5688?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxjbHVibWFzdGVyJTIwZ2xhc3Nlc3xlbnwwfHx8fDE3NjQ4ODQxMzN8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "clubmaster glasses"
+    },
+    {
+      "id": "fastrack-sport-wrap",
+      "description": "Wraparound sunglasses designed for maximum coverage during intense activities.",
+      "imageUrl": "https://images.unsplash.com/photo-1586034533838-3486c0757a3e?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHx3cmFwYXJvdW5kJTIwc3VuZ2xhc3Nlc3xlbnwwfHx8fDE3NjQ4ODQxMzN8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "wraparound sunglasses"
+    },
+    {
+      "id": "x-ford-browline",
+      "description": "Classic browline glasses that offer a studious and distinguished look.",
+      "imageUrl": "https://images.unsplash.com/photo-1614716494363-3b283182a46e?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxhYnN0cmFjdCUyMGV5ZWdsYXNzZXN8ZW58MHx8fHwxNzY0ODg0MTMzfDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "browline glasses"
+    },
+    {
+      "id": "technoii-digital-lens",
+      "description": "High-definition lenses optimized for digital screen usage, reducing fatigue.",
+      "imageUrl": "https://images.unsplash.com/photo-1666249246601-b8bb20b21b3f?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxlbnwwfHx8fDE3NjQ4ODQxMzN8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "digital lenses"
+    },
+    {
+      "id": "lauredale-glam",
+      "description": "Oversized and glamorous sunglasses for those who want to make an entrance.",
+      "imageUrl": "https://images.unsplash.com/photo-1577992933098-f3d9a69152a5?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxvdmVyc2l6ZWQlMjBzdW5nbGFzc2VzfGVufDB8fHx8MTc2NDg4NDEzM3ww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "oversized sunglasses"
+    },
+    {
+      "id": "titan-airflex",
+      "description": "Extremely flexible and durable frames, designed for comfort and longevity.",
+      "imageUrl": "https://images.unsplash.com/photo-1611012595366-18cf16280487?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxsZXhpYmxlJTIwZ2xhc3Nlc3xlbnwwfHx8fDE3NjQ4ODQxMzN8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "flexible glasses"
+    },
+    {
+      "id": "nvg-night-vision",
+      "description": "Specialized lenses designed to reduce glare and improve clarity for night driving.",
+      "imageUrl": "https://images.unsplash.com/photo-1631049339673-c1e5ba4849fb?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxuaWdodCUyMGRyaXZpbmclMjBnbGFzc2VzfGVufDB8fHx8MTc2NDg4NDEzM3ww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "night driving glasses"
+    },
+    {
+      "id": "fastrack-urban",
+      "description": "Trendy and affordable frames for the modern city dweller.",
+      "imageUrl": "https://images.unsplash.com/photo-1574494349420-ecf8ccbff974?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHx1cmJhbiUyMGdsYXNzZXN8ZW58MHx8fHwxNzY0ODg0MTMzfDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "urban glasses"
+    },
+    {
+      "id": "velocity-aviator-2",
+      "description": "A modern take on the classic aviator with updated materials and lens tech.",
+      "imageUrl": "https://images.unsplash.com/photo-1511499767150-a48a237f0083?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxhdmlhdG9yJTIwc3VuZ2xhc3Nlc3xlbnwwfHx8fDE3NjQ4ODQxMzN8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "aviator sunglasses"
+    },
+    {
+      "id": "x-ford-executive",
+      "description": "Sophisticated and professional frames perfect for the office environment.",
+      "imageUrl": "https://images.unsplash.com/photo-1549298240-0d8e2d4d4227?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxvZmZpY2UlMjBnbGFzc2VzfGVufDB8fHx8MTc2NDg4NDEzM3ww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "office glasses"
+    },
+    {
+      "id": "lauredale-tortoise",
+      "description": "Classic tortoise-shell pattern on a chic, modern frame shape.",
+      "imageUrl": "https://images.unsplash.com/photo-1631049339673-c1e5ba4849fb?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHx0b3J0b2lzZSUyMHN1bmdsYXNzZXN8ZW58MHx8fHwxNzY0ODg0MTMzfDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "tortoise sunglasses"
+    },
+    {
+      "id": "titan-rimless",
+      "description": "Ultra-lightweight rimless frames for a barely-there feel and a minimalist look.",
+      "imageUrl": "https://images.unsplash.com/photo-1577992933098-f3d9a69152a5?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxyaW1sZXNzJTIwZ2xhc3Nlc3xlbnwwfHx8fDE3NjQ4ODQxMzN8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "rimless glasses"
+    },
+    {
+      "id": "technoii-drive-lens",
+      "description": "Lenses with a specialized tint and polarization to enhance contrast while driving.",
+      "imageUrl": "https://images.unsplash.com/photo-1568475004576-f05a3903642f?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxkcml2aW5nJTIwbGVuc2VzfGVufDB8fHx8MTc2NDg4NDEzM3ww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "driving lenses"
+    },
+    {
+      "id": "nvg-shield-pro",
+      "description": "Professional-grade shield sunglasses for maximum protection and a bold look.",
+      "imageUrl": "https://images.unsplash.com/photo-1577992933098-f3d9a69152a5?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxwcm9mZXNzaW9uYWwlMjBzdW5nbGFzc2VzfGVufDB8fHx8MTc2NDg4NDEzM3ww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "professional sunglasses"
+    },
+    {
+      "id": "fastrack-gradient",
+      "description": "Fashionable sunglasses with gradient lenses that are dark on top and lighter on the bottom.",
+      "imageUrl": "https://images.unsplash.com/photo-1572635196237-14b3f281503f?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxncmFkaWVudCUyMHN1bmdsYXNzZXN8ZW58MHx8fHwxNzY0ODg0MTMzfDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "gradient sunglasses"
     }
   ]
 }
