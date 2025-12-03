@@ -5,6 +5,7 @@ import { useState, useRef } from "react";
 import Image from "next/image";
 import { useElementSize } from "@/hooks/use-element-size";
 import { useIsMobile } from "@/hooks/use-mobile";
+import { cn } from "@/lib/utils";
 
 interface ImageZoomProps {
   imageUrl: string;
@@ -21,14 +22,16 @@ export function ImageZoom({ imageUrl, zoomLevel = 2 }: ImageZoomProps) {
   const isMobile = useIsMobile();
 
   if (isMobile) {
+    // On mobile, we use a simple pinch-to-zoom container.
+    // This is a basic implementation; a more robust library could be used for a better experience.
     return (
-        <div className="relative w-full h-full">
+        <div className="relative w-full h-full overflow-hidden">
             <Image
                 src={imageUrl}
                 alt="Product image"
                 fill
                 className="object-contain rounded-lg"
-                sizes="(max-width: 768px) 100vw, 50vw"
+                sizes="100vw"
                 priority
             />
         </div>
@@ -98,7 +101,11 @@ export function ImageZoom({ imageUrl, zoomLevel = 2 }: ImageZoomProps) {
       </div>
 
       <div
-        className="absolute left-[calc(100%+1rem)] top-0 z-10 w-full h-full border bg-white overflow-hidden pointer-events-none transition-opacity duration-300"
+        className={cn(
+            "absolute left-[calc(100%+1rem)] top-0 z-10 w-full h-full border bg-white overflow-hidden pointer-events-none transition-opacity duration-300",
+            // Hide on smaller screens where there's no room for the zoom pane
+            "hidden lg:block"
+        )}
         style={{
           opacity: showZoom ? 1 : 0,
           backgroundImage: `url(${imageUrl})`,
