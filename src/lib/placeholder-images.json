@@ -3,13 +3,13 @@
     {
       "id": "classic-aviator",
       "description": "A pair of classic aviator sunglasses.",
-      "imageUrl": "https://images.unsplash.com/photo-1757594458622-c256b1fb0225?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw4fHxhdmlhdG9yJTIwc3VuZ2xhc3Nlc3xlbnwwfHx8fDE3NjM5NzU2Mzl8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageUrl": "https://images.unsplash.com/photo-1511499767150-a48a237f0083?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxhdmlhdG9yJTIwc3VuZ2xhc3Nlc3xlbnwwfHx8fDE3NjQ4ODQxMzN8MA&ixlib=rb-4.1.0&q=80&w=1080",
       "imageHint": "aviator sunglasses"
     },
     {
       "id": "wayfarer-ease",
       "description": "A pair of black wayfarer sunglasses.",
-      "imageUrl": "https://images.unsplash.com/photo-1738104955869-e32946fbd893?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw3fHx3YXlmYXJlciUyMHN1bmdsYXNzZXN8ZW58MHx8fHwxNzYzOTc1NjM5fDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageUrl": "https://images.unsplash.com/photo-1582553337938-12d8a43641f4?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHx3YXlmYXJlciUyMHN1bmdsYXNzZXN8ZW58MHx8fHwxNzY0ODg0MTMzfDA&ixlib=rb-4.1.0&q=80&w=1080",
       "imageHint": "wayfarer sunglasses"
     },
     {
@@ -21,151 +21,61 @@
     {
       "id": "714-steve-mcqueen",
       "description": "A pair of Persol 714 folding sunglasses.",
-      "imageUrl": "https://images.unsplash.com/photo-1707222636163-71b5d2b5f245?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwzfHxmb2xkaW5nJTIwc3VuZ2xhc3Nlc3xlbnwwfHx8fDE3NjM5NzU2Mzl8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageUrl": "https://images.unsplash.com/photo-1614716494363-3b283182a46e?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxmb2xkaW5nJTIwc3VuZ2xhc3Nlc3xlbnwwfHx8fDE3NjQ4ODQxMzN8MA&ixlib=rb-4.1.0&q=80&w=1080",
       "imageHint": "folding sunglasses"
     },
     {
       "id": "urban-lite-frames",
       "description": "A pair of sleek, minimalist titanium frames.",
-      "imageUrl": "https://images.unsplash.com/photo-1694892464596-e4a4cc503fb3?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw4fHx0aXRhbml1bSUyMGdsYXNzZXN8ZW58MHx8fHwxNzYzOTc1NjM5fDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageUrl": "https://images.unsplash.com/photo-1494498902521-3d5f32982464?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHx0aXRhbml1bSUyMGdsYXNzZXN8ZW58MHx8fHwxNzY0ODg0MTMzfDA&ixlib=rb-4.1.0&q=80&w=1080",
       "imageHint": "titanium glasses"
     },
     {
       "id": "chic-cat-eye",
       "description": "A pair of bold, vintage-inspired cat-eye frames.",
-      "imageUrl": "https://images.unsplash.com/photo-1715067812929-2dda54e1cec5?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwyfHxjYXQtZXllJTIwZ2xhc3Nlc3xlbnwwfHx8fDE3NjM5NzU2Mzl8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageUrl": "https://images.unsplash.com/photo-1590861132964-673b53f314b2?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxjYXQtZXllJTIwZ2xhc3Nlc3xlbnwwfHx8fDE3NjQ4ODQxMzN8MA&ixlib=rb-4.1.0&q=80&w=1080",
       "imageHint": "cat-eye glasses"
     },
     {
       "id": "sport-performance-frames",
       "description": "A pair of aerodynamic frames for sports.",
-      "imageUrl": "https://images.unsplash.com/photo-1724360514832-5050d7ff0594?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw0fHxzcG9ydCUyMGdsYXNzZXN8ZW58MHx8fHwxNzYzOTc1NjM5fDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageUrl": "https://images.unsplash.com/photo-1574258485694-8a169e658b43?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxzcG9ydCUyMGdsYXNzZXN8ZW58MHx8fHwxNzY0ODg0MTMzfDA&ixlib=rb-4.1.0&q=80&w=1080",
       "imageHint": "sport glasses"
     },
     {
       "id": "clearblue-lenses",
       "description": "A pair of lenses with blue light filtering.",
-      "imageUrl": "https://images.unsplash.com/photo-1666249246601-b8bb20b21b3f?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw4fHxleWVnbGFzcyUyMGxlbnNlc3xlbnwwfHx8fDE3NjM5NzU2Mzl8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageUrl": "https://images.unsplash.com/photo-1631049339673-c1e5ba4849fb?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxlbnwwfHx8fDE3NjQ4ODQxMzN8MA&ixlib=rb-4.1.0&q=80&w=1080",
       "imageHint": "eyeglass lenses"
     },
     {
       "id": "photochromic-lenses",
       "description": "A pair of photochromic lenses that darken in the sun.",
-      "imageUrl": "https://images.unsplash.com/photo-1700469880511-3ef0cee47985?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw3fHx0cmFuc2l0aW9uJTIwbGVuc2VzfGVufDB8fHx8MTc2Mzk3NTYzOXww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageUrl": "https://images.unsplash.com/photo-1577992933098-f3d9a69152a5?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHx0cmFuc2l0aW9uJTIwbGVuc2VzfGVufDB8fHx8MTc2NDg4NDEzM3ww&ixlib=rb-4.1.0&q=80&w=1080",
       "imageHint": "transition lenses"
     },
     {
       "id": "polarized-pro-lenses",
       "description": "A pair of high-quality polarized lenses.",
-      "imageUrl": "https://images.unsplash.com/photo-1568475004576-f05a3903642f?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw4fHxwb2xhcml6ZWQlMjBsZW5zZXN8ZW58MHx8fHwxNzYzOTc1NjM5fDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageUrl": "https://images.unsplash.com/photo-1568475004576-f05a3903642f?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxwb2xhcml6ZWQlMjBsZW5zZXN8ZW58MHx8fHwxNzY0ODg0MTMzfDA&ixlib=rb-4.1.0&q=80&w=1080",
       "imageHint": "polarized lenses"
     },
     {
       "id": "retro-round-frames",
       "description": "A pair of round metal frames.",
-      "imageUrl": "https://images.unsplash.com/photo-1640142717685-94309aa3b940?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw1fHxyb3VuZCUyMGdsYXNzZXN8ZW58MHx8fHwxNzYzOTIyNjk2fDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageUrl": "https://images.unsplash.com/photo-1574494349420-ecf8ccbff974?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxyb3VuZCUyMGdsYXNzZXN8ZW58MHx8fHwxNzY0ODg0MTMzfDA&ixlib=rb-4.1.0&q=80&w=1080",
       "imageHint": "round glasses"
     },
     {
       "id": "minimalist-square-frames",
       "description": "A pair of modern square frames.",
-      "imageUrl": "https://images.unsplash.com/photo-1755869950502-6c3bfa85c2d8?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxMHx8c3F1YXJlJTIwZ2xhc3Nlc3xlbnwwfHx8fDE3NjM5NzU2Mzl8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageUrl": "https://images.unsplash.com/photo-1611012595366-18cf16280487?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxzcXVhcmUlMjBnbGFzc2VzfGVufDB8fHx8MTc2NDg4NDEzM3ww&ixlib=rb-4.1.0&q=80&w=1080",
       "imageHint": "square glasses"
-    },
-    {
-      "id": "hero-carousel-1-desktop",
-      "description": "A stylish person wearing sunglasses.",
-      "imageUrl": "https://images.unsplash.com/photo-1636458939465-9209848a5688?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwzfHxmYXNoaW9uJTIwbW9kZWwlMjBzdW5nbGFzc2VzfGVufDB8fHx8MTc2NDc0ODExNHww&ixlib=rb-4.1.0&q=80&w=1080",
-      "imageHint": "fashion model sunglasses"
-    },
-    {
-      "id": "hero-carousel-1-mobile",
-      "description": "A stylish person wearing sunglasses, mobile view.",
-      "imageUrl": "https://images.unsplash.com/photo-1636458939465-9209848a5688?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwzfHxmYXNoaW9uJTIwbW9kZWwlMjBzdW5nbGFzc2VzfGVufDB8fHx8MTc2NDc0ODExNHww&ixlib=rb-4.1.0&q=80&w=1080",
-      "imageHint": "fashion model sunglasses"
-    },
-    {
-      "id": "hero-carousel-2-desktop",
-      "description": "A close-up of a person's eye with glasses.",
-      "imageUrl": "https://images.unsplash.com/photo-1750064744110-48e45c46a3c2?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw2fHxleWV3ZWFyJTIwZmFzaGlvbnxlbnwwfHx8fDE3NjQ3NDgxMTR8MA&ixlib=rb-4.1.0&q=80&w=1080",
-      "imageHint": "eyewear fashion"
-    },
-    {
-      "id": "hero-carousel-2-mobile",
-      "description": "A close-up of a person's eye with glasses, mobile view.",
-      "imageUrl": "https://images.unsplash.com/photo-1750064744110-48e45c46a3c2?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw2fHxleWV3ZWFyJTIwZmFzaGlvbnxlbnwwfHx8fDE3NjQ3NDgxMTR8MA&ixlib=rb-4.1.0&q=80&w=1080",
-      "imageHint": "eyewear fashion"
-    },
-    {
-      "id": "hero-carousel-3-desktop",
-      "description": "A collection of different styles of glasses.",
-      "imageUrl": "https://images.unsplash.com/photo-1574494349420-ecf8ccbff974?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw0fHxnbGFzc2VzJTIwY29sbGVjdGlvbnxlbnwwfHx8fDE3NjQ3NDgxMTR8MA&ixlib=rb-4.1.0&q=80&w=1080",
-      "imageHint": "glasses collection"
-    },
-    {
-      "id": "hero-carousel-3-mobile",
-      "description": "A collection of different styles of glasses, mobile view.",
-      "imageUrl": "https://images.unsplash.com/photo-1723408409869-41754b1d1730?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw2fHxnbGFzc2VzJTIwY29sbGVjdGlvbnxlbnwwfHx8fDE3NjQ3NDgxMTR8MA&ixlib=rb-4.1.0&q=80&w=1080",
-      "imageHint": "glasses collection"
-    },
-    {
-      "id": "hero-carousel-bogo-desktop",
-      "description": "A stylish setting with multiple pairs of glasses for a BOGO sale.",
-      "imageUrl": "https://images.unsplash.com/photo-1585486451366-5b5b9520797e?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwzfHxzcGVjdGFjbGUlMjBmcmFtZXN8ZW58MHx8fHwxNzY0MzQ1MjUyfDA&ixlib=rb-4.1.0&q=80&w=1080",
-      "imageHint": "spectacle frames"
-    },
-    {
-      "id": "hero-carousel-bogo-mobile",
-      "description": "A stylish setting with multiple pairs of glasses for a BOGO sale, mobile view.",
-      "imageUrl": "https://images.unsplash.com/photo-1585486451366-5b5b9520797e?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwzfHxzcGVjdGFjbGUlMjBmcmFtZXN8ZW58MHx8fHwxNzY0MzQ1MjUyfDA&ixlibrb-4.1.0&q=80&w=1080",
-      "imageHint": "spectacle frames"
-    },
-    {
-      "id": "checkout-image",
-      "description": "A collection of stylish glasses.",
-      "imageUrl": "https://images.unsplash.com/photo-1611012595366-18cf16280487?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw1fHxleWV3ZWFyJTIwY29sbGVjdGlvbnxlbnwwfHx8fDE3NjM5NzU2Mzl8MA&ixlib=rb-4.1.0&q=80&w=1080",
-      "imageHint": "eyewear collection"
-    },
-    {
-      "id": "style-guide-hero",
-      "description": "A person trying on different glasses.",
-      "imageUrl": "https://images.unsplash.com/photo-1682664175900-7771b38e1585?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw0fHxjaG9vc2luZyUyMGdsYXNzZXN8ZW58MHx8fHwxNzYzOTc1NjM5fDA&ixlib=rb-4.1.0&q=80&w=1080",
-      "imageHint": "choosing glasses"
-    },
-    {
-      "id": "category-eyeglasses",
-      "description": "A pair of eyeglasses.",
-      "imageUrl": "https://images.unsplash.com/photo-1638038988551-28155572ce41?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxMHx8ZXllZ2xhc3Nlc3xlbnwwfHx8fDE3NjQzNDUyNTJ8MA&ixlib=rb-4.1.0&q=80&w=1080",
-      "imageHint": "eyeglasses"
-    },
-    {
-      "id": "category-sunglasses",
-      "description": "A pair of sunglasses.",
-      "imageUrl": "https://images.unsplash.com/photo-1508296695146-257a814070b4?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw4fHxzdW5nbGFzc2VzfGVufDB8fHx8MTc2NDMzMDA0Mnww&ixlib=rb-4.1.0&q=80&w=1080",
-      "imageHint": "sunglasses"
-    },
-    {
-      "id": "category-lenses",
-      "description": "A pair of contact lenses.",
-      "imageUrl": "https://images.unsplash.com/photo-1494869042583-f6c911f04b4c?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxMHx8Y29udGFjdCUyMGxlbnNlc3xlbnwwfHx8fDE3NjQzNDUyNTJ8MA&ixlibrb-4.1.0&q=80&w=1080",
-      "imageHint": "contact lenses"
-    },
-    {
-      "id": "category-frames",
-      "description": "A pair of spectacle frames.",
-      "imageUrl": "https://images.unsplash.com/photo-1585486451366-5b5b9p520797e?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwzfHxzcGVjdGFjbGUlMjBmcmFtZXN8ZW58MHx8fHwxNzY0MzQ1MjUyfDA&ixlib=rb-4.1.0&q=80&w=1080",
-      "imageHint": "spectacle frames"
-    },
-    {
-      "id": "promo-banner-image",
-      "description": "A stylish setting with multiple pairs of glasses on display.",
-      "imageUrl": "https://images.unsplash.com/photo-1526642289423-893e141a4645?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw1fHxleWV3ZWFyJTIwc2FsZXxlbnwwfHx8fDE3NjQzOTI2MTd8MA&ixlib=rb-4.1.0&q=80&w=1080",
-      "imageHint": "eyewear sale"
     },
     {
       "id": "stealth-blade",
       "description": "Futuristic shield-style sunglasses.",
-      "imageUrl": "https://images.unsplash.com/photo-1577992933098-f3d9a69152a5?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwyfHxzaGllbGQlMjBzdW5nbGFzc2VzfGVufDB8fHx8MTc2NDg4NDEzM3ww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageUrl": "https://images.unsplash.com/photo-1577992933098-f3d9a69152a5?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwyfHxzaGllZGQlMjBzdW5nbGFzc2VzfGVufDB8fHx8MTc2NDg4NDEzM3ww&ixlib=rb-4.1.0&q=80&w=1080",
       "imageHint": "shield sunglasses"
     },
     {
@@ -207,98 +117,176 @@
     {
       "id": "lauredale-glam",
       "description": "Oversized and glamorous sunglasses for those who want to make an entrance.",
-      "imageUrl": "https://images.unsplash.com/photo-1577992933098-f3d9a69152a5?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxvdmVyc2l6ZWQlMjBzdW5nbGFzc2VzfGVufDB8fHx8MTc2NDg4NDEzM3ww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageUrl": "https://images.unsplash.com/photo-1577992933098-f3d9a69152a5?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHxvdmVyc2l6ZWQlMjBzdW5nbGFzc2VzfGVufDB8fHx8MTc2NDg4NDEzM3ww&ixlib=rb-4.1.0&q=80&w=1080",
       "imageHint": "oversized sunglasses"
     },
     {
       "id": "titan-airflex",
       "description": "Extremely flexible and durable frames, designed for comfort and longevity.",
-      "imageUrl": "https://images.unsplash.com/photo-1611012595366-18cf16280487?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxsZXhpYmxlJTIwZ2xhc3Nlc3xlbnwwfHx8fDE3NjQ4ODQxMzN8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageUrl": "https://images.unsplash.com/photo-1611012595366-18cf16280487?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHxsZXhpYmxlJTIwZ2xhc3Nlc3xlbnwwfHx8fDE3NjQ4ODQxMzN8MA&ixlib=rb-4.1.0&q=80&w=1080",
       "imageHint": "flexible glasses"
     },
     {
       "id": "nvg-night-vision",
       "description": "Specialized lenses designed to reduce glare and improve clarity for night driving.",
-      "imageUrl": "https://images.unsplash.com/photo-1631049339673-c1e5ba4849fb?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxuaWdodCUyMGRyaXZpbmclMjBnbGFzc2VzfGVufDB8fHx8MTc2NDg4NDEzM3ww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageUrl": "https://images.unsplash.com/photo-1631049339673-c1e5ba4849fb?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHxuaWdodCUyMGRyaXZpbmclMjBnbGFzc2VzfGVufDB8fHx8MTc2NDg4NDEzM3ww&ixlib=rb-4.1.0&q=80&w=1080",
       "imageHint": "night driving glasses"
     },
     {
       "id": "fastrack-urban",
       "description": "Trendy and affordable frames for the modern city dweller.",
-      "imageUrl": "https://images.unsplash.com/photo-1574494349420-ecf8ccbff974?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHx1cmJhbiUyMGdsYXNzZXN8ZW58MHx8fHwxNzY0ODg0MTMzfDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageUrl": "https://images.unsplash.com/photo-1574494349420-ecf8ccbff974?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHx1cmJhbiUyMGdsYXNzZXN8ZW58MHx8fHwxNzY0ODg0MTMzfDA&ixlib=rb-4.1.0&q=80&w=1080",
       "imageHint": "urban glasses"
     },
     {
       "id": "velocity-aviator-2",
       "description": "A modern take on the classic aviator with updated materials and lens tech.",
-      "imageUrl": "https://images.unsplash.com/photo-1511499767150-a48a237f0083?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxhdmlhdG9yJTIwc3VuZ2xhc3Nlc3xlbnwwfHx8fDE3NjQ4ODQxMzN8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageUrl": "https://images.unsplash.com/photo-1511499767150-a48a237f0083?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHxhdmlhdG9yJTIwc3VuZ2xhc3Nlc3xlbnwwfHx8fDE3NjQ4ODQxMzN8MA&ixlib=rb-4.1.0&q=80&w=1080",
       "imageHint": "aviator sunglasses"
     },
     {
       "id": "x-ford-executive",
       "description": "Sophisticated and professional frames perfect for the office environment.",
-      "imageUrl": "https://images.unsplash.com/photo-1549298240-0d8e2d4d4227?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxvZmZpY2UlMjBnbGFzc2VzfGVufDB8fHx8MTc2NDg4NDEzM3ww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageUrl": "https://images.unsplash.com/photo-1549298240-0d8e2d4d4227?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHxvZmZpY2UlMjBnbGFzc2VzfGVufDB8fHx8MTc2NDg4NDEzM3ww&ixlib=rb-4.1.0&q=80&w=1080",
       "imageHint": "office glasses"
     },
     {
       "id": "lauredale-tortoise",
       "description": "Classic tortoise-shell pattern on a chic, modern frame shape.",
-      "imageUrl": "https://images.unsplash.com/photo-1631049339673-c1e5ba4849fb?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHx0b3J0b2lzZSUyMHN1bmdsYXNzZXN8ZW58MHx8fHwxNzY0ODg0MTMzfDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageUrl": "https://images.unsplash.com/photo-1631049339673-c1e5ba4849fb?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHx0b3J0b2lzZSUyMHN1bmdsYXNzZXN8ZW58MHx8fHwxNzY0ODg0MTMzfDA&ixlib=rb-4.1.0&q=80&w=1080",
       "imageHint": "tortoise sunglasses"
     },
     {
       "id": "titan-rimless",
       "description": "Ultra-lightweight rimless frames for a barely-there feel and a minimalist look.",
-      "imageUrl": "https://images.unsplash.com/photo-1577992933098-f3d9a69152a5?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxyaW1sZXNzJTIwZ2xhc3Nlc3xlbnwwfHx8fDE3NjQ4ODQxMzN8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageUrl": "https://images.unsplash.com/photo-1577992933098-f3d9a69152a5?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHxyaW1sZXNzJTIwZ2xhc3Nlc3xlbnwwfHx8fDE3NjQ4ODQxMzN8MA&ixlib=rb-4.1.0&q=80&w=1080",
       "imageHint": "rimless glasses"
     },
     {
       "id": "technoii-drive-lens",
       "description": "Lenses with a specialized tint and polarization to enhance contrast while driving.",
-      "imageUrl": "https://images.unsplash.com/photo-1568475004576-f05a3903642f?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxkcml2aW5nJTIwbGVuc2VzfGVufDB8fHx8MTc2NDg4NDEzM3ww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageUrl": "https://images.unsplash.com/photo-1568475004576-f05a3903642f?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHxkcml2aW5nJTIwbGVuc2VzfGVufDB8fHx8MTc2NDg4NDEzM3ww&ixlib=rb-4.1.0&q=80&w=1080",
       "imageHint": "driving lenses"
     },
     {
       "id": "nvg-shield-pro",
       "description": "Professional-grade shield sunglasses for maximum protection and a bold look.",
-      "imageUrl": "https://images.unsplash.com/photo-1577992933098-f3d9a69152a5?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxwcm9mZXNzaW9uYWwlMjBzdW5nbGFzc2VzfGVufDB8fHx8MTc2NDg4NDEzM3ww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageUrl": "https://images.unsplash.com/photo-1577992933098-f3d9a69152a5?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHxzaGllbGQlMjBzdW5nbGFzc2VzfGVufDB8fHx8MTc2NDg4NDEzM3ww&ixlib=rb-4.1.0&q=80&w=1080",
       "imageHint": "professional sunglasses"
     },
     {
       "id": "fastrack-gradient",
       "description": "Fashionable sunglasses with gradient lenses that are dark on top and lighter on the bottom.",
-      "imageUrl": "https://images.unsplash.com/photo-1572635196237-14b3f281503f?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxncmFkaWVudCUyMHN1bmdsYXNzZXN8ZW58MHx8fHwxNzY0ODg0MTMzfDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageUrl": "https://images.unsplash.com/photo-1572635196237-14b3f281503f?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHxncmFkaWVudCUyMHN1bmdsYXNzZXN8ZW58MHx8fHwxNzY0ODg0MTMzfDA&ixlib=rb-4.1.0&q=80&w=1080",
       "imageHint": "gradient sunglasses"
     },
     {
       "id": "contact-daily-comfort",
-      "description": "Daily disposable contact lenses.",
-      "imageUrl": "https://images.unsplash.com/photo-1628872477382-a72a744d3b37?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxjb250YWN0JTIwbGVuc2VzfGVufDB8fHx8MTc2NDk3NzY3Nnww&ixlib=rb-4.1.0&q=80&w=1080",
+      "description": "A box of daily disposable contact lenses.",
+      "imageUrl": "https://images.unsplash.com/photo-1628872477382-a72a744d3b37?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxjb250YWN0JTIwbGVucyUyMGJveHxlbnwwfHx8fDE3NjQ5Nzc2NzZ8MA&ixlib=rb-4.1.0&q=80&w=1080",
       "imageHint": "contact lenses"
     },
     {
       "id": "contact-monthly-wear",
-      "description": "Monthly disposable contact lenses.",
-      "imageUrl": "https://images.unsplash.com/photo-1588863668858-3d7b63e9f45a?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwzfHxjb250YWN0JTIwbGVuc2VzfGVufDB8fHx8MTc2NDk3NzY3Nnww&ixlib=rb-4.1.0&q=80&w=1080",
-      "imageHint": "contact lenses"
+      "description": "A single monthly disposable contact lens in its case.",
+      "imageUrl": "https://images.unsplash.com/photo-1588863668858-3d7b63e9f45a?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHxjb250YWN0JTIwbGVucyUyMGNhc2V8ZW58MHx8fHwxNzY0OTc3Njc2fDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "contact lens case"
     },
     {
       "id": "contact-toric",
-      "description": "Toric contact lenses for astigmatism.",
-      "imageUrl": "https://images.unsplash.com/photo-1621641529845-56708304b49b?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw1fHxjb250YWN0JTIwbGVuc2VzfGVufDB8fHx8MTc2NDk3NzY3Nnww&ixlib=rb-4.1.0&q=80&w=1080",
-      "imageHint": "contact lenses"
+      "description": "A close-up of a toric contact lens for astigmatism.",
+      "imageUrl": "https://images.unsplash.com/photo-1621641529845-56708304b49b?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHxjb250YWN0JTIwbGVuc3xlbnwwfHx8fDE3NjQ5Nzc2NzZ8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "contact lens"
     },
     {
       "id": "contact-multifocal",
-      "description": "Multifocal contact lenses.",
-      "imageUrl": "https://images.unsplash.com/photo-1621641529845-56708304b49b?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw1fHxjb250YWN0JTIwbGVuc2VzfGVufDB8fHx8MTc2NDk3NzY3Nnww&ixlib=rb-4.1.0&q=80&w=1080",
-      "imageHint": "contact lenses"
+      "description": "A diagram showing how a multifocal contact lens works.",
+      "imageUrl": "https://images.unsplash.com/photo-1607957233158-d2f349c04b48?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHxibHVlJTIwZXllc3xlbnwwfHx8fDE3NjQ5Nzc2NzZ8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "blue eye"
     },
     {
       "id": "contact-color-blue",
-      "description": "Blue colored contact lenses.",
-      "imageUrl": "https://images.unsplash.com/photo-1607957233158-d2f349c04b48?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxibHVlJTIwZXllc3xlbnwwfHx8fDE3NjQ5Nzc2NzZ8MA&ixlib=rb-4.1.0&q=80&w=1080",
-      "imageHint": "blue eyes"
+      "description": "A person with vibrant blue colored contact lenses.",
+      "imageUrl": "https://images.unsplash.com/photo-1615598828554-7901789c6239?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHxjb2xvcmVkJTIwY29udGFjdHN8ZW58MHx8fHwxNzY0OTc3Njc2fDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "colored contacts"
+    },
+    {
+      "id": "hero-carousel-1-desktop",
+      "description": "A stylish person wearing sunglasses.",
+      "imageUrl": "https://images.unsplash.com/photo-1511499767150-a48a237f0083?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHxmYXNoaW9uJTIwbW9kZWwlMjBzdW5nbGFzc2VzfGVufDB8fHx8MTc2NDc0ODExNHww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "fashion model sunglasses"
+    },
+    {
+      "id": "hero-carousel-1-mobile",
+      "description": "A stylish person wearing sunglasses, mobile view.",
+      "imageUrl": "https://images.unsplash.com/photo-1511499767150-a48a237f0083?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHxmYXNoaW9uJTIwbW9kZWwlMjBzdW5nbGFzc2VzfGVufDB8fHx8MTc2NDc0ODExNHww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "fashion model sunglasses"
+    },
+    {
+      "id": "hero-carousel-bogo-desktop",
+      "description": "A stylish setting with multiple pairs of glasses for a BOGO sale.",
+      "imageUrl": "https://images.unsplash.com/photo-1585486451366-5b5b9520797e?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwzfHxzcGVjdGFjbGUlMjBmcmFtZXN8ZW58MHx8fHwxNzY0MzQ1MjUyfDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "spectacle frames"
+    },
+    {
+      "id": "hero-carousel-bogo-mobile",
+      "description": "A stylish setting with multiple pairs of glasses for a BOGO sale, mobile view.",
+      "imageUrl": "https://images.unsplash.com/photo-1585486451366-5b5b9520797e?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwzfHxzcGVjdGFjbGUlMjBmcmFtZXN8ZW58MHx8fHwxNzY0MzQ1MjUyfDA&ixlibrb-4.1.0&q=80&w=1080",
+      "imageHint": "spectacle frames"
+    },
+    {
+      "id": "hero-carousel-2-desktop",
+      "description": "A close-up of a person's eye with glasses.",
+      "imageUrl": "https://images.unsplash.com/photo-1574494349420-ecf8ccbff974?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw0fHxleWV3ZWFyJTIwZmFzaGlvbnxlbnwwfHx8fDE3NjQ3NDgxMTR8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "eyewear fashion"
+    },
+    {
+      "id": "hero-carousel-2-mobile",
+      "description": "A close-up of a person's eye with glasses, mobile view.",
+      "imageUrl": "https://images.unsplash.com/photo-1574494349420-ecf8ccbff974?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw0fHxleWV3ZWFyJTIwZmFzaGlvbnxlbnwwfHx8fDE3NjQ3NDgxMTR8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "eyewear fashion"
+    },
+    {
+      "id": "hero-carousel-3-desktop",
+      "description": "A collection of different styles of glasses.",
+      "imageUrl": "https://images.unsplash.com/photo-1611012595366-18cf16280487?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw1fHxnbGFzc2VzJTIwY29sbGVjdGlvbnxlbnwwfHx8fDE3NjQ3NDgxMTR8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "glasses collection"
+    },
+    {
+      "id": "hero-carousel-3-mobile",
+      "description": "A collection of different styles of glasses, mobile view.",
+      "imageUrl": "https://images.unsplash.com/photo-1611012595366-18cf16280487?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw1fHxnbGFzc2VzJTIwY29sbGVjdGlvbnxlbnwwfHx8fDE3NjQ3NDgxMTR8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "glasses collection"
+    },
+    {
+      "id": "checkout-image",
+      "description": "A collection of stylish glasses.",
+      "imageUrl": "https://images.unsplash.com/photo-1611012595366-18cf16280487?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw1fHxleWV3ZWFyJTIwY29sbGVjdGlvbnxlbnwwfHx8fDE3NjM5NzU2Mzl8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "eyewear collection"
+    },
+    {
+      "id": "style-guide-hero",
+      "description": "A person trying on different glasses.",
+      "imageUrl": "https://images.unsplash.com/photo-1574494349420-ecf8ccbff974?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw0fHxjaG9vc2luZyUyMGdsYXNzZXN8ZW58MHx8fHwxNzYzOTc1NjM5fDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "choosing glasses"
+    },
+    {
+      "id": "category-eyeglasses",
+      "description": "A pair of eyeglasses.",
+      "imageUrl": "https://images.unsplash.com/photo-1574494349420-ecf8ccbff974?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxMHx8ZXllZ2xhc3Nlc3xlbnwwfHx8fDE3NjQzNDUyNTJ8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "eyeglasses"
+    },
+    {
+      "id": "category-sunglasses",
+      "description": "A pair of sunglasses.",
+      "imageUrl": "https://images.unsplash.com/photo-1511499767150-a48a237f0083?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw4fHxzdW5nbGFzc2VzfGVufDB8fHx8MTc2NDMzMDA0Mnww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "sunglasses"
+    },
+    {
+      "id": "category-lenses",
+      "description": "A close-up of different eyeglass lenses.",
+      "imageUrl": "https://images.unsplash.com/photo-1631049339673-c1e5ba4849fb?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxlbnwwfHx8fDE3NjQ4ODQxMzN8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "eyeglass lenses"
     }
   ]
 }
