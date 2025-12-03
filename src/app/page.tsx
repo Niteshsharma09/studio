@@ -38,6 +38,14 @@ const HeroSection = () => {
             buttonLink: '/#featured',
         },
         {
+            desktopImageId: 'hero-carousel-bogo-desktop',
+            mobileImageId: 'hero-carousel-bogo-mobile',
+            title: 'Buy One, Get One Free',
+            subtitle: 'Select two frames from Titan or Fastrack, and get the second one on us. Perfect for a new look or a spare pair.',
+            buttonText: 'Shop The BOGO Sale',
+            buttonLink: '/?category=frames&brands=titan,fastrack',
+        },
+        {
             desktopImageId: 'hero-carousel-2-desktop',
             mobileImageId: 'hero-carousel-2-mobile',
             title: 'Advanced Lens Technology',
