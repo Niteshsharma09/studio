@@ -327,6 +327,33 @@ const PRODUCTS_DATA: Product[] = [
     type: 'Frames',
     imageId: 'minimalist-square-frames',
   },
+  {
+    id: '13',
+    name: 'Stealth Blade',
+    description: 'Futuristic shield-style sunglasses for a bold, high-fashion statement.',
+    price: 295.00,
+    brand: 'NVG',
+    type: 'Sunglasses',
+    imageId: 'stealth-blade',
+  },
+  {
+    id: '14',
+    name: 'Titanium Hexa',
+    description: 'Modern hexagonal frames made from ultra-lightweight and durable titanium.',
+    price: 420.00,
+    brand: 'titan',
+    type: 'Frames',
+    imageId: 'titanium-hexa',
+  },
+  {
+    id: '15',
+    name: 'Oceanic Round',
+    description: 'Stylish round sunglasses with a cool blue tint, perfect for beach days.',
+    price: 185.00,
+    brand: 'NVG',
+    type: 'Sunglasses',
+    imageId: 'oceanic-round',
+  }
 ];
 
 // For backwards compatibility before caching was introduced

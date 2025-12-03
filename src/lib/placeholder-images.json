@@ -117,7 +117,7 @@
     {
       "id": "hero-carousel-bogo-mobile",
       "description": "A stylish setting with multiple pairs of glasses for a BOGO sale, mobile view.",
-      "imageUrl": "https://images.unsplash.com/photo-1585486451366-5b5b9520797e?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwzfHxzcGVjdGFjbGUlMjBmcmFtZXN8ZW58MHx8fHwxNzY0MzQ1MjUyfDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageUrl": "https://images.unsplash.com/photo-1585486451366-5b5b9520797e?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwzfHxzcGVjdGFjbGUlMjBmcmFtZXN8ZW58MHx8fHwxNzY0MzQ1MjUyfDA&ixlibrb-4.1.0&q=80&w=1080",
       "imageHint": "spectacle frames"
     },
     {
@@ -153,7 +153,7 @@
     {
       "id": "category-frames",
       "description": "A pair of spectacle frames.",
-      "imageUrl": "https://images.unsplash.com/photo-1585486451366-5b5b9520797e?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwzfHxzcGVjdGFjbGUlMjBmcmFtZXN8ZW58MHx8fHwxNzY0MzQ1MjUyfDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageUrl": "https://images.unsplash.com/photo-1585486451366-5b5b9p520797e?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwzfHxzcGVjdGFjbGUlMjBmcmFtZXN8ZW58MHx8fHwxNzY0MzQ1MjUyfDA&ixlib=rb-4.1.0&q=80&w=1080",
       "imageHint": "spectacle frames"
     },
     {
@@ -161,6 +161,24 @@
       "description": "A stylish setting with multiple pairs of glasses on display.",
       "imageUrl": "https://images.unsplash.com/photo-1526642289423-893e141a4645?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw1fHxleWV3ZWFyJTIwc2FsZXxlbnwwfHx8fDE3NjQzOTI2MTd8MA&ixlib=rb-4.1.0&q=80&w=1080",
       "imageHint": "eyewear sale"
+    },
+    {
+      "id": "stealth-blade",
+      "description": "Futuristic shield-style sunglasses.",
+      "imageUrl": "https://images.unsplash.com/photo-1577992933098-f3d9a69152a5?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwyfHxzaGllbGQlMjBzdW5nbGFzc2VzfGVufDB8fHx8MTc2NDg4NDEzM3ww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "shield sunglasses"
+    },
+    {
+      "id": "titanium-hexa",
+      "description": "Hexagonal titanium eyeglass frames.",
+      "imageUrl": "https://images.unsplash.com/photo-1614716494363-3b283182a46e?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxoZXhhZ29uJTIwZ2xhc3Nlc3xlbnwwfHx8fDE3NjQ4ODQxMzN8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "hexagon glasses"
+    },
+    {
+      "id": "oceanic-round",
+      "description": "Round sunglasses with blue lenses.",
+      "imageUrl": "https://images.unsplash.com/photo-1572635196237-14b3f281503f?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxyb3VuZCUyMHN1bmdsYXNzZXN8ZW58MHx8fHwxNzY0ODg0MTMzfDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "round sunglasses"
     }
   ]
 }
