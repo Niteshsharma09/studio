@@ -180,25 +180,16 @@ const ProductCollection = ({ title, products, id }: { title: string, products: P
     </section>
 );
 
-function ProductList() {
+function ProductList({ allProducts }: { allProducts: Product[] }) {
   const searchParams = useSearchParams();
   const searchQuery = searchParams.get('q');
   const category = searchParams.get('category');
   const selectedBrands = useMemo(() => searchParams.get('brands')?.split(',') || [], [searchParams]);
   const minPrice = useMemo(() => Number(searchParams.get('minPrice') || 0), [searchParams]);
   const maxPrice = useMemo(() => Number(searchParams.get('maxPrice') || 9999), [searchParams]);
-  const [products, setProducts] = useState<Product[]>([]);
   
-  useEffect(() => {
-    const fetchProducts = async () => {
-      const allProducts = await getProducts();
-      setProducts(allProducts);
-    };
-    fetchProducts();
-  }, []);
-
   const filteredProducts = useMemo(() => {
-    let prods = products;
+    let prods = allProducts;
 
     if (searchQuery) {
         prods = prods.filter(product => 
@@ -218,7 +209,7 @@ function ProductList() {
     prods = prods.filter(product => product.price >= minPrice && product.price <= maxPrice);
 
     return prods;
-  }, [searchQuery, category, selectedBrands, minPrice, maxPrice, products]);
+  }, [searchQuery, category, selectedBrands, minPrice, maxPrice, allProducts]);
 
   const title = category ? category.charAt(0).toUpperCase() + category.slice(1) : "Search Results";
   
@@ -248,18 +239,8 @@ function ProductList() {
   );
 }
 
-function FeaturedProducts() {
-    const [products, setProducts] = useState<Product[]>([]);
-
-    useEffect(() => {
-        const fetchProducts = async () => {
-            const allProducts = await getProducts();
-            setProducts(allProducts);
-        };
-        fetchProducts();
-    }, []);
-    
-    const featuredProducts = products.slice(0, 8);
+function FeaturedProducts({ allProducts }: { allProducts: Product[] }) {
+    const featuredProducts = allProducts.slice(0, 8);
 
     return (
         <div className="col-span-12 lg:col-span-9">
@@ -269,6 +250,16 @@ function FeaturedProducts() {
 }
 
 export default function Home() {
+  const [products, setProducts] = useState<Product[]>([]);
+  
+  useEffect(() => {
+    const fetchProducts = async () => {
+      const allProducts = await getProducts();
+      setProducts(allProducts);
+    };
+    fetchProducts();
+  }, []);
+
   const categories = [
       { title: 'Eyeglasses', imageId: 'category-eyeglasses', href: '/?category=frames' },
       { title: 'Sunglasses', imageId: 'category-sunglasses', href: '/?category=sunglasses' },
@@ -302,7 +293,7 @@ export default function Home() {
           </Suspense>
         </aside>
         <Suspense fallback={<div>Loading products...</div>}>
-            {hasFilters ? <ProductList /> : <FeaturedProducts />}
+            {hasFilters ? <ProductList allProducts={products} /> : <FeaturedProducts allProducts={products} />}
         </Suspense>
       </div>
       {showCollections && <PromoBanner />}
