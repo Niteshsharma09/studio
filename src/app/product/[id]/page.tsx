@@ -2,17 +2,14 @@
 "use client";
 
 import { useParams, useRouter } from 'next/navigation';
-import Image from 'next/image';
 import { PRODUCTS, LENS_TYPES } from '@/lib/data';
 import { Button } from '@/components/ui/button';
 import { useCart } from '@/context/cart-context';
 import { PlaceHolderImages } from '@/lib/placeholder-images';
-import { Star, ShieldCheck, Zap, MapPin, Loader2, Undo2, Flame } from 'lucide-react';
+import { Star, ShieldCheck, Zap, MapPin, Loader2, Undo2, ShoppingCart } from 'lucide-react';
 import { useState, useMemo } from 'react';
 import { Input } from '@/components/ui/input';
 import { useToast } from '@/hooks/use-toast';
-import { useIsMobile } from '@/hooks/use-mobile';
-import { VirtualTryOn } from '@/components/virtual-try-on';
 import type { Product, Prescription } from '@/lib/types';
 import {
   Select,
@@ -27,7 +24,8 @@ import { ProductCard } from '@/components/product-card';
 import { Separator } from '@/components/ui/separator';
 import { PrescriptionDialog } from '@/components/prescription-dialog';
 import { ReviewList } from '@/components/review-list';
-
+import Image from 'next/image';
+import { ImageZoom } from '@/components/image-zoom';
 
 export default function ProductDetailPage() {
   const params = useParams();
@@ -38,18 +36,32 @@ export default function ProductDetailPage() {
   const { toast } = useToast();
   const [quantity, setQuantity] = useState(1);
   const [selectedLens, setSelectedLens] = useState<Product | null>(null);
-  const isMobile = useIsMobile();
   const [pincode, setPincode] = useState('');
   const [deliveryStatus, setDeliveryStatus] = useState<'idle' | 'checking' | 'available' | 'unavailable'>('idle');
   const [deliveryDate, setDeliveryDate] = useState<Date | null>(null);
   const [isPrescriptionDialogOpen, setIsPrescriptionDialogOpen] = useState(false);
   const [actionType, setActionType] = useState<'cart' | 'buy' | null>(null);
 
+  const placeholder = PlaceHolderImages.find(p => p.id === product?.imageId);
+  const mainImageUrl = placeholder?.imageUrl ?? `https://picsum.photos/seed/${product?.id}/600/400`;
+
+  const [activeImage, setActiveImage] = useState(mainImageUrl);
+
+   const thumbnails = useMemo(() => {
+    if (!product) return [];
+    // Using placeholder images for thumbnails. In a real app, these would be different product shots.
+    return [
+      mainImageUrl,
+      `https://picsum.photos/seed/${product.id}a/100/100`,
+      `https://picsum.photos/seed/${product.id}b/100/100`,
+      `https://picsum.photos/seed/${product.id}c/100/100`,
+    ];
+  }, [product, mainImageUrl]);
+
   const similarProducts = useMemo(() => {
     if (!product) return [];
     return PRODUCTS.filter(p => p.type === product.type && p.id !== product.id).slice(0, 4);
   }, [product]);
-
 
   const lenses = useMemo(() => LENS_TYPES as Product[], []);
 
@@ -65,10 +77,6 @@ export default function ProductDetailPage() {
       </div>
     );
   }
-
-  const placeholder = PlaceHolderImages.find(p => p.id === product.imageId);
-  const imageUrl = placeholder?.imageUrl ?? `https://picsum.photos/seed/${product.id}/600/400`;
-  const imageHint = placeholder?.imageHint ?? '';
   
   const formatPrice = (price: number) => {
     return new Intl.NumberFormat('en-IN', {
@@ -157,23 +165,36 @@ export default function ProductDetailPage() {
   return (
     <>
     <div className="container mx-auto px-4 py-12">
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-start">
-        <div className="group aspect-[4/3] relative bg-card rounded-lg shadow-lg overflow-hidden">
-          <Image
-            src={imageUrl}
-            alt={product.name}
-            fill
-            className="object-cover transition-transform duration-500 ease-in-out group-hover:scale-125"
-            data-ai-hint={imageHint}
-            sizes="(max-width: 768px) 100vw, 50vw"
-            priority
-          />
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start">
+        <div className="grid grid-cols-[80px_1fr] gap-4 items-start">
+            <div className="flex flex-col gap-3">
+                {thumbnails.map((thumbUrl, index) => (
+                    <button
+                        key={index}
+                        onClick={() => setActiveImage(thumbUrl)}
+                        className={`relative aspect-square w-full rounded-md border-2 transition-all ${activeImage === thumbUrl ? 'border-primary' : 'border-transparent'}`}
+                    >
+                        <Image
+                            src={thumbUrl}
+                            alt={`Thumbnail ${index + 1}`}
+                            fill
+                            className="object-cover rounded-sm"
+                        />
+                    </button>
+                ))}
+            </div>
+            <div className="aspect-[4/3] relative">
+                 <ImageZoom imageUrl={activeImage} zoomLevel={2.5}/>
+            </div>
         </div>
         
         <div>
           <p className="text-sm font-medium text-primary">{product.brand}</p>
           <h1 className="text-4xl font-bold tracking-tight mt-1">{product.name}</h1>
-          <p className="text-3xl font-light mt-4">{formatPrice(total_price)}</p>
+          
+          <div className="flex items-center mt-4">
+            <p className="text-3xl font-light">{formatPrice(total_price)}</p>
+          </div>
 
           <div className="flex items-center mt-2">
             <div className="flex items-center">
@@ -215,8 +236,8 @@ export default function ProductDetailPage() {
                 className="w-20"
                 aria-label="Quantity"
               />
-              <Button size="lg" className="flex-1" onClick={handleAddToCart}>
-                <Flame className="mr-2 h-5 w-5" />
+              <Button size="lg" className="flex-1" onClick={handleAddToCart} variant="secondary">
+                <ShoppingCart className="mr-2 h-5 w-5" />
                 Add to Cart
               </Button>
             </div>
@@ -225,14 +246,6 @@ export default function ProductDetailPage() {
               Buy Now
             </Button>
           </div>
-          
-          {isMobile === true && product.type === 'Frames' && (
-            <VirtualTryOn product={product}>
-              <Button size="lg" variant="outline" className="w-full mt-4">
-                Virtual Try-On
-              </Button>
-            </VirtualTryOn>
-          )}
 
           <div className="mt-8 space-y-4">
             <div>
