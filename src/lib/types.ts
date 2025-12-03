@@ -1,4 +1,5 @@
 
+
 export type Product = {
   id: string;
   name: string;
@@ -67,12 +68,16 @@ export type OrderItem = {
   lensName: string | null;
 };
 
+export type ManualPrescription = {
+    leftDV?: string;
+    rightDV?: string;
+    leftNV?: string;
+    rightNV?: string;
+};
+
 export type Prescription = {
     file?: string | null;
-    manual?: {
-        left?: string;
-        right?: string;
-    };
+    manual?: ManualPrescription;
 };
 
 export type CartItem = {

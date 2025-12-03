@@ -26,14 +26,26 @@ import {
 } from "@/components/ui/form";
 import type { Product, Prescription } from "@/lib/types";
 
-const prescriptionSchema = z.object({
+const singleVisionSchema = z.object({
     prescriptionFile: z.any().optional(),
-    leftEye: z.string().optional(),
-    rightEye: z.string().optional(),
-}).refine(data => data.prescriptionFile || (data.leftEye && data.rightEye), {
+    leftDV: z.string().optional(),
+    rightDV: z.string().optional(),
+}).refine(data => data.prescriptionFile || (data.leftDV && data.rightDV), {
     message: "Either upload a prescription or enter values for both eyes.",
-    path: ["leftEye"], // Show error on one of the manual fields
+    path: ["leftDV"], 
 });
+
+const multiFocalSchema = z.object({
+    prescriptionFile: z.any().optional(),
+    leftDV: z.string().optional(),
+    rightDV: z.string().optional(),
+    leftNV: z.string().optional(),
+    rightNV: z.string().optional(),
+}).refine(data => data.prescriptionFile || (data.leftDV && data.rightDV && data.leftNV && data.rightNV), {
+    message: "Either upload a prescription or fill all vision fields.",
+    path: ["leftDV"],
+});
+
 
 interface PrescriptionDialogProps {
   isOpen: boolean;
@@ -45,11 +57,15 @@ interface PrescriptionDialogProps {
 export function PrescriptionDialog({ isOpen, onOpenChange, lens, onProceed }: PrescriptionDialogProps) {
   const [fileName, setFileName] = useState("");
 
-  const form = useForm<z.infer<typeof prescriptionSchema>>({
-    resolver: zodResolver(prescriptionSchema),
+  const isMultiFocal = lens.name.toLowerCase().includes('progressive') || lens.name.toLowerCase().includes('bifocal');
+  const schema = isMultiFocal ? multiFocalSchema : singleVisionSchema;
+
+  const form = useForm<z.infer<typeof schema>>({
+    resolver: zodResolver(schema),
     defaultValues: {
-        leftEye: "",
-        rightEye: "",
+        leftDV: "",
+        rightDV: "",
+        ...(isMultiFocal && { leftNV: "", rightNV: "" }),
     },
   });
 
@@ -60,18 +76,20 @@ export function PrescriptionDialog({ isOpen, onOpenChange, lens, onProceed }: Pr
       const reader = new FileReader();
       reader.onloadend = () => {
         form.setValue("prescriptionFile", reader.result as string);
-        form.clearErrors(["leftEye", "rightEye"]);
+        form.clearErrors();
       };
       reader.readAsDataURL(file);
     }
   };
 
-  const onSubmit = (values: z.infer<typeof prescriptionSchema>) => {
+  const onSubmit = (values: z.infer<typeof schema>) => {
     onProceed({
         file: values.prescriptionFile,
         manual: {
-            left: values.leftEye,
-            right: values.rightEye,
+            leftDV: values.leftDV,
+            rightDV: values.rightDV,
+            leftNV: 'leftNV' in values ? values.leftNV : undefined,
+            rightNV: 'rightNV' in values ? values.rightNV : undefined,
         },
     });
     onOpenChange(false);
@@ -79,7 +97,7 @@ export function PrescriptionDialog({ isOpen, onOpenChange, lens, onProceed }: Pr
   
   return (
     <Dialog open={isOpen} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-[480px]">
+      <DialogContent className="sm:max-w-md">
         <DialogHeader>
           <DialogTitle>Prescription for {lens.name}</DialogTitle>
           <DialogDescription>
@@ -110,7 +128,7 @@ export function PrescriptionDialog({ isOpen, onOpenChange, lens, onProceed }: Pr
                     <div className="grid grid-cols-2 gap-4">
                         <FormField
                             control={form.control}
-                            name="leftEye"
+                            name="leftDV"
                             render={({ field }) => (
                                 <FormItem>
                                     <FormLabel>Left Eye (DV-OD)</FormLabel>
@@ -123,7 +141,7 @@ export function PrescriptionDialog({ isOpen, onOpenChange, lens, onProceed }: Pr
                         />
                         <FormField
                             control={form.control}
-                            name="rightEye"
+                            name="rightDV"
                             render={({ field }) => (
                                 <FormItem>
                                     <FormLabel>Right Eye (DV-OS)</FormLabel>
@@ -135,6 +153,36 @@ export function PrescriptionDialog({ isOpen, onOpenChange, lens, onProceed }: Pr
                             )}
                         />
                     </div>
+                    {isMultiFocal && (
+                        <div className="grid grid-cols-2 gap-4">
+                           <FormField
+                                control={form.control}
+                                name="leftNV"
+                                render={({ field }) => (
+                                    <FormItem>
+                                        <FormLabel>Left Eye (NV-OD)</FormLabel>
+                                        <FormControl>
+                                            <Input placeholder="e.g., +1.50" {...field} />
+                                        </FormControl>
+                                        <FormMessage />
+                                    </FormItem>
+                                )}
+                            />
+                            <FormField
+                                control={form.control}
+                                name="rightNV"
+                                render={({ field }) => (
+                                    <FormItem>
+                                        <FormLabel>Right Eye (NV-OS)</FormLabel>
+                                        <FormControl>
+                                            <Input placeholder="e.g., +1.50" {...field} />
+                                        </FormControl>
+                                        <FormMessage />
+                                    </FormItem>
+                                )}
+                            />
+                        </div>
+                    )}
                 </div>
                 <DialogFooter>
                     <Button type="button" variant="outline" onClick={() => onOpenChange(false)}>Cancel</Button>

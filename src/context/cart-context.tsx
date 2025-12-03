@@ -1,4 +1,5 @@
 
+
 "use client";
 
 import React, { createContext, useContext, useState, ReactNode } from 'react';
@@ -21,12 +22,19 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
 
   const addItem = (product: Product, quantity: number, lens?: Product, prescription?: Prescription) => {
     setCartItems(prevItems => {
-      const existingItemIndex = prevItems.findIndex(item => item.product.id === product.id && item.lens?.id === lens?.id);
+      // A unique identifier for a cart item is the combination of product ID and lens ID.
+      const cartItemIdentifier = `${product.id}-${lens?.id || ''}`;
+      
+      const existingItemIndex = prevItems.findIndex(item => 
+        `${item.product.id}-${item.lens?.id || ''}` === cartItemIdentifier
+      );
 
       if (existingItemIndex > -1) {
         const newItems = [...prevItems];
         newItems[existingItemIndex].quantity += quantity;
-        if(prescription) {
+        // If a new prescription is provided with this add action, update it.
+        // This is useful if the user first adds to cart without prescription, then adds again with one.
+        if (prescription) {
             newItems[existingItemIndex].prescription = prescription;
         }
         return newItems;
