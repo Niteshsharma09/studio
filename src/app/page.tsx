@@ -1,7 +1,7 @@
 
 "use client";
 
-import { useMemo, Suspense, useRef, useState, useEffect } from 'react';
+import { useMemo, Suspense } from 'react';
 import { ProductCard } from '@/components/product-card';
 import { getProducts } from '@/lib/data';
 import Image from 'next/image';
@@ -23,7 +23,7 @@ import Autoplay from "embla-carousel-autoplay"
 
 
 const HeroSection = () => {
-    const plugin = useRef(
+    const plugin = React.useRef(
         Autoplay({ delay: 5000, stopOnInteraction: true })
     );
 
@@ -249,54 +249,58 @@ function FeaturedProducts({ allProducts }: { allProducts: Product[] }) {
     );
 }
 
-export default function Home() {
-  const [products, setProducts] = useState<Product[]>([]);
+
+function HomePageContent({ allProducts }: { allProducts: Product[] }) {
+    const categories = [
+        { title: 'Eyeglasses', imageId: 'category-eyeglasses', href: '/?category=frames' },
+        { title: 'Sunglasses', imageId: 'category-sunglasses', href: '/?category=sunglasses' },
+        { title: 'Lenses', imageId: 'category-lenses', href: '/?category=lenses' },
+    ]
+    const searchParams = useSearchParams();
+    const hasFilters = searchParams.has('brands') || searchParams.has('minPrice') || searchParams.has('maxPrice') || searchParams.has('q') || searchParams.has('category');
   
-  useEffect(() => {
-    const fetchProducts = async () => {
-      const allProducts = await getProducts();
-      setProducts(allProducts);
-    };
-    fetchProducts();
-  }, []);
+    const showCollections = !hasFilters;
+  
+    return (
+      <div className="animate-fade-in">
+          {showCollections && <HeroSection />}
+  
+          {showCollections && (
+              <section className="container mx-auto px-4 py-16">
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+                      {categories.map((cat, index) => (
+                          <div key={cat.title} style={{animationDelay: `${index * 150}ms`}}>
+                               <CategoryCard {...cat} />
+                          </div>
+                      ))}
+                  </div>
+              </section>
+          )}
+  
+        <div className="container mx-auto px-4 grid grid-cols-12 gap-8 items-start">
+          <aside className="hidden lg:block lg:col-span-3 sticky top-20 animate-fade-in">
+            <Suspense fallback={<p>Loading filters...</p>}>
+              <FilterSidebar />
+            </Suspense>
+          </aside>
 
-  const categories = [
-      { title: 'Eyeglasses', imageId: 'category-eyeglasses', href: '/?category=frames' },
-      { title: 'Sunglasses', imageId: 'category-sunglasses', href: '/?category=sunglasses' },
-      { title: 'Lenses', imageId: 'category-lenses', href: '/?category=lenses' },
-  ]
-  const searchParams = useSearchParams();
-  const hasFilters = searchParams.has('brands') || searchParams.has('minPrice') || searchParams.has('maxPrice') || searchParams.has('q') || searchParams.has('category');
-
-  const showCollections = !hasFilters;
-
-  return (
-    <div className="animate-fade-in">
-        {showCollections && <HeroSection />}
-
-        {showCollections && (
-            <section className="container mx-auto px-4 py-16">
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-                    {categories.map((cat, index) => (
-                        <div key={cat.title} style={{animationDelay: `${index * 150}ms`}}>
-                             <CategoryCard {...cat} />
-                        </div>
-                    ))}
-                </div>
-            </section>
-        )}
-
-      <div className="container mx-auto px-4 grid grid-cols-12 gap-8 items-start">
-        <aside className="hidden lg:block lg:col-span-3 sticky top-20 animate-fade-in">
-          <Suspense fallback={<p>Loading filters...</p>}>
-            <FilterSidebar />
-          </Suspense>
-        </aside>
-        <Suspense fallback={<div>Loading products...</div>}>
-            {hasFilters ? <ProductList allProducts={products} /> : <FeaturedProducts allProducts={products} />}
-        </Suspense>
+          {hasFilters ? <ProductList allProducts={allProducts} /> : <FeaturedProducts allProducts={allProducts} />}
+        
+        </div>
+        {showCollections && <PromoBanner />}
       </div>
-      {showCollections && <PromoBanner />}
-    </div>
-  );
+    );
+}
+
+export default function Home() {
+    return (
+        <Suspense fallback={<div className="flex justify-center items-center h-screen">Loading...</div>}>
+            <PageContent />
+        </Suspense>
+    )
+}
+
+async function PageContent() {
+    const allProducts = await getProducts();
+    return <HomePageContent allProducts={allProducts} />;
 }
