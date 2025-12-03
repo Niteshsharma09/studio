@@ -171,7 +171,7 @@ export function Header() {
                             onClick={() => !link.submenu && setIsMobileMenuOpen(false)}
                             className={cn(
                               'font-medium transition-colors hover:text-foreground/80',
-                              pathname === link.href ? 'text-foreground' : 'text-foreground/60'
+                              (pathname + searchParams.toString()).includes(link.href.substring(1)) ? 'text-foreground' : 'text-foreground/60'
                             )}
                           >
                             {link.label}
@@ -195,7 +195,7 @@ export function Header() {
                   </nav>
                   <div className="mt-8 space-y-2">
                     {user ? (
-                      <Button onClick={handleLogout} variant="outline" className="w-full">Log Out</Button>
+                      <Button onClick={() => { handleLogout(); setIsMobileMenuOpen(false); }} variant="outline" className="w-full">Log Out</Button>
                     ) : (
                       <>
                         <Button asChild variant="outline" className="w-full">
@@ -311,5 +311,7 @@ export function Header() {
     </header>
   );
 }
+
+    
 
     
