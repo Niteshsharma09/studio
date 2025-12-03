@@ -125,44 +125,17 @@ export function PrescriptionDialog({ isOpen, onOpenChange, lens, onProceed }: Pr
 
                 <div className="space-y-4">
                     <p className="font-medium text-center">Manually Enter Eye Vision</p>
-                    <div className="grid grid-cols-2 gap-4">
-                        <FormField
-                            control={form.control}
-                            name="leftDV"
-                            render={({ field }) => (
-                                <FormItem>
-                                    <FormLabel>Left Eye (DV-OD)</FormLabel>
-                                    <FormControl>
-                                        <Input placeholder="e.g., -2.00" {...field} />
-                                    </FormControl>
-                                    <FormMessage />
-                                </FormItem>
-                            )}
-                        />
-                        <FormField
-                            control={form.control}
-                            name="rightDV"
-                            render={({ field }) => (
-                                <FormItem>
-                                    <FormLabel>Right Eye (DV-OS)</FormLabel>
-                                    <FormControl>
-                                        <Input placeholder="e.g., -1.75" {...field} />
-                                    </FormControl>
-                                     <FormMessage />
-                                </FormItem>
-                            )}
-                        />
-                    </div>
-                    {isMultiFocal && (
+                    <div className="space-y-1">
+                        <p className="font-medium text-sm text-center text-muted-foreground">Distance Vision (DV)</p>
                         <div className="grid grid-cols-2 gap-4">
-                           <FormField
+                            <FormField
                                 control={form.control}
-                                name="leftNV"
+                                name="leftDV"
                                 render={({ field }) => (
                                     <FormItem>
-                                        <FormLabel>Left Eye (NV-OD)</FormLabel>
+                                        <FormLabel>Left Eye (OD)</FormLabel>
                                         <FormControl>
-                                            <Input placeholder="e.g., +1.50" {...field} />
+                                            <Input placeholder="e.g., -2.00" {...field} />
                                         </FormControl>
                                         <FormMessage />
                                     </FormItem>
@@ -170,17 +143,51 @@ export function PrescriptionDialog({ isOpen, onOpenChange, lens, onProceed }: Pr
                             />
                             <FormField
                                 control={form.control}
-                                name="rightNV"
+                                name="rightDV"
                                 render={({ field }) => (
                                     <FormItem>
-                                        <FormLabel>Right Eye (NV-OS)</FormLabel>
+                                        <FormLabel>Right Eye (OS)</FormLabel>
                                         <FormControl>
-                                            <Input placeholder="e.g., +1.50" {...field} />
+                                            <Input placeholder="e.g., -1.75" {...field} />
                                         </FormControl>
                                         <FormMessage />
                                     </FormItem>
                                 )}
                             />
+                        </div>
+                    </div>
+
+                    {isMultiFocal && (
+                        <div className="space-y-1">
+                            <p className="font-medium text-sm text-center text-muted-foreground">Addition (ADD)</p>
+                             <div className="grid grid-cols-2 gap-4">
+                               <FormField
+                                    control={form.control}
+                                    name="leftNV"
+                                    render={({ field }) => (
+                                        <FormItem>
+                                            <FormLabel>Left Eye (OD)</FormLabel>
+                                            <FormControl>
+                                                <Input placeholder="e.g., +1.50" {...field} />
+                                            </FormControl>
+                                            <FormMessage />
+                                        </FormItem>
+                                    )}
+                                />
+                                <FormField
+                                    control={form.control}
+                                    name="rightNV"
+                                    render={({ field }) => (
+                                        <FormItem>
+                                            <FormLabel>Right Eye (OS)</FormLabel>
+                                            <FormControl>
+                                                <Input placeholder="e.g., +1.50" {...field} />
+                                            </FormControl>
+                                            <FormMessage />
+                                        </FormItem>
+                                    )}
+                                />
+                            </div>
                         </div>
                     )}
                 </div>
