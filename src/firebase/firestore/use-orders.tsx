@@ -60,13 +60,14 @@ export function useOrders() {
   }, [firestore, user?.uid, userLoading]);
 
   useEffect(() => {
+    if (userLoading) return;
     const unsubscribe = fetchOrders();
     return () => {
         if (unsubscribe) {
             unsubscribe();
         }
     };
-  }, [fetchOrders]);
+  }, [userLoading, fetchOrders]);
 
   return { orders, loading: userLoading || loading };
 }
