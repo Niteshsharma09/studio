@@ -141,7 +141,7 @@
     {
       "id": "velocity-aviator-2",
       "description": "A modern take on the classic aviator with updated materials and lens tech.",
-      "imageUrl": "https://images.unsplash.com/photo-1511499767150-a48a237f0083?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHxhdmlhdG9yJTIwc3VuZ2xhc3Nlc3xlbnwwfHx8fDE3NjQ4ODQxMzN8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageUrl": "https://images.unsplash.com/photo-1511499767150-a48a237f0083?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHxhdmlhdG9yJTIwc3VuZ2xhc3Nlc3xlbnwwfHx8fDE3NjQ4ODQxMzN8MA&ixlibrb-4.1.0&q=80&w=1080",
       "imageHint": "aviator sunglasses"
     },
     {
@@ -159,19 +159,19 @@
     {
       "id": "titan-rimless",
       "description": "Ultra-lightweight rimless frames for a barely-there feel and a minimalist look.",
-      "imageUrl": "https://images.unsplash.com/photo-1577992933098-f3d9a69152a5?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHxyaW1sZXNzJTIwZ2xhc3Nlc3xlbnwwfHx8fDE3NjQ4ODQxMzN8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageUrl": "https://images.unsplash.com/photo-1577992933098-f3d9a69152a5?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHxyaW1sZXNzJTIwZ2xhc3Nlc3xlbnwwfHx8fDE3NjQ4ODQxMzN8MA&ixlib-rb-4.1.0&q=80&w=1080",
       "imageHint": "rimless glasses"
     },
     {
       "id": "technoii-drive-lens",
       "description": "Lenses with a specialized tint and polarization to enhance contrast while driving.",
-      "imageUrl": "https://images.unsplash.com/photo-1568475004576-f05a3903642f?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHxkcml2aW5nJTIwbGVuc2VzfGVufDB8fHx8MTc2NDg4NDEzM3ww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageUrl": "https://images.unsplash.com/photo-1568475004576-f05a3903642f?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHxkcml2aW5nJTIwbGVuc2VzfGVufDB8fHx8MTc2NDg4NDEzM3ww&ixlibrb-4.1.0&q=80&w=1080",
       "imageHint": "driving lenses"
     },
     {
       "id": "nvg-shield-pro",
       "description": "Professional-grade shield sunglasses for maximum protection and a bold look.",
-      "imageUrl": "https://images.unsplash.com/photo-1577992933098-f3d9a69152a5?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHxzaGllbGQlMjBzdW5nbGFzc2VzfGVufDB8fHx8MTc2NDg4NDEzM3ww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageUrl": "https://images.unsplash.com/photo-1577992933098-f3d9a69152a5?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHxzaGllZGQlMjBzdW5nbGFzc2VzfGVufDB8fHx8MTc2NDg4NDEzM3ww&ixlib=rb-4.1.0&q=80&w=1080",
       "imageHint": "professional sunglasses"
     },
     {
@@ -179,36 +179,6 @@
       "description": "Fashionable sunglasses with gradient lenses that are dark on top and lighter on the bottom.",
       "imageUrl": "https://images.unsplash.com/photo-1572635196237-14b3f281503f?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHxncmFkaWVudCUyMHN1bmdsYXNzZXN8ZW58MHx8fHwxNzY0ODg0MTMzfDA&ixlib=rb-4.1.0&q=80&w=1080",
       "imageHint": "gradient sunglasses"
-    },
-    {
-      "id": "contact-daily-comfort",
-      "description": "A box of daily disposable contact lenses.",
-      "imageUrl": "https://images.unsplash.com/photo-1628872477382-a72a744d3b37?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxjb250YWN0JTIwbGVucyUyMGJveHxlbnwwfHx8fDE3NjQ5Nzc2NzZ8MA&ixlib=rb-4.1.0&q=80&w=1080",
-      "imageHint": "contact lenses"
-    },
-    {
-      "id": "contact-monthly-wear",
-      "description": "A single monthly disposable contact lens in its case.",
-      "imageUrl": "https://images.unsplash.com/photo-1588863668858-3d7b63e9f45a?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHxjb250YWN0JTIwbGVucyUyMGNhc2V8ZW58MHx8fHwxNzY0OTc3Njc2fDA&ixlib=rb-4.1.0&q=80&w=1080",
-      "imageHint": "contact lens case"
-    },
-    {
-      "id": "contact-toric",
-      "description": "A close-up of a toric contact lens for astigmatism.",
-      "imageUrl": "https://images.unsplash.com/photo-1621641529845-56708304b49b?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHxjb250YWN0JTIwbGVuc3xlbnwwfHx8fDE3NjQ5Nzc2NzZ8MA&ixlib=rb-4.1.0&q=80&w=1080",
-      "imageHint": "contact lens"
-    },
-    {
-      "id": "contact-multifocal",
-      "description": "A diagram showing how a multifocal contact lens works.",
-      "imageUrl": "https://images.unsplash.com/photo-1607957233158-d2f349c04b48?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHxibHVlJTIwZXllc3xlbnwwfHx8fDE3NjQ5Nzc2NzZ8MA&ixlib=rb-4.1.0&q=80&w=1080",
-      "imageHint": "blue eye"
-    },
-    {
-      "id": "contact-color-blue",
-      "description": "A person with vibrant blue colored contact lenses.",
-      "imageUrl": "https://images.unsplash.com/photo-1615598828554-7901789c6239?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHxjb2xvcmVkJTIwY29udGFjdHN8ZW58MHx8fHwxNzY0OTc3Njc2fDA&ixlib=rb-4.1.0&q=80&w=1080",
-      "imageHint": "colored contacts"
     },
     {
       "id": "hero-carousel-1-desktop",
@@ -261,13 +231,13 @@
     {
       "id": "checkout-image",
       "description": "A collection of stylish glasses.",
-      "imageUrl": "https://images.unsplash.com/photo-1611012595366-18cf16280487?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw1fHxleWV3ZWFyJTIwY29sbGVjdGlvbnxlbnwwfHx8fDE3NjM5NzU2Mzl8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageUrl": "https://images.unsplash.com/photo-1611012595366-18cf16280487?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw1fHxleWV3ZWFyJTIwY29sbGVjdGlvbnxlbnwwfHx8fDE3NjM5NzU2Mzl8MA&ixlib-rb-4.1.0&q=80&w=1080",
       "imageHint": "eyewear collection"
     },
     {
       "id": "style-guide-hero",
       "description": "A person trying on different glasses.",
-      "imageUrl": "https://images.unsplash.com/photo-1574494349420-ecf8ccbff974?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw0fHxjaG9vc2luZyUyMGdsYXNzZXN8ZW58MHx8fHwxNzYzOTc1NjM5fDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageUrl": "https://images.unsplash.com/photo-1574494349420-ecf8ccbff974?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw0fHxjaG9vc2luZyUyMGdsYXNzZXN8ZW58MHx8fHwxNzYzOTc1NjM5fDA&ixlib-rb-4.1.0&q=80&w=1080",
       "imageHint": "choosing glasses"
     },
     {
@@ -285,8 +255,38 @@
     {
       "id": "category-lenses",
       "description": "A close-up of different eyeglass lenses.",
-      "imageUrl": "https://images.unsplash.com/photo-1631049339673-c1e5ba4849fb?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxlbnwwfHx8fDE3NjQ4ODQxMzN8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageUrl": "https://images.unsplash.com/photo-1631049339673-c1e5ba4849fb?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxlbnwwfHx8fDE3NjQ4ODQxMzN8MA&ixlib-rb-4.1.0&q=80&w=1080",
       "imageHint": "eyeglass lenses"
+    },
+    {
+      "id": "contact-daily-comfort",
+      "description": "A box of daily disposable contact lenses.",
+      "imageUrl": "https://images.unsplash.com/photo-1628872477382-a72a744d3b37?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxjb250YWN0JTIwbGVucyUyMGJveHxlbnwwfHx8fDE3NjQ5Nzc2NzZ8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "contact lenses"
+    },
+    {
+      "id": "contact-monthly-wear",
+      "description": "A single monthly disposable contact lens in its case.",
+      "imageUrl": "https://images.unsplash.com/photo-1588863668858-3d7b63e9f45a?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHxjb250YWN0JTIwbGVucyUyMGNhc2V8ZW58MHx8fHwxNzY0OTc3Njc2fDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "contact lens case"
+    },
+    {
+      "id": "contact-toric",
+      "description": "A close-up of a toric contact lens for astigmatism.",
+      "imageUrl": "https://images.unsplash.com/photo-1621641529845-56708304b49b?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHxjb250YWN0JTIwbGVuc3xlbnwwfHx8fDE3NjQ5Nzc2NzZ8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "contact lens"
+    },
+    {
+      "id": "contact-multifocal",
+      "description": "A diagram showing how a multifocal contact lens works.",
+      "imageUrl": "https://images.unsplash.com/photo-1607957233158-d2f349c04b48?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHxibHVlJTIwZXllc3xlbnwwfHx8fDE3NjQ5Nzc2NzZ8MA&ixlib-rb-4.1.0&q=80&w=1080",
+      "imageHint": "blue eye"
+    },
+    {
+      "id": "contact-color-blue",
+      "description": "A person with vibrant blue colored contact lenses.",
+      "imageUrl": "https://images.unsplash.com/photo-1615598828554-7901789c6239?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHxjb2xvcmVkJTIwY29udGFjdHN8ZW58MHx8fHwxNzY0OTc3Njc2fDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "colored contacts"
     }
   ]
 }
