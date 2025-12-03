@@ -1,7 +1,7 @@
 
 "use client";
 
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import Image from "next/image";
 import { useElementSize } from "@/hooks/use-element-size";
 import { useIsMobile } from "@/hooks/use-mobile";
@@ -12,25 +12,99 @@ interface ImageZoomProps {
   zoomLevel?: number;
 }
 
+const MIN_SCALE = 1;
+const MAX_SCALE = 4;
+
 export function ImageZoom({ imageUrl, zoomLevel = 2 }: ImageZoomProps) {
   const [showZoom, setShowZoom] = useState(false);
   const [position, setPosition] = useState({ x: 0, y: 0 });
-  
   const [imageRef, { width: imageWidth, height: imageHeight }] = useElementSize();
   const [containerRef, { width: containerWidth, height: containerHeight }] = useElementSize();
-
   const isMobile = useIsMobile();
+  const [scale, setScale] = useState(1);
+  const [offset, setOffset] = useState({ x: 0, y: 0 });
+  const imageRefMobile = useRef<HTMLImageElement>(null);
+  const initialPinchDistance = useRef<number | null>(null);
 
+  // Reset state when imageUrl changes
+  useEffect(() => {
+    setScale(1);
+    setOffset({ x: 0, y: 0 });
+    initialPinchDistance.current = null;
+  }, [imageUrl]);
+  
   if (isMobile) {
-    // On mobile, we use a simple pinch-to-zoom container.
-    // This is a basic implementation; a more robust library could be used for a better experience.
+    const handleTouchStart = (e: React.TouchEvent<HTMLDivElement>) => {
+      if (e.touches.length === 2) {
+        e.preventDefault();
+        const touch1 = e.touches[0];
+        const touch2 = e.touches[1];
+        initialPinchDistance.current = Math.hypot(
+          touch1.clientX - touch2.clientX,
+          touch1.clientY - touch2.clientY
+        );
+      }
+    };
+    
+    const handleTouchMove = (e: React.TouchEvent<HTMLDivElement>) => {
+      if (e.touches.length === 2 && initialPinchDistance.current !== null) {
+        e.preventDefault();
+        const touch1 = e.touches[0];
+        const touch2 = e.touches[1];
+        const currentPinchDistance = Math.hypot(
+          touch1.clientX - touch2.clientX,
+          touch1.clientY - touch2.clientY
+        );
+        const pinchRatio = currentPinchDistance / initialPinchDistance.current;
+        const newScale = Math.max(MIN_SCALE, Math.min(scale * pinchRatio, MAX_SCALE));
+        setScale(newScale);
+      } else if (e.touches.length === 1 && scale > 1) {
+        e.preventDefault();
+        const touch = e.touches[0];
+        setOffset(currentOffset => {
+            const newX = currentOffset.x + touch.clientX - (e.currentTarget.dataset.lastX ? parseFloat(e.currentTarget.dataset.lastX) : touch.clientX);
+            const newY = currentOffset.y + touch.clientY - (e.currentTarget.dataset.lastY ? parseFloat(e.currentTarget.dataset.lastY) : touch.clientY);
+            
+            const maxOffsetX = (imageWidth * scale - containerWidth) / 2 / scale;
+            const maxOffsetY = (imageHeight * scale - containerHeight) / 2 / scale;
+            
+            return {
+              x: Math.max(-maxOffsetX, Math.min(maxOffsetX, newX)),
+              y: Math.max(-maxOffsetY, Math.min(maxOffsetY, newY)),
+            };
+        });
+        e.currentTarget.dataset.lastX = touch.clientX.toString();
+        e.currentTarget.dataset.lastY = touch.clientY.toString();
+      }
+    };
+
+    const handleTouchEnd = (e: React.TouchEvent<HTMLDivElement>) => {
+      e.preventDefault();
+      initialPinchDistance.current = null;
+      delete e.currentTarget.dataset.lastX;
+      delete e.currentTarget.dataset.lastY;
+    };
+    
     return (
-        <div className="relative w-full h-full overflow-hidden">
+        <div
+            className="relative w-full h-full overflow-hidden touch-none flex items-center justify-center"
+            ref={containerRef}
+            onTouchStart={handleTouchStart}
+            onTouchMove={handleTouchMove}
+            onTouchEnd={handleTouchEnd}
+        >
             <Image
+                ref={imageRefMobile}
                 src={imageUrl}
                 alt="Product image"
                 fill
-                className="object-contain rounded-lg"
+                className="object-contain transition-transform duration-100 ease-out"
+                style={{
+                  transform: `scale(${scale}) translate(${offset.x}px, ${offset.y}px)`,
+                  transformOrigin: 'center center',
+                  maxWidth: '100%',
+                  maxHeight: '100%',
+                }}
                 sizes="100vw"
                 priority
             />
@@ -102,8 +176,7 @@ export function ImageZoom({ imageUrl, zoomLevel = 2 }: ImageZoomProps) {
 
       <div
         className={cn(
-            "absolute left-[calc(100%+1rem)] top-0 z-10 w-full h-full border bg-white overflow-hidden pointer-events-none transition-opacity duration-300",
-            // Hide on smaller screens where there's no room for the zoom pane
+            "absolute left-full top-0 z-10 ml-4 w-full h-full border bg-white overflow-hidden pointer-events-none transition-opacity duration-300",
             "hidden lg:block"
         )}
         style={{

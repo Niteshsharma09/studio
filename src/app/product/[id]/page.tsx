@@ -183,7 +183,7 @@ export default function ProductDetailPage() {
               />
             </div>
           </DialogTrigger>
-          <DialogContent className="max-w-full h-full max-h-full w-full p-2 bg-black/80 border-none">
+          <DialogContent className="max-w-full h-full max-h-full w-full p-0 bg-black/80 border-none">
              <ImageZoom imageUrl={activeImage} />
           </DialogContent>
         </Dialog>
@@ -202,8 +202,8 @@ export default function ProductDetailPage() {
       <div className="animate-fade-in">
           <div className="container mx-auto px-4 py-12">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start">
-              <div className="grid grid-cols-[80px_1fr] gap-4 items-start animate-fade-in">
-                  <div className="flex flex-col gap-3">
+            <div className="grid grid-cols-1 lg:grid-cols-[80px_1fr] gap-4 items-start animate-fade-in lg:col-span-1">
+                  <div className="flex flex-col gap-3 order-first lg:order-none">
                       {thumbnails.map((thumbUrl, index) => (
                           <button
                               key={index}
@@ -223,9 +223,9 @@ export default function ProductDetailPage() {
                       ))}
                   </div>
                   <MainImage />
-              </div>
+            </div>
               
-              <div className="animate-fade-in-up">
+              <div className="animate-fade-in-up lg:col-span-1">
               <p className="text-sm font-medium text-primary">{product.brand}</p>
               <h1 className="text-4xl font-bold tracking-tight mt-1">{product.name}</h1>
               
