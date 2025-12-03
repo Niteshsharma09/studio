@@ -1,5 +1,4 @@
 
-
 "use client";
 
 import { useMemo, Suspense, useRef, useState, useEffect } from 'react';
@@ -189,9 +188,7 @@ function ProductList() {
   const minPrice = useMemo(() => Number(searchParams.get('minPrice') || 0), [searchParams]);
   const maxPrice = useMemo(() => Number(searchParams.get('maxPrice') || 9999), [searchParams]);
   const [products, setProducts] = useState<Product[]>([]);
-  const hasFilters = searchParams.has('brands') || searchParams.has('minPrice') || searchParams.has('maxPrice') || searchParams.has('q') || searchParams.has('category');
-
-
+  
   useEffect(() => {
     const fetchProducts = async () => {
       const allProducts = await getProducts();
@@ -223,42 +220,52 @@ function ProductList() {
     return prods;
   }, [searchQuery, category, selectedBrands, minPrice, maxPrice, products]);
 
-  if (hasFilters) {
-    const title = category ? category.charAt(0).toUpperCase() + category.slice(1) : "Search Results";
+  const title = category ? category.charAt(0).toUpperCase() + category.slice(1) : "Search Results";
+  
+  return (
+      <div className="col-span-12 lg:col-span-9">
+          <div className="mb-8 text-center animate-fade-in">
+            <h2 className="text-3xl font-bold">{title}</h2>
+            <p className="text-muted-foreground">{filteredProducts.length} products found.</p>
+          </div>
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-x-6 gap-y-10">
+              {filteredProducts.map((product, index) => (
+                  <ProductCard 
+                      key={product.id} 
+                      product={product} 
+                      className="animate-fade-in-up"
+                      style={{ animationDelay: `${index * 100}ms`}}
+                  />
+              ))}
+          </div>
+          {filteredProducts.length === 0 && (
+              <div className="col-span-full flex flex-col items-center justify-center text-center h-96 bg-card rounded-lg border mt-8 animate-fade-in">
+                  <h3 className="text-2xl font-semibold">No Products Found</h3>
+                  <p className="text-muted-foreground mt-2">Try adjusting your search or filters.</p>
+              </div>
+          )}
+      </div>
+  );
+}
+
+function FeaturedProducts() {
+    const [products, setProducts] = useState<Product[]>([]);
+
+    useEffect(() => {
+        const fetchProducts = async () => {
+            const allProducts = await getProducts();
+            setProducts(allProducts);
+        };
+        fetchProducts();
+    }, []);
     
+    const featuredProducts = products.slice(0, 8);
+
     return (
         <div className="col-span-12 lg:col-span-9">
-            <div className="mb-8 text-center animate-fade-in">
-              <h2 className="text-3xl font-bold">{title}</h2>
-              <p className="text-muted-foreground">{filteredProducts.length} products found.</p>
-            </div>
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-x-6 gap-y-10">
-                {filteredProducts.map((product, index) => (
-                    <ProductCard 
-                        key={product.id} 
-                        product={product} 
-                        className="animate-fade-in-up"
-                        style={{ animationDelay: `${index * 100}ms`}}
-                    />
-                ))}
-            </div>
-            {filteredProducts.length === 0 && (
-                <div className="col-span-full flex flex-col items-center justify-center text-center h-96 bg-card rounded-lg border mt-8 animate-fade-in">
-                    <h3 className="text-2xl font-semibold">No Products Found</h3>
-                    <p className="text-muted-foreground mt-2">Try adjusting your search or filters.</p>
-                </div>
-            )}
+            <ProductCollection id="featured" title="Featured Products" products={featuredProducts} />
         </div>
     );
-  }
-  
-  const featuredProducts = products.slice(0, 8);
-
-  return (
-    <div className="col-span-12 lg:col-span-9">
-        <ProductCollection id="featured" title="Featured Products" products={featuredProducts} />
-    </div>
-  );
 }
 
 export default function Home() {
@@ -295,7 +302,7 @@ export default function Home() {
           </Suspense>
         </aside>
         <Suspense fallback={<div>Loading products...</div>}>
-            <ProductList />
+            {hasFilters ? <ProductList /> : <FeaturedProducts />}
         </Suspense>
       </div>
       {showCollections && <PromoBanner />}
