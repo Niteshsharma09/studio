@@ -49,11 +49,12 @@ export type User = {
 export type Order = {
   id: string;
   userId: string;
-  orderDate: number;
+  orderDate: any; // Firestore Timestamp
   totalAmount: number;
   status: string;
   shippingAddress?: string;
   billingAddress?: string;
+  items: OrderItem[];
 };
 
 export type OrderItem = {
@@ -62,6 +63,8 @@ export type OrderItem = {
   productId: string;
   quantity: number;
   priceAtPurchase: number;
+  productName: string;
+  lensName: string | null;
 };
 
 export type Prescription = {

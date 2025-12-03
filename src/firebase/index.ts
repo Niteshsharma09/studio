@@ -11,6 +11,7 @@ import {
   useFirestore,
 } from './provider';
 import { useUser } from './auth/use-user';
+import { useOrders } from './firestore/use-orders';
 
 
 export {
@@ -20,4 +21,5 @@ export {
     useAuth,
     useFirestore,
     useUser,
+    useOrders,
 };

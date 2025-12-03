@@ -2,7 +2,7 @@
 "use client";
 
 import Link from 'next/link';
-import { ShoppingBag, Search, Menu, LogOut, LayoutDashboard } from 'lucide-react';
+import { ShoppingBag, Search, Menu, LogOut, LayoutDashboard, History } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { CartSheet } from '@/components/cart-sheet';
 import { useCart } from '@/context/cart-context';
@@ -109,7 +109,7 @@ export function Header() {
             </DropdownMenuLabel>
             <DropdownMenuSeparator />
             <DropdownMenuItem onSelect={() => router.push('/my-orders')}>
-              <LayoutDashboard className="mr-2 h-4 w-4" />
+              <History className="mr-2 h-4 w-4" />
               <span>My Orders</span>
             </DropdownMenuItem>
             <DropdownMenuSeparator />
@@ -187,28 +187,30 @@ export function Header() {
             </Sheet>
           </div>
           
-          <Link href="/" className="mr-4 lg:hidden">
-             <Image src="/logo.png" alt="technoii Logo" width={80} height={28} />
-          </Link>
-           <Link href="/" className="mr-4 hidden lg:block">
-            <Image src="/logo.png" alt="technoii Logo" width={120} height={35} />
-          </Link>
+           <div className="mr-2 md:mr-4">
+            <Link href="/" className="flex items-center">
+              <Image src="/logo.png" alt="technoii Logo" width={120} height={30} className="hidden sm:block h-[30px] w-auto"/>
+              <Image src="/logo.png" alt="technoii Logo" width={100} height={25} className="sm:hidden h-[25px] w-auto"/>
+            </Link>
+          </div>
           
-           <div className="flex-1 flex justify-center px-2 sm:px-8">
-             <form onSubmit={handleSearchSubmit} className="w-full max-w-md">
-               <div className="relative">
-                 <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-                 <Input 
-                   placeholder="Search..." 
-                   className="pl-10 h-9"
-                   value={searchQuery}
-                   onChange={(e) => setSearchQuery(e.target.value)}
-                 />
-               </div>
-             </form>
+           <div className="flex-1 flex justify-center px-2 lg:px-8">
+             <div className="w-full max-w-md">
+                <form onSubmit={handleSearchSubmit} className="w-full">
+                  <div className="relative">
+                    <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                    <Input 
+                      placeholder="Search..." 
+                      className="pl-10 h-9 w-full"
+                      value={searchQuery}
+                      onChange={(e) => setSearchQuery(e.target.value)}
+                    />
+                  </div>
+                </form>
+              </div>
            </div>
 
-          <div className="flex flex-shrink-0 items-center justify-end space-x-2">
+          <div className="flex flex-shrink-0 items-center justify-end space-x-1 sm:space-x-2">
             <UserMenu />
 
             <CartSheet>
