@@ -102,7 +102,7 @@ export function ImageZoom({ imageUrl, zoomLevel = 2 }: ImageZoomProps) {
 
       <div
         className={cn(
-            "absolute left-full top-0 ml-4 z-10 w-full h-full border bg-white overflow-hidden pointer-events-none transition-opacity duration-300",
+            "absolute left-[calc(100%+1rem)] top-0 z-10 w-full h-full border bg-white overflow-hidden pointer-events-none transition-opacity duration-300",
             // Hide on smaller screens where there's no room for the zoom pane
             "hidden lg:block"
         )}

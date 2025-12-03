@@ -201,8 +201,8 @@ export default function ProductDetailPage() {
     <>
       <div className="animate-fade-in">
           <div className="container mx-auto px-4 py-12">
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-12 items-start">
-              <div className="grid grid-cols-[80px_1fr] gap-4 items-start animate-fade-in lg:col-span-2">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start">
+              <div className="grid grid-cols-[80px_1fr] gap-4 items-start animate-fade-in">
                   <div className="flex flex-col gap-3">
                       {thumbnails.map((thumbUrl, index) => (
                           <button
