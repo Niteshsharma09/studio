@@ -3,7 +3,7 @@
 
 import { useMemo, Suspense, useRef } from 'react';
 import { ProductCard } from '@/components/product-card';
-import { PRODUCTS } from '@/lib/data';
+import { getProducts, getLenses, PRODUCTS } from '@/lib/data';
 import Image from 'next/image';
 import { PlaceHolderImages } from '@/lib/placeholder-images';
 import Link from 'next/link';
@@ -99,7 +99,7 @@ const HeroSection = () => {
                                         />
                                     )}
                                     <div className="absolute inset-0 bg-black/50" />
-                                    <div className="absolute inset-0 z-10 flex flex-col items-center justify-center text-center p-4">
+                                    <div className="absolute inset-0 z-10 flex flex-col items-center justify-center text-center p-4 text-white">
                                         <div className="max-w-3xl animate-fade-in-up">
                                             <h1 className="text-4xl md:text-6xl font-bold tracking-tighter leading-tight">{slide.title}</h1>
                                             <p className="mt-4 text-lg md:text-xl max-w-xl mx-auto">{slide.subtitle}</p>
@@ -188,25 +188,34 @@ function ProductList() {
   const selectedBrands = useMemo(() => searchParams.get('brands')?.split(',') || [], [searchParams]);
   const minPrice = useMemo(() => Number(searchParams.get('minPrice') || 0), [searchParams]);
   const maxPrice = useMemo(() => Number(searchParams.get('maxPrice') || 9999), [searchParams]);
+  const [products, setProducts] = useState<Product[]>([]);
+
+  useEffect(() => {
+    const fetchProducts = async () => {
+      const allProducts = await getProducts();
+      setProducts(allProducts);
+    };
+    fetchProducts();
+  }, []);
 
   const filteredProducts = useMemo(() => {
-    let products = PRODUCTS;
+    let prods = products;
 
     if (searchQuery) {
-        products = products.filter(product => 
+        prods = prods.filter(product => 
             product.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
             product.brand.toLowerCase().includes(searchQuery.toLowerCase())
         );
     }
     
     if (selectedBrands.length > 0) {
-        products = products.filter(product => selectedBrands.includes(product.brand));
+        prods = prods.filter(product => selectedBrands.includes(product.brand));
     }
 
-    products = products.filter(product => product.price >= minPrice && product.price <= maxPrice);
+    prods = prods.filter(product => product.price >= minPrice && product.price <= maxPrice);
 
-    return products;
-  }, [searchQuery, selectedBrands, minPrice, maxPrice]);
+    return prods;
+  }, [searchQuery, selectedBrands, minPrice, maxPrice, products]);
 
   if (category) {
     const productsToDisplay = filteredProducts.filter(p => p.type.toLowerCase().includes(category));
@@ -289,3 +298,5 @@ export default function Home() {
     </div>
   );
 }
+
+    
