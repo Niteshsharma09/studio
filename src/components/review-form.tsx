@@ -58,7 +58,7 @@ export function ReviewForm({ productId, onReviewSubmit }: ReviewFormProps) {
             <CardDescription>You must be logged in to write a review.</CardDescription>
         </CardHeader>
         <CardContent>
-            <Button asChild><Link href="/login?redirect=/product/${productId}">Log In to Review</Link></Button>
+            <Button asChild><Link href={`/login?redirect=/product/${productId}`}>Log In to Review</Link></Button>
         </CardContent>
       </Card>
     );
@@ -83,10 +83,8 @@ export function ReviewForm({ productId, onReviewSubmit }: ReviewFormProps) {
     try {
         let imageUrl: string | undefined = undefined;
 
-        // Upload image if present
         if (values.image) {
             const storage = getStorage();
-            // The path now includes the user's UID to match the security rule
             const imageRef = ref(storage, `reviews/${productId}/${user.uid}/${Date.now()}-${fileName}`);
             const snapshot = await uploadString(imageRef, values.image, 'data_url');
             imageUrl = await getDownloadURL(snapshot.ref);
@@ -97,10 +95,10 @@ export function ReviewForm({ productId, onReviewSubmit }: ReviewFormProps) {
             productId,
             userId: user.uid,
             userName: user.displayName || user.email || "Anonymous",
-            userImage: user.photoURL,
+            userImage: user.photoURL || null,
             rating: values.rating,
             comment: values.comment,
-            imageUrl: imageUrl,
+            imageUrl: imageUrl || null,
             createdAt: serverTimestamp(),
         });
         
