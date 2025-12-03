@@ -2,7 +2,7 @@
 "use client";
 
 import Link from 'next/link';
-import { ShoppingBag, Search, Menu, LogOut, LayoutDashboard, History } from 'lucide-react';
+import { ShoppingBag, Search, Menu, LogOut, LayoutDashboard, History, ChevronDown } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { CartSheet } from '@/components/cart-sheet';
 import { useCart } from '@/context/cart-context';
@@ -21,6 +21,11 @@ import {
   SheetContent,
   SheetTrigger,
 } from "@/components/ui/sheet"
+import {
+  Collapsible,
+  CollapsibleContent,
+  CollapsibleTrigger,
+} from "@/components/ui/collapsible"
 import { useState, useEffect } from 'react';
 import { Input } from '@/components/ui/input';
 import { useUser } from '@/firebase';
@@ -163,36 +168,59 @@ export function Header() {
                     <Image src="/logo.png" alt="technoii Logo" width={120} height={35} />
                   </Link>
                   
-                  <nav className="flex flex-col space-y-4 text-lg">
-                    {navLinks.map((link) => (
-                      <div key={link.href}>
-                         <Link
-                            href={link.href}
-                            onClick={() => !link.submenu && setIsMobileMenuOpen(false)}
-                            className={cn(
-                              'font-medium transition-colors hover:text-foreground/80',
-                              (pathname + searchParams.toString()).includes(link.href.substring(1)) ? 'text-foreground' : 'text-foreground/60'
-                            )}
-                          >
-                            {link.label}
-                          </Link>
-                          {link.submenu && (
-                            <div className="flex flex-col pl-4 mt-2 space-y-2">
-                              {link.submenu.map(sublink => (
-                                <Link
-                                  key={sublink.href}
-                                  href={sublink.href}
-                                  onClick={() => setIsMobileMenuOpen(false)}
-                                  className="text-base text-foreground/60 hover:text-foreground/80"
-                                >
-                                  {sublink.label}
-                                </Link>
-                              ))}
+                  <nav className="flex flex-col space-y-1 text-lg">
+                    {navLinks.map((link) => 
+                      link.submenu ? (
+                        <Collapsible key={link.href} className="flex flex-col space-y-1">
+                          <CollapsibleTrigger asChild>
+                            <div className='flex items-center justify-between'>
+                              <Link
+                                href={link.href}
+                                onClick={() => setIsMobileMenuOpen(false)}
+                                className={cn(
+                                'font-medium transition-colors hover:text-foreground/80 flex-1',
+                                (pathname + '?' + searchParams.toString()).includes('category=frames') ? 'text-foreground' : 'text-foreground/60'
+                                )}
+                              >
+                                {link.label}
+                              </Link>
+                              <Button variant="ghost" size="sm" className="w-9 p-0 [&[data-state=open]>svg]:rotate-180">
+                                <ChevronDown className="h-5 w-5 transition-transform" />
+                                <span className="sr-only">Toggle</span>
+                              </Button>
                             </div>
+                          </CollapsibleTrigger>
+                          <CollapsibleContent>
+                            <div className="flex flex-col pl-6 space-y-2 mt-2 border-l-2 ml-2">
+                                {link.submenu.map(sublink => (
+                                    <Link
+                                    key={sublink.href}
+                                    href={sublink.href}
+                                    onClick={() => setIsMobileMenuOpen(false)}
+                                    className="text-base text-foreground/60 hover:text-foreground/80 py-1"
+                                    >
+                                    {sublink.label}
+                                    </Link>
+                                ))}
+                            </div>
+                          </CollapsibleContent>
+                        </Collapsible>
+                      ) : (
+                        <Link
+                          key={link.href}
+                          href={link.href}
+                          onClick={() => setIsMobileMenuOpen(false)}
+                          className={cn(
+                            'font-medium transition-colors hover:text-foreground/80 block py-2',
+                            (pathname + searchParams.toString()).includes(link.href.substring(1)) ? 'text-foreground' : 'text-foreground/60'
                           )}
-                      </div>
-                    ))}
+                        >
+                          {link.label}
+                        </Link>
+                      )
+                    )}
                   </nav>
+
                   <div className="mt-8 space-y-2">
                     {user ? (
                       <Button onClick={() => { handleLogout(); setIsMobileMenuOpen(false); }} variant="outline" className="w-full">Log Out</Button>
@@ -311,7 +339,3 @@ export function Header() {
     </header>
   );
 }
-
-    
-
-    
