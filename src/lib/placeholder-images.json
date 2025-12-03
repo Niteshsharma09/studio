@@ -111,14 +111,14 @@
     {
       "id": "hero-carousel-bogo-desktop",
       "description": "A stylish setting with multiple pairs of glasses for a BOGO sale.",
-      "imageUrl": "https://images.unsplash.com/photo-1526642289423-893e141a4645?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw1fHxleWV3ZWFyJTIwc2FsZXxlbnwwfHx8fDE3NjQzOTI2MTd8MA&ixlib=rb-4.1.0&q=80&w=1080",
-      "imageHint": "eyewear sale"
+      "imageUrl": "https://images.unsplash.com/photo-1585486451366-5b5b9520797e?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwzfHxzcGVjdGFjbGUlMjBmcmFtZXN8ZW58MHx8fHwxNzY0MzQ1MjUyfDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "spectacle frames"
     },
     {
       "id": "hero-carousel-bogo-mobile",
       "description": "A stylish setting with multiple pairs of glasses for a BOGO sale, mobile view.",
-      "imageUrl": "https://images.unsplash.com/photo-1526642289423-893e141a4645?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw1fHxleWV3ZWFyJTIwc2FsZXxlbnwwfHx8fDE3NjQzOTI2MTd8MA&ixlib=rb-4.1.0&q=80&w=1080",
-      "imageHint": "eyewear sale"
+      "imageUrl": "https://images.unsplash.com/photo-1585486451366-5b5b9520797e?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwzfHxzcGVjdGFjbGUlMjBmcmFtZXN8ZW58MHx8fHwxNzY0MzQ1MjUyfDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "spectacle frames"
     },
     {
       "id": "checkout-image",
