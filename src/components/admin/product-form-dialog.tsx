@@ -18,6 +18,8 @@ import { doc, setDoc, addDoc, collection } from 'firebase/firestore';
 import { useToast } from '@/hooks/use-toast';
 import { Loader2 } from 'lucide-react';
 import { ScrollArea } from '../ui/scroll-area';
+import { PlaceHolderImages } from '@/lib/placeholder-images';
+import Image from 'next/image';
 
 const formSchema = z.object({
   name: z.string().min(1, 'Product name is required'),
@@ -39,7 +41,7 @@ export function ProductFormDialog({ isOpen, onOpenChange, product }: ProductForm
   const [isLoading, setIsLoading] = useState(false);
   const firestore = useFirestore();
   const { toast } = useToast();
-
+  
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -52,6 +54,10 @@ export function ProductFormDialog({ isOpen, onOpenChange, product }: ProductForm
       gender: 'Unisex',
     },
   });
+
+  const imageId = form.watch('imageId');
+  const imageUrl = PlaceHolderImages.find(p => p.id === imageId)?.imageUrl || `https://placehold.co/600x400?text=No+Image`;
+
 
   useEffect(() => {
     if (product) {
@@ -106,7 +112,7 @@ export function ProductFormDialog({ isOpen, onOpenChange, product }: ProductForm
 
   return (
     <Dialog open={isOpen} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-2xl flex flex-col h-full sm:h-auto">
+      <DialogContent className="sm:max-w-4xl flex flex-col h-full sm:h-[90vh]">
         <DialogHeader>
           <DialogTitle>{product ? 'Edit Product' : 'Add New Product'}</DialogTitle>
           <DialogDescription>
@@ -114,101 +120,90 @@ export function ProductFormDialog({ isOpen, onOpenChange, product }: ProductForm
           </DialogDescription>
         </DialogHeader>
         <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="flex-1 flex flex-col min-h-0">
-            <ScrollArea className="flex-1 -mx-6">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 py-4 px-6">
+          <form onSubmit={form.handleSubmit(onSubmit)} className="flex-1 grid md:grid-cols-2 gap-x-8 gap-y-4 min-h-0">
+            <div className='flex flex-col space-y-4'>
+                <FormField
+                  control={form.control}
+                  name="name"
+                  render={({ field }) => (
+                      <FormItem>
+                      <FormLabel>Name</FormLabel>
+                      <FormControl>
+                          <Input {...field} />
+                      </FormControl>
+                      <FormMessage />
+                      </FormItem>
+                  )}
+                />
+                 <FormField
+                  control={form.control}
+                  name="price"
+                  render={({ field }) => (
+                      <FormItem>
+                      <FormLabel>Price</FormLabel>
+                      <FormControl>
+                          <Input type="number" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                      </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="description"
+                  render={({ field }) => (
+                      <FormItem>
+                      <FormLabel>Description</FormLabel>
+                      <FormControl>
+                          <Textarea {...field} rows={5} />
+                      </FormControl>
+                      <FormMessage />
+                      </FormItem>
+                  )}
+                />
+                 <div className="grid grid-cols-2 gap-4">
                     <FormField
-                      control={form.control}
-                      name="name"
-                      render={({ field }) => (
-                          <FormItem>
-                          <FormLabel>Name</FormLabel>
-                          <FormControl>
-                              <Input {...field} />
-                          </FormControl>
-                          <FormMessage />
-                          </FormItem>
-                      )}
-                    />
-                     <FormField
-                      control={form.control}
-                      name="price"
-                      render={({ field }) => (
-                          <FormItem>
-                          <FormLabel>Price</FormLabel>
-                          <FormControl>
-                              <Input type="number" {...field} />
-                          </FormControl>
-                          <FormMessage />
-                          </FormItem>
-                      )}
-                    />
-                    <FormField
-                      control={form.control}
-                      name="description"
-                      render={({ field }) => (
-                          <FormItem className="md:col-span-2">
-                          <FormLabel>Description</FormLabel>
-                          <FormControl>
-                              <Textarea {...field} />
-                          </FormControl>
-                          <FormMessage />
-                          </FormItem>
-                      )}
-                    />
-                    <FormField
-                      control={form.control}
-                      name="brand"
-                      render={({ field }) => (
-                          <FormItem>
-                          <FormLabel>Brand</FormLabel>
-                          <Select onValueChange={field.onChange} defaultValue={field.value}>
-                              <FormControl>
-                              <SelectTrigger>
-                                  <SelectValue placeholder="Select a brand" />
-                              </SelectTrigger>
-                              </FormControl>
-                              <SelectContent>
-                              {BRANDS.map(brand => <SelectItem key={brand} value={brand}>{brand}</SelectItem>)}
-                              </SelectContent>
-                          </Select>
-                          <FormMessage />
-                          </FormItem>
-                      )}
-                    />
-                    <FormField
-                      control={form.control}
-                      name="type"
-                      render={({ field }) => (
-                          <FormItem>
-                          <FormLabel>Type</FormLabel>
-                          <Select onValueChange={field.onChange} defaultValue={field.value}>
-                              <FormControl>
-                              <SelectTrigger>
-                                  <SelectValue placeholder="Select a product type" />
-                              </SelectTrigger>
-                              </FormControl>
-                              <SelectContent>
-                              {PRODUCT_TYPES.map(type => <SelectItem key={type} value={type}>{type}</SelectItem>)}
-                              </SelectContent>
-                          </Select>
-                          <FormMessage />
-                          </FormItem>
-                      )}
+                    control={form.control}
+                    name="brand"
+                    render={({ field }) => (
+                        <FormItem>
+                        <FormLabel>Brand</FormLabel>
+                        <Select onValueChange={field.onChange} defaultValue={field.value}>
+                            <FormControl>
+                            <SelectTrigger>
+                                <SelectValue placeholder="Select a brand" />
+                            </SelectTrigger>
+                            </FormControl>
+                            <SelectContent>
+                            {BRANDS.map(brand => <SelectItem key={brand} value={brand}>{brand}</SelectItem>)}
+                            </SelectContent>
+                        </Select>
+                        <FormMessage />
+                        </FormItem>
+                    )}
                     />
                     <FormField
-                      control={form.control}
-                      name="imageId"
-                      render={({ field }) => (
-                          <FormItem>
-                          <FormLabel>Image ID</FormLabel>
-                          <FormControl>
-                              <Input placeholder="e.g., classic-aviator" {...field} />
-                          </FormControl>
-                          <FormMessage />
-                          </FormItem>
-                      )}
+                    control={form.control}
+                    name="type"
+                    render={({ field }) => (
+                        <FormItem>
+                        <FormLabel>Type</FormLabel>
+                        <Select onValueChange={field.onChange} defaultValue={field.value}>
+                            <FormControl>
+                            <SelectTrigger>
+                                <SelectValue placeholder="Select a product type" />
+                            </SelectTrigger>
+                            </FormControl>
+                            <SelectContent>
+                            {PRODUCT_TYPES.map(type => <SelectItem key={type} value={type}>{type}</SelectItem>)}
+                            </SelectContent>
+                        </Select>
+                        <FormMessage />
+                        </FormItem>
+                    )}
                     />
+                </div>
+                 <div className="grid grid-cols-2 gap-4">
                     <FormField
                       control={form.control}
                       name="gender"
@@ -233,8 +228,34 @@ export function ProductFormDialog({ isOpen, onOpenChange, product }: ProductForm
                       )}
                     />
                 </div>
-            </ScrollArea>
-            <DialogFooter className="pt-4 border-t">
+            </div>
+            <div className='flex flex-col space-y-4'>
+                <FormField
+                  control={form.control}
+                  name="imageId"
+                  render={({ field }) => (
+                      <FormItem>
+                      <FormLabel>Image ID</FormLabel>
+                      <FormControl>
+                          <Input placeholder="e.g., classic-aviator" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                      </FormItem>
+                  )}
+                />
+                <div className='relative aspect-[4/3] w-full bg-muted rounded-md'>
+                    <Image 
+                        src={imageUrl} 
+                        alt="Product image preview" 
+                        fill 
+                        className="object-contain rounded-md"
+                        sizes="(max-width: 768px) 100vw, 50vw"
+                    />
+                </div>
+                <p className="text-xs text-muted-foreground">The image preview will update based on the Image ID. You can find available IDs in the placeholder images data.</p>
+            </div>
+            <DialogFooter className="md:col-span-2 pt-4 border-t">
+              <Button type="button" variant="outline" onClick={() => onOpenChange(false)}>Cancel</Button>
               <Button type="submit" disabled={isLoading}>
                 {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
                 Save changes
