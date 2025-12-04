@@ -1,7 +1,7 @@
 
 'use client';
 
-import { useEffect, useState, useTransition } from 'react';
+import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
@@ -43,7 +43,7 @@ type ImageFile = {
 };
 
 export function ProductFormDialog({ isOpen, onOpenChange, product }: ProductFormDialogProps) {
-  const [isPending, startTransition] = useTransition();
+  const [isPending, setIsPending] = useState(false);
   const [newImageFiles, setNewImageFiles] = useState<ImageFile[]>([]);
   const [existingImageUrls, setExistingImageUrls] = useState<string[]>([]);
 
@@ -112,52 +112,54 @@ export function ProductFormDialog({ isOpen, onOpenChange, product }: ProductForm
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     if (!firestore) return;
+    
+    setIsPending(true);
 
-    startTransition(async () => {
-        try {
-            const isNewProduct = !product;
-            const productRef = isNewProduct
-                ? doc(collection(firestore, 'products'))
-                : doc(firestore, 'products', product.id);
+    try {
+        const isNewProduct = !product;
+        const productRef = isNewProduct
+            ? doc(collection(firestore, 'products'))
+            : doc(firestore, 'products', product.id);
 
-            let newUploadedUrls: string[] = [];
-            if (newImageFiles.length > 0) {
-                const storage = getStorage();
-                const uploadPromises = newImageFiles.map(imageFile => {
-                    const imageRef = ref(storage, `products/${productRef.id}/${Date.now()}-${imageFile.file.name}`);
-                    return uploadBytes(imageRef, imageFile.file).then(snapshot => getDownloadURL(snapshot.ref));
-                });
-                newUploadedUrls = await Promise.all(uploadPromises);
-            }
-
-            const finalImageUrls = [...existingImageUrls, ...newUploadedUrls];
-
-            const productData: Partial<Product> & {imageUrls: string[]} = { 
-                ...values,
-                id: productRef.id,
-                imageId: values.name.toLowerCase().replace(/\s+/g, '-'),
-                imageUrls: finalImageUrls,
-            };
-            
-            if (isNewProduct) {
-                productData.createdAt = serverTimestamp();
-            }
-
-            await setDoc(productRef, productData, { merge: true });
-
-            toast({ title: product ? 'Product Updated' : 'Product Created', description: `${values.name} has been saved.` });
-            onOpenChange(false);
-            router.refresh();
-
-        } catch (e: any) {
-            console.error("Save product error:", e);
-            toast({ 
-                title: 'Error Saving Product', 
-                description: e.message || "An unknown error occurred.",
-                variant: 'destructive',
+        let newUploadedUrls: string[] = [];
+        if (newImageFiles.length > 0) {
+            const storage = getStorage();
+            const uploadPromises = newImageFiles.map(imageFile => {
+                const imageRef = ref(storage, `products/${productRef.id}/${Date.now()}-${imageFile.file.name}`);
+                return uploadBytes(imageRef, imageFile.file).then(snapshot => getDownloadURL(snapshot.ref));
             });
+            newUploadedUrls = await Promise.all(uploadPromises);
         }
-    });
+
+        const finalImageUrls = [...existingImageUrls, ...newUploadedUrls];
+
+        const productData: Omit<Product, 'createdAt'> & { imageUrls: string[], createdAt?: any } = { 
+            ...values,
+            id: productRef.id,
+            imageId: values.name.toLowerCase().replace(/\s+/g, '-'),
+            imageUrls: finalImageUrls,
+        };
+        
+        if (isNewProduct) {
+            productData.createdAt = serverTimestamp();
+        }
+
+        await setDoc(productRef, productData, { merge: true });
+
+        toast({ title: product ? 'Product Updated' : 'Product Created', description: `${values.name} has been saved.` });
+        onOpenChange(false);
+        router.refresh();
+
+    } catch (e: any) {
+        console.error("Save product error:", e);
+        toast({ 
+            title: 'Error Saving Product', 
+            description: e.message || "An unknown error occurred.",
+            variant: 'destructive',
+        });
+    } finally {
+        setIsPending(false);
+    }
   };
 
 
