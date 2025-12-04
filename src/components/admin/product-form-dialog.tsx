@@ -14,7 +14,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { BRANDS, PRODUCT_TYPES } from '@/lib/constants';
 import type { Product } from '@/lib/types';
 import { useFirestore, useStorage } from '@/firebase';
-import { doc, setDoc, collection, serverTimestamp } from 'firebase/firestore';
+import { doc, setDoc, collection } from 'firebase/firestore';
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { useToast } from '@/hooks/use-toast';
 import { Loader2, UploadCloud, X } from 'lucide-react';
@@ -123,7 +123,6 @@ export function ProductFormDialog({ isOpen, onOpenChange, product }: ProductForm
         const isNewProduct = !product;
         const productId = product?.id || doc(collection(firestore, 'products')).id;
 
-        // 1. Upload new images and get their URLs
         const newUploadedUrls = await Promise.all(
             newImageFiles.map(async (imageFile) => {
                 const imageRef = ref(storage, `products/${productId}/${Date.now()}-${imageFile.file.name}`);
@@ -132,18 +131,15 @@ export function ProductFormDialog({ isOpen, onOpenChange, product }: ProductForm
             })
         );
         
-        // 2. Combine existing and new image URLs
         const finalImageUrls = [...existingImageUrls, ...newUploadedUrls];
         
-        // 3. Prepare product data for Firestore
         const productData = { 
             ...values,
             id: productId,
             imageUrls: finalImageUrls,
-            ...(isNewProduct && { createdAt: serverTimestamp() }),
+            ...(isNewProduct && { createdAt: new Date() }),
         };
         
-        // 4. Save to Firestore
         const productRef = doc(firestore, 'products', productId);
         await setDoc(productRef, productData, { merge: true });
 
@@ -358,7 +354,5 @@ export function ProductFormDialog({ isOpen, onOpenChange, product }: ProductForm
     </Dialog>
   );
 }
-
-    
 
     
