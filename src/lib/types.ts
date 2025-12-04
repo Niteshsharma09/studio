@@ -13,7 +13,7 @@ export type Product = {
   color?: string;
   gender?: string;
   SKU?: string;
-  createdAt?: number;
+  createdAt?: any;
 };
 
 export type Frame = Product & {
