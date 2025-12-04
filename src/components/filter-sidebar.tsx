@@ -8,7 +8,7 @@ import { Checkbox } from '@/components/ui/checkbox';
 import { Label } from '@/components/ui/label';
 import { Slider } from '@/components/ui/slider';
 import { Button } from '@/components/ui/button';
-import { BRANDS } from '@/lib/data';
+import { BRANDS } from '@/lib/constants';
 import { Separator } from './ui/separator';
 import type { Product } from '@/lib/types';
 
