@@ -117,15 +117,13 @@ export function ProductFormDialog({ isOpen, onOpenChange, product }: ProductForm
 
     try {
         const isNewProduct = !product;
-        const productRef = isNewProduct
-            ? doc(collection(firestore, 'products'))
-            : doc(firestore, 'products', product.id);
+        const productId = product ? product.id : doc(collection(firestore, 'products')).id;
 
         let newUploadedUrls: string[] = [];
         if (newImageFiles.length > 0) {
             const storage = getStorage();
             const uploadPromises = newImageFiles.map(imageFile => {
-                const imageRef = ref(storage, `products/${productRef.id}/${Date.now()}-${imageFile.file.name}`);
+                const imageRef = ref(storage, `products/${productId}/${Date.now()}-${imageFile.file.name}`);
                 return uploadBytes(imageRef, imageFile.file).then(snapshot => getDownloadURL(snapshot.ref));
             });
             newUploadedUrls = await Promise.all(uploadPromises);
@@ -135,15 +133,15 @@ export function ProductFormDialog({ isOpen, onOpenChange, product }: ProductForm
 
         const productData: Omit<Product, 'createdAt'> & { imageUrls: string[], createdAt?: any } = { 
             ...values,
-            id: productRef.id,
-            imageId: values.name.toLowerCase().replace(/\s+/g, '-'),
+            id: productId,
             imageUrls: finalImageUrls,
         };
         
         if (isNewProduct) {
             productData.createdAt = serverTimestamp();
         }
-
+        
+        const productRef = doc(firestore, 'products', productId);
         await setDoc(productRef, productData, { merge: true });
 
         toast({ title: product ? 'Product Updated' : 'Product Created', description: `${values.name} has been saved.` });
