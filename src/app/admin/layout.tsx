@@ -19,9 +19,10 @@ import {
   Users,
   LogOut,
   Home,
+  ShieldAlert,
 } from 'lucide-react';
 import { usePathname, useRouter } from 'next/navigation';
-import { useAuth, useUser } from '@/firebase';
+import { useAuth, useUser, useAdmin } from '@/firebase';
 import { signOut } from 'firebase/auth';
 import { Button } from '@/components/ui/button';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
@@ -35,7 +36,8 @@ export default function AdminLayout({
 }) {
   const pathname = usePathname();
   const router = useRouter();
-  const { user, loading } = useUser();
+  const { user, loading: userLoading } = useUser();
+  const { isAdmin, loading: adminLoading } = useAdmin();
   const auth = useAuth();
   const { toast } = useToast();
 
@@ -56,11 +58,39 @@ export default function AdminLayout({
     return name.split(' ').map(n => n[0]).join('').toUpperCase();
   }
 
-  if (loading) {
+  const isLoading = userLoading || adminLoading;
+
+  if (isLoading) {
     return (
         <div className="flex h-screen items-center justify-center">
             <Loader2 className="h-16 w-16 animate-spin" />
         </div>
+    );
+  }
+
+  if (!user) {
+    // Not logged in, redirect to login page, but preserve the intended admin path
+    if (typeof window !== 'undefined') {
+      router.push(`/login?redirect=${pathname}`);
+    }
+    return (
+       <div className="flex h-screen items-center justify-center">
+            <Loader2 className="h-16 w-16 animate-spin" />
+            <p className="ml-4">Redirecting to login...</p>
+        </div>
+    );
+  }
+
+  if (!isAdmin) {
+    return (
+      <div className="flex h-screen items-center justify-center bg-background">
+          <div className="text-center">
+              <ShieldAlert className="mx-auto h-16 w-16 text-destructive" />
+              <h1 className="mt-4 text-2xl font-bold">Not Authorized</h1>
+              <p className="mt-2 text-muted-foreground">You do not have permission to view this page.</p>
+              <Button onClick={() => router.push('/')} className="mt-6">Go to Homepage</Button>
+          </div>
+      </div>
     );
   }
 
