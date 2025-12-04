@@ -32,7 +32,7 @@ export const getProducts = cache(async (): Promise<Product[]> => {
         // In case of an error, return an empty array to prevent crashes.
         return [];
     }
-}, ['products'], { revalidate: 1 }); // Revalidate every 1 second to show new products
+}, ['products']);
 
 export const getLenses = cache(
     async () => {
