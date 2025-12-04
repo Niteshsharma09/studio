@@ -286,12 +286,12 @@ export default function ProductDetailPage() {
                       className="w-20"
                       aria-label="Quantity"
                   />
-                  <Button size="lg" className="flex-1" onClick={handleAddToCart} variant="secondary">
+                  <Button size="lg" className="flex-1" onClick={handleAddToCart} variant="default">
                       <ShoppingCart className="mr-2 h-5 w-5" />
                       Add to Cart
                   </Button>
                   </div>
-                  <Button size="lg" variant="default" className="w-full" onClick={handleBuyNow}>
+                  <Button size="lg" variant="secondary" className="w-full" onClick={handleBuyNow}>
                   <Zap className="mr-2 h-5 w-5" />
                   Buy Now
                   </Button>

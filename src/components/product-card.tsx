@@ -59,7 +59,7 @@ export function ProductCard({ product, className }: ProductCardProps) {
                      </div>
                 </Button>
                 {product.type !== "Lenses" &&
-                    <Button size="icon" variant="secondary" className="h-9 w-9" onClick={handleAddToCart}>
+                    <Button size="icon" variant="default" className="h-9 w-9" onClick={handleAddToCart}>
                         <ShoppingCart className="h-4 w-4"/>
                     </Button>
                 }
