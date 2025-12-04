@@ -14,7 +14,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { BRANDS, PRODUCT_TYPES } from '@/lib/constants';
 import type { Product } from '@/lib/types';
 import { useFirestore } from '@/firebase';
-import { doc, setDoc, addDoc, collection, serverTimestamp } from 'firebase/firestore';
+import { doc, setDoc, collection, serverTimestamp } from 'firebase/firestore';
 import { getStorage, ref, uploadString, getDownloadURL } from "firebase/storage";
 import { useToast } from '@/hooks/use-toast';
 import { Loader2, UploadCloud, X } from 'lucide-react';
@@ -155,15 +155,13 @@ export function ProductFormDialog({ isOpen, onOpenChange, product }: ProductForm
             ...(product ? {} : { createdAt: serverTimestamp() })
         };
 
-        if (product) {
-            const productRef = doc(firestore, 'products', product.id);
-            await setDoc(productRef, productData, { merge: true });
-            toast({ title: 'Product Updated', description: `${values.name} has been updated.` });
-        } else {
-            const productsCollection = collection(firestore, 'products');
-            await addDoc(productsCollection, productData);
-            toast({ title: 'Product Created', description: `${values.name} has been added.` });
-        }
+        const productRef = product 
+            ? doc(firestore, 'products', product.id)
+            : doc(collection(firestore, 'products')); // Generate a new doc ref for new products
+
+        await setDoc(productRef, productData, { merge: true });
+
+        toast({ title: product ? 'Product Updated' : 'Product Created', description: `${values.name} has been saved.` });
         onOpenChange(false);
     } catch (e) {
         console.error("Product form submission error:", e);
