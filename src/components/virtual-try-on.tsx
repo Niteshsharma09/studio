@@ -58,7 +58,7 @@ export function VirtualTryOn({ children, product }: VirtualTryOnProps) {
     setResultImage(null);
 
     try {
-      const productImageUrl = product.imageUrl;
+      const productImageUrl = product.imageUrls?.[0];
       if (!productImageUrl) throw new Error("Product image not found.");
 
       const [glassesDataUri, photoDataUri] = await Promise.all([

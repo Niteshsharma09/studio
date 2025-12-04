@@ -17,7 +17,7 @@ interface ProductCardProps {
 }
 
 export function ProductCard({ product, className, style }: ProductCardProps) {
-  const imageUrl = product.imageUrl || `https://placehold.co/600x400?text=${product.name.charAt(0)}`;
+  const imageUrl = product.imageUrls?.[0] || `https://placehold.co/600x400?text=${product.name.charAt(0)}`;
   const { addItem } = useCart();
   const { toast } = useToast();
 

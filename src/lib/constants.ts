@@ -13,7 +13,7 @@ export const PRODUCTS_DATA: Product[] = [
     price: 150.00,
     brand: 'fastrack',
     type: 'Sunglasses',
-    imageUrl: 'https://images.unsplash.com/photo-1511499767150-a48a237f0083?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxhdmlhdG9yJTIwc3VuZ2xhc3Nlc3xlbnwwfHx8fDE3NjQ4ODQxMzN8MA&ixlib=rb-4.1.0&q=80&w=600',
+    imageUrls: ['https://images.unsplash.com/photo-1511499767150-a48a237f0083?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxhdmlhdG9yJTIwc3VuZ2xhc3Nlc3xlbnwwfHx8fDE3NjQ4ODQxMzN8MA&ixlib=rb-4.1.0&q=80&w=600'],
     gender: 'Unisex',
   },
   {
@@ -23,7 +23,7 @@ export const PRODUCTS_DATA: Product[] = [
     price: 165.00,
     brand: 'titan',
     type: 'Sunglasses',
-    imageUrl: 'https://images.unsplash.com/photo-1582553337938-12d8a43641f4?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHx3YXlmYXJlciUyMHN1bmdsYXNzZXN8ZW58MHx8fHwxNzY0ODg0MTMzfDA&ixlib=rb-4.1.0&q=80&w=600',
+    imageUrls: ['https://images.unsplash.com/photo-1582553337938-12d8a43641f4?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHx3YXlmYXJlciUyMHN1bmdsYXNzZXN8ZW58MHx8fHwxNzY0ODg0MTMzfDA&ixlib=rb-4.1.0&q=80&w=600'],
     gender: 'Unisex',
   },
   {
@@ -33,7 +33,7 @@ export const PRODUCTS_DATA: Product[] = [
     price: 195.00,
     brand: 'Technoii',
     type: 'Sunglasses',
-    imageUrl: 'https://images.unsplash.com/photo-1620138996653-b99dadd84aba?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw1fHxzcG9ydCUyMHN1bmdsYXNzZXN8ZW58MHx8fHwxNzYzOTc1NjM5fDA&ixlib=rb-4.1.0&q=80&w=600',
+    imageUrls: ['https://images.unsplash.com/photo-1620138996653-b99dadd84aba?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw1fHxzcG9ydCUyMHN1bmdsYXNzZXN8ZW58MHx8fHwxNzYzOTc1NjM5fDA&ixlib=rb-4.1.0&q=80&w=600'],
     gender: 'Men',
   },
   {
@@ -43,7 +43,7 @@ export const PRODUCTS_DATA: Product[] = [
     price: 480.00,
     brand: 'velocity',
     type: 'Sunglasses',
-    imageUrl: 'https://images.unsplash.com/photo-1614716494363-3b283182a46e?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxmb2xkaW5nJTIwc3VuZ2xhc3Nlc3xlbnwwfHx8fDE3NjQ4ODQxMzN8MA&ixlib=rb-4.1.0&q=80&w=600',
+    imageUrls: ['https://images.unsplash.com/photo-1614716494363-3b283182a46e?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxmb2xkaW5nJTIwc3VuZ2xhc3Nlc3xlbnwwfHx8fDE3NjQ4ODQxMzN8MA&ixlib=rb-4.1.0&q=80&w=600'],
     gender: 'Men',
   },
   {
@@ -53,7 +53,7 @@ export const PRODUCTS_DATA: Product[] = [
     price: 220.00,
     brand: 'X-Ford',
     type: 'Frames',
-    imageUrl: 'https://images.unsplash.com/photo-1494498902521-3d5f32982464?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHx0aXRhbml1bSUyMGdsYXNzZXN8ZW58MHx8fHwxNzY0ODg0MTMzfDA&ixlib=rb-4.1.0&q=80&w=600',
+    imageUrls: ['https://images.unsplash.com/photo-1494498902521-3d5f32982464?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHx0aXRhbml1bSUyMGdsYXNzZXN8ZW58MHx8fHwxNzY0ODg0MTMzfDA&ixlib=rb-4.1.0&q=80&w=600'],
     gender: 'Unisex',
   },
   {
@@ -63,7 +63,7 @@ export const PRODUCTS_DATA: Product[] = [
     price: 310.00,
     brand: 'Lauredale Eyewear',
     type: 'Frames',
-    imageUrl: 'https://images.unsplash.com/photo-1590861132964-673b53f314b2?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxjYXQtZXllJTIwZ2xhc3Nlc3xlbnwwfHx8fDE3NjQ4ODQxMzN8MA&ixlib=rb-4.1.0&q=80&w=600',
+    imageUrls: ['https://images.unsplash.com/photo-1590861132964-673b53f314b2?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxjYXQtZXllJTIwZ2xhc3Nlc3xlbnwwfHx8fDE3NjQ4ODQxMzN8MA&ixlib=rb-4.1.0&q=80&w=600'],
     gender: 'Women',
   },
   {
@@ -73,7 +73,7 @@ export const PRODUCTS_DATA: Product[] = [
     price: 210.00,
     brand: 'titan',
     type: 'Frames',
-    imageUrl: 'https://images.unsplash.com/photo-1574258485694-8a169e658b43?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxzcG9ydCUyMGdsYXNzZXN8ZW58MHx8fHwxNzY0ODg0MTMzfDA&ixlib=rb-4.1.0&q=80&w=600',
+    imageUrls: ['https://images.unsplash.com/photo-1574258485694-8a169e658b43?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxzcG9ydCUyMGdsYXNzZXN8ZW58MHx8fHwxNzY0ODg0MTMzfDA&ixlib=rb-4.1.0&q=80&w=600'],
     gender: 'Men',
   },
   {
@@ -83,7 +83,7 @@ export const PRODUCTS_DATA: Product[] = [
     price: 120.00,
     brand: 'Technoii',
     type: 'Lenses',
-    imageUrl: 'https://images.unsplash.com/photo-1608498522396-18d45a7e6b48?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxibHVlJTIwbGlnaHQlMjBnbGFzc2VzJTIwbGVuc3xlbnwwfHx8fDE3NjQ5OTI4NTV8MA&ixlib=rb-4.1.0&q=80&w=600',
+    imageUrls: ['https://images.unsplash.com/photo-1608498522396-18d45a7e6b48?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxibHVlJTIwbGlnaHQlMjBnbGFzc2VzJTIwbGVuc3xlbnwwfHx8fDE3NjQ5OTI4NTV8MA&ixlib=rb-4.1.0&q=80&w=600'],
   },
     {
     id: '9',
@@ -92,7 +92,7 @@ export const PRODUCTS_DATA: Product[] = [
     price: 180.00,
     brand: 'velocity',
     type: 'Lenses',
-    imageUrl: 'https://images.unsplash.com/photo-1614716494363-3b283182a46e?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHx0cmFuc2l0aW9uJTIwbGVuc2VzJTJDZ3JleXxlbnwwfHx8fDE3NjQ5OTI4NTV8MA&ixlib=rb-4.1.0&q=80&w=600',
+    imageUrls: ['https://images.unsplash.com/photo-1614716494363-3b283182a46e?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHx0cmFuc2l0aW9uJTIwbGVuc2VzJTJDZ3JleXxlbnwwfHx8fDE3NjQ5OTI4NTV8MA&ixlib=rb-4.1.0&q=80&w=600'],
   },
   {
     id: '10',
@@ -101,7 +101,7 @@ export const PRODUCTS_DATA: Product[] = [
     price: 250.00,
     brand: 'X-Ford',
     type: 'Lenses',
-    imageUrl: 'https://images.unsplash.com/photo-1628872477382-a72a744d3b37?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxleWVnbGFzcyUyMGxlbnNlcyUyMG9uJTIwdGFibGV8ZW58MHx8fHwxNzY0OTkyODU1fDA&ixlib=rb-4.1.0&q=80&w=600',
+    imageUrls: ['https://images.unsplash.com/photo-1628872477382-a72a744d3b37?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxleWVnbGFzcyUyMGxlbnNlcyUyMG9uJTIwdGFibGV8ZW58MHx8fHwxNzY0OTkyODU1fDA&ixlib=rb-4.1.0&q=80&w=600'],
   },
   {
     id: '11',
@@ -110,7 +110,7 @@ export const PRODUCTS_DATA: Product[] = [
     price: 175.00,
     brand: 'fastrack',
     type: 'Frames',
-    imageUrl: 'https://images.unsplash.com/photo-1574494349420-ecf8ccbff974?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxyb3VuZCUyMGdsYXNzZXN8ZW58MHx8fHwxNzY0ODg0MTMzfDA&ixlib=rb-4.1.0&q=80&w=600',
+    imageUrls: ['https://images.unsplash.com/photo-1574494349420-ecf8ccbff974?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxyb3VuZCUyMGdsYXNzZXN8ZW58MHx8fHwxNzY0ODg0MTMzfDA&ixlib=rb-4.1.0&q=80&w=600'],
     gender: 'Unisex',
   },
   {
@@ -120,7 +120,7 @@ export const PRODUCTS_DATA: Product[] = [
     price: 350.00,
     brand: 'Lauredale Eyewear',
     type: 'Frames',
-    imageUrl: 'https://images.unsplash.com/photo-1611012595366-18cf16280487?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxzcXVhcmUlMjBnbGFzc2VzfGVufDB8fHx8MTc2NDg4NDEzM3ww&ixlib=rb-4.1.0&q=80&w=600',
+    imageUrls: ['https://images.unsplash.com/photo-1611012595366-18cf16280487?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxzcXVhcmUlMjBnbGFzc2VzfGVufDB8fHx8MTc2NDg4NDEzM3ww&ixlib=rb-4.1.0&q=80&w=600'],
     gender: 'Unisex',
   },
   {
@@ -130,7 +130,7 @@ export const PRODUCTS_DATA: Product[] = [
     price: 295.00,
     brand: 'NVG',
     type: 'Sunglasses',
-    imageUrl: 'https://images.unsplash.com/photo-1577992933098-f3d9a69152a5?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwyfHxzaGllZGQlMjBzdW5nbGFzc2VzfGVufDB8fHx8MTc2NDg4NDEzM3ww&ixlib=rb-4.1.0&q=80&w=600',
+    imageUrls: ['https://images.unsplash.com/photo-1577992933098-f3d9a69152a5?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwyfHxzaGllZGQlMjBzdW5nbGFzc2VzfGVufDB8fHx8MTc2NDg4NDEzM3ww&ixlib=rb-4.1.0&q=80&w=600'],
     gender: 'Unisex',
   },
   {
@@ -140,7 +140,7 @@ export const PRODUCTS_DATA: Product[] = [
     price: 420.00,
     brand: 'titan',
     type: 'Frames',
-    imageUrl: 'https://images.unsplash.com/photo-1614716494363-3b283182a46e?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxoZXhhZ29uJTIwZ2xhc3Nlc3xlbnwwfHx8fDE3NjQ4ODQxMzN8MA&ixlib=rb-4.1.0&q=80&w=600',
+    imageUrls: ['https://images.unsplash.com/photo-1614716494363-3b283182a46e?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHxoZXhhZ29uJTIwZ2xhc3Nlc3xlbnwwfHx8fDE3NjQ4ODQxMzN8MA&ixlib=rb-4.1.0&q=80&w=600'],
     gender: 'Women',
   },
   {
@@ -150,7 +150,7 @@ export const PRODUCTS_DATA: Product[] = [
     price: 185.00,
     brand: 'NVG',
     type: 'Sunglasses',
-    imageUrl: 'https://images.unsplash.com/photo-1572635196237-14b3f281503f?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxyb3VuZCUyMHN1bmdsYXNzZXN8ZW58MHx8fHwxNzY0ODg0MTMzfDA&ixlib=rb-4.1.0&q=80&w=600',
+    imageUrls: ['https://images.unsplash.com/photo-1572635196237-14b3f281503f?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxyb3VuZCUyMHN1bmdsYXNzZXN8ZW58MHx8fHwxNzY0ODg0MTMzfDA&ixlib=rb-4.1.0&q=80&w=600'],
     gender: 'Women',
   },
   {
@@ -160,7 +160,7 @@ export const PRODUCTS_DATA: Product[] = [
     price: 280.00,
     brand: 'velocity',
     type: 'Frames',
-    imageUrl: 'https://images.unsplash.com/photo-1636458939465-9209848a5688?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxjbHVibWFzdGVyJTIwZ2xhc3Nlc3xlbnwwfHx8fDE3NjQ4ODQxMzN8MA&ixlib=rb-4.1.0&q=80&w=600',
+    imageUrls: ['https://images.unsplash.com/photo-1636458939465-9209848a5688?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxjbHVibWFzdGVyJTIwZ2xhc3Nlc3xlbnwwfHx8fDE3NjQ4ODQxMzN8MA&ixlib-rb-4.1.0&q=80&w=600'],
     gender: 'Unisex',
   },
   {
@@ -170,7 +170,7 @@ export const PRODUCTS_DATA: Product[] = [
     price: 130.00,
     brand: 'fastrack',
     type: 'Sunglasses',
-    imageUrl: 'https://images.unsplash.com/photo-1586034533838-3486c0757a3e?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHx3cmFwYXJvdW5kJTIwc3VuZ2xhc3Nlc3xlbnwwfHx8fDE3NjQ4ODQxMzN8MA&ixlib=rb-4.1.0&q=80&w=600',
+    imageUrls: ['https://images.unsplash.com/photo-1586034533838-3486c0757a3e?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHx3cmFwYXJvdW5kJTIwc3VuZ2xhc3Nlc3xlbnwwfHx8fDE3NjQ4ODQxMzN8MA&ixlib=rb-4.1.0&q=80&w=600'],
     gender: 'Men',
   },
   {
@@ -180,7 +180,7 @@ export const PRODUCTS_DATA: Product[] = [
     price: 265.00,
     brand: 'X-Ford',
     type: 'Frames',
-    imageUrl: 'https://images.unsplash.com/photo-1614716494363-3b283182a46e?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHxhYnN0cmFjdCUyMGV5ZWdsYXNzZXN8ZW58MHx8fHwxNzY0ODg0MTMzfDA&ixlib=rb-4.1.0&q=80&w=600',
+    imageUrls: ['https://images.unsplash.com/photo-1614716494363-3b283182a46e?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHxhYnN0cmFjdCUyMGV5ZWdsYXNzZXN8ZW58MHx8fHwxNzY0ODg0MTMzfDA&ixlib-rb-4.1.0&q=80&w=600'],
     gender: 'Men',
   },
   {
@@ -190,7 +190,7 @@ export const PRODUCTS_DATA: Product[] = [
     price: 190.00,
     brand: 'Technoii',
     type: 'Lenses',
-    imageUrl: 'https://images.unsplash.com/photo-1526656098433-2e7b0e535237?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxzbWFydCUyMGdsYXNzZXMlMjBsZW5zZXN8ZW58MHx8fHwxNzY0OTkyODU1fDA&ixlib=rb-4.1.0&q=80&w=600',
+    imageUrls: ['https://images.unsplash.com/photo-1526656098433-2e7b0e535237?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxzbWFydCUyMGdsYXNzZXMlMjBsZW5zZXN8ZW58MHx8fHwxNzY0OTkyODU1fDA&ixlib=rb-4.1.0&q=80&w=600'],
   },
   {
     id: '20',
@@ -199,7 +199,7 @@ export const PRODUCTS_DATA: Product[] = [
     price: 320.00,
     brand: 'Lauredale Eyewear',
     type: 'Sunglasses',
-    imageUrl: 'https://images.unsplash.com/photo-1577992933098-f3d9a69152a5?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHxvdmVyc2l6ZWQlMjBzdW5nbGFzc2VzfGVufDB8fHx8MTc2NDg4NDEzM3ww&ixlib=rb-4.1.0&q=80&w=600',
+    imageUrls: ['https://images.unsplash.com/photo-1577992933098-f3d9a69152a5?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHxvdmVyc2l6ZWQlMjBzdW5nbGFzc2VzfGVufDB8fHx8MTc2NDg4NDEzM3ww&ixlib-rb-4.1.0&q=80&w=600'],
     gender: 'Women',
   },
   {
@@ -209,7 +209,7 @@ export const PRODUCTS_DATA: Product[] = [
     price: 390.00,
     brand: 'titan',
     type: 'Frames',
-    imageUrl: 'https://images.unsplash.com/photo-1611012595366-18cf16280487?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHxsZXhpYmxlJTIwZ2xhc3Nlc3xlbnwwfHx8fDE3NjQ4ODQxMzN8MA&ixlib=rb-4.1.0&q=80&w=600',
+    imageUrls: ['https://images.unsplash.com/photo-1611012595366-18cf16280487?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHxsZXhpYmxlJTIwZ2xhc3Nlc3xlbnwwfHx8fDE3NjQ4ODQxMzN8MA&ixlib=rb-4.1.0&q=80&w=600'],
     gender: 'Kids',
   },
   {
@@ -219,7 +219,7 @@ export const PRODUCTS_DATA: Product[] = [
     price: 230.00,
     brand: 'NVG',
     type: 'Lenses',
-    imageUrl: 'https://images.unsplash.com/photo-1621285819729-2391a44c9b13?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxuaWdodCUyMHZpc2lvbiUyMGdsYXNzZXMlMjBsZW5zZXN8ZW58MHx8fHwxNzY0OTkyODU1fDA&ixlib=rb-4.1.0&q=80&w=600',
+    imageUrls: ['https://images.unsplash.com/photo-1621285819729-2391a44c9b13?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxuaWdodCUyMHZpc2lvbiUyMGdsYXNzZXMlMjBsZW5zZXN8ZW58MHx8fHwxNzY0OTkyODU1fDA&ixlib-rb-4.1.0&q=80&w=600'],
   },
   {
     id: '23',
@@ -228,7 +228,7 @@ export const PRODUCTS_DATA: Product[] = [
     price: 95.00,
     brand: 'fastrack',
     type: 'Frames',
-    imageUrl: 'https://images.unsplash.com/photo-1574494349420-ecf8ccbff974?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHx1cmJhbiUyMGdsYXNzZXN8ZW58MHx8fHwxNzY0ODg0MTMzfDA&ixlib=rb-4.1.0&q=80&w=600',
+    imageUrls: ['https://images.unsplash.com/photo-1574494349420-ecf8ccbff974?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHx1cmJhbiUyMGdsYXNzZXN8ZW58MHx8fHwxNzY0ODg0MTMzfDA&ixlibrb-4.1.0&q=80&w=600'],
     gender: 'Kids',
   },
   {
@@ -238,7 +238,7 @@ export const PRODUCTS_DATA: Product[] = [
     price: 210.00,
     brand: 'velocity',
     type: 'Sunglasses',
-    imageUrl: 'https://images.unsplash.com/photo-1511499767150-a48a237f0083?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHxhdmlhdG9yJTIwc3VuZ2xhc3Nlc3xlbnwwfHx8fDE3NjQ4ODQxMzN8MA&ixlibrb-4.1.0&q=80&w=600',
+    imageUrls: ['https://images.unsplash.com/photo-1511499767150-a48a237f0083?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHxhdmlhdG9yJTIwc3VuZ2xhc3Nlc3xlbnwwfHx8fDE3NjQ4ODQxMzN8MA&ixlib.rb-4.1.0&q=80&w=600'],
     gender: 'Unisex',
   },
   {
@@ -248,7 +248,7 @@ export const PRODUCTS_DATA: Product[] = [
     price: 330.00,
     brand: 'X-Ford',
     type: 'Frames',
-    imageUrl: 'https://images.unsplash.com/photo-1549298240-0d8e2d4d4227?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHxvZmZpY2UlMjBnbGFzc2VzfGVufDB8fHx8MTc2NDg4NDEzM3ww&ixlib=rb-4.1.0&q=80&w=600',
+    imageUrls: ['https://images.unsplash.com/photo-1549298240-0d8e2d4d4227?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHxvZmZpY2UlMjBnbGFzc2VzfGVufDB8fHx8MTc2NDg4NDEzM3ww&ixlib.rb-4.1.0&q=80&w=600'],
     gender: 'Men',
   },
   {
@@ -258,7 +258,7 @@ export const PRODUCTS_DATA: Product[] = [
     price: 290.00,
     brand: 'Lauredale Eyewear',
     type: 'Frames',
-    imageUrl: 'https://images.unsplash.com/photo-1631049339673-c1e5ba4849fb?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHx0b3J0b2lzZSUyMHN1bmdsYXNzZXN8ZW58MHx8fHwxNzY0ODg0MTMzfDA&ixlib=rb-4.1.0&q=80&w=600',
+    imageUrls: ['https://images.unsplash.com/photo-1631049339673-c1e5ba4849fb?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHx0b3J0b2lzZSUyMHN1bmdsYXNzZXN8ZW58MHx8fHwxNzY0ODg0MTMzfDA&ixlib.rb-4.1.0&q=80&w=600'],
     gender: 'Women',
   },
   {
@@ -268,7 +268,7 @@ export const PRODUCTS_DATA: Product[] = [
     price: 450.00,
     brand: 'titan',
     type: 'Frames',
-    imageUrl: 'https://images.unsplash.com/photo-1577992933098-f3d9a69152a5?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHxyaW1sZXNzJTIwZ2xhc3Nlc3xlbnwwfHx8fDE3NjQ4ODQxMzN8MA&ixlib=rb-4.1.0&q=80&w=600',
+    imageUrls: ['https://images.unsplash.com/photo-1577992933098-f3d9a69152a5?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHxyaW1sZXNzJTIwZ2xhc3Nlc3xlbnwwfHx8fDE3NjQ4ODQxMzN8MA&ixlib.rb-4.1.0&q=80&w=600'],
     gender: 'Unisex',
   },
   {
@@ -278,7 +278,7 @@ export const PRODUCTS_DATA: Product[] = [
     price: 260.00,
     brand: 'Technoii',
     type: 'Lenses',
-    imageUrl: 'https://images.unsplash.com/photo-1625983792078-4a5700779839?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxkcml2aW5nJTIwZ2xhc3NlcyUyMGxlbnN8ZW58MHx8fHwxNzY0OTkyODU1fDA&ixlib=rb-4.1.0&q=80&w=600',
+    imageUrls: ['https://images.unsplash.com/photo-1625983792078-4a5700779839?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxkcml2aW5nJTIwZ2xhc3NlcyUyMGxlbnN8ZW58MHx8fHwxNzY0OTkyODU1fDA&ixlib.rb-4.1.0&q=80&w=600'],
   },
   {
     id: '29',
@@ -287,7 +287,7 @@ export const PRODUCTS_DATA: Product[] = [
     price: 350.00,
     brand: 'NVG',
     type: 'Sunglasses',
-    imageUrl: 'https://images.unsplash.com/photo-1577992933098-f3d9a69152a5?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHxzaGllZGQlMjBzdW5nbGFzc2VzfGVufDB8fHx8MTc2NDg4NDEzM3ww&ixlib=rb-4.1.0&q=80&w=600',
+    imageUrls: ['https://images.unsplash.com/photo-1577992933098-f3d9a69152a5?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHxzaGllZGQlMjBzdW5nbGFzc2VzfGVufDB8fHx8MTc2NDg4NDEzM3ww&ixlib.rb-4.1.0&q=80&w=600'],
     gender: 'Unisex',
   },
   {
@@ -297,7 +297,7 @@ export const PRODUCTS_DATA: Product[] = [
     price: 140.00,
     brand: 'fastrack',
     type: 'Sunglasses',
-    imageUrl: 'https://images.unsplash.com/photo-1572635196237-14b3f281503f?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHxncmFkaWVudCUyMHN1bmdsYXNzZXN8ZW58MHx8fHwxNzY0ODg0MTMzfDA&ixlib=rb-4.1.0&q=80&w=600',
+    imageUrls: ['https://images.unsplash.com/photo-1572635196237-14b3f281503f?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHxncmFkaWVudCUyMHN1bmdsYXNzZXN8ZW58MHx8fHwxNzY0ODg0MTMzfDA&ixlib.rb-4.1.0&q=80&w=600'],
     gender: 'Women',
   },
   {
@@ -307,7 +307,7 @@ export const PRODUCTS_DATA: Product[] = [
     price: 30.00,
     brand: 'Technoii',
     type: 'Contact Lenses',
-    imageUrl: 'https://images.unsplash.com/photo-1628872477382-a72a744d3b37?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxjb250YWN0JTIwbGVucyUyMGJveHxlbnwwfHx8fDE3NjQ5Nzc2NzZ8MA&ixlib=rb-4.1.0&q=80&w=600',
+    imageUrls: ['https://images.unsplash.com/photo-1628872477382-a72a744d3b37?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxjb250YWN0JTIwbGVucyUyMGJveHxlbnwwfHx8fDE3NjQ5Nzc2NzZ8MA&ixlib.rb-4.1.0&q=80&w=600'],
   },
   {
     id: '32',
@@ -316,7 +316,7 @@ export const PRODUCTS_DATA: Product[] = [
     price: 25.00,
     brand: 'velocity',
     type: 'Contact Lenses',
-    imageUrl: 'https://images.unsplash.com/photo-1588863668858-3d7b63e9f45a?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHxjb250YWN0JTIwbGVucyUyMGNhc2V8ZW58MHx8fHwxNzY0OTc3Njc2fDA&ixlib=rb-4.1.0&q=80&w=600',
+    imageUrls: ['https://images.unsplash.com/photo-1588863668858-3d7b63e9f45a?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHxjb250YWN0JTIwbGVucyUyMGNhc2V8ZW58MHx8fHwxNzY0OTc3Njc2fDA&ixlib.rb-4.1.0&q=80&w=600'],
   },
   {
     id: '33',
@@ -325,7 +325,7 @@ export const PRODUCTS_DATA: Product[] = [
     price: 45.00,
     brand: 'X-Ford',
     type: 'Contact Lenses',
-    imageUrl: 'https://images.unsplash.com/photo-1621641529845-56708304b49b?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHxjb250YWN0JTIwbGVuc3xlbnwwfHx8fDE3NjQ5Nzc2NzZ8MA&ixlib=rb-4.1.0&q=80&w=600',
+    imageUrls: ['https://images.unsplash.com/photo-1621641529845-56708304b49b?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHxjb250YWN0JTIwbGVuc3xlbnwwfHx8fDE3NjQ5Nzc2NzZ8MA&ixlib.rb-4.1.0&q=80&w=600'],
   },
   {
     id: '34',
@@ -334,7 +334,7 @@ export const PRODUCTS_DATA: Product[] = [
     price: 55.00,
     brand: 'titan',
     type: 'Contact Lenses',
-    imageUrl: 'https://images.unsplash.com/photo-1607957233158-d2f349c04b48?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHxibHVlJTIwZXllc3xlbnwwfHx8fDE3NjQ5Nzc2NzZ8MA&ixlib=rb-4.1.0&q=80&w=600',
+    imageUrls: ['https://images.unsplash.com/photo-1607957233158-d2f349c04b48?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHxibHVlJTIwZXllc3xlbnwwfHx8fDE3NjQ5Nzc2NzZ8MA&ixlib.rb-4.1.0&q=80&w=600'],
   },
   {
     id: '35',
@@ -343,6 +343,6 @@ export const PRODUCTS_DATA: Product[] = [
     price: 35.00,
     brand: 'fastrack',
     type: 'Contact Lenses',
-    imageUrl: 'https://images.unsplash.com/photo-1615598828554-7901789c6239?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHxjb2xvcmVkJTIwY29udGFjdHN8ZW58MHx8fHwxNzY0OTc3Njc2fDA&ixlib=rb-4.1.0&q=80&w=600',
+    imageUrls: ['https://images.unsplash.com/photo-1615598828554-7901789c6239?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHxjb2xvcmVkJTIwY29udGFjdHN8ZW58MHx8fHwxNzY0OTc3Njc2fDA&ixlib.rb-4.1.0&q=80&w=600'],
   },
 ];
