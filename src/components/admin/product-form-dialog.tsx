@@ -20,7 +20,6 @@ import { useToast } from '@/hooks/use-toast';
 import { Loader2, UploadCloud, X } from 'lucide-react';
 import Image from 'next/image';
 import { ScrollArea } from '../ui/scroll-area';
-import { FirebaseError } from 'firebase/app';
 import { useRouter } from 'next/navigation';
 
 const formSchema = z.object({
@@ -113,7 +112,7 @@ export function ProductFormDialog({ isOpen, onOpenChange, product }: ProductForm
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     if (!firestore) return;
-    
+
     startTransition(async () => {
         try {
             const isNewProduct = !product;
@@ -133,7 +132,7 @@ export function ProductFormDialog({ isOpen, onOpenChange, product }: ProductForm
 
             const finalImageUrls = [...existingImageUrls, ...newUploadedUrls];
 
-            const productData: Omit<Product, 'imageUrls'> & { imageUrls: string[], createdAt?: any } = { 
+            const productData: Partial<Product> & {imageUrls: string[]} = { 
                 ...values,
                 id: productRef.id,
                 imageId: values.name.toLowerCase().replace(/\s+/g, '-'),
@@ -151,7 +150,7 @@ export function ProductFormDialog({ isOpen, onOpenChange, product }: ProductForm
             router.refresh();
 
         } catch (e: any) {
-            console.error("Save product error:", e, e.stack);
+            console.error("Save product error:", e);
             toast({ 
                 title: 'Error Saving Product', 
                 description: e.message || "An unknown error occurred.",
@@ -356,3 +355,5 @@ export function ProductFormDialog({ isOpen, onOpenChange, product }: ProductForm
     </Dialog>
   );
 }
+
+    
