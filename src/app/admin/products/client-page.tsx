@@ -92,7 +92,7 @@ export function AdminProductsClientPage({ products }: { products: Product[]}) {
                         </TableHeader>
                         <TableBody>
                             {products.map(product => {
-                                const imageUrl = product.imageUrls && product.imageUrls.length > 0 ? product.imageUrls[0] : `https://placehold.co/64x64?text=${product.name.charAt(0)}`;
+                                const imageUrl = product.imageUrl || `https://placehold.co/64x64?text=${product.name.charAt(0)}`;
                                 return (
                                 <TableRow key={product.id}>
                                     <TableCell className="hidden sm:table-cell">

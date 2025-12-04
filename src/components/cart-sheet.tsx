@@ -42,7 +42,7 @@ export function CartSheet({ children }: { children: React.ReactNode }) {
             <ScrollArea className="flex-1">
               <div className="flex flex-col gap-6 p-6">
                 {cartItems.map((item) => {
-                  const imageUrl = (item.product.imageUrls && item.product.imageUrls.length > 0) ? item.product.imageUrls[0] : `https://placehold.co/100x100?text=${item.product.name.charAt(0)}`;
+                  const imageUrl = item.product.imageUrl || `https://placehold.co/100x100?text=${item.product.name.charAt(0)}`;
                   const itemPrice = item.product.price + (item.lens?.price ?? 0);
                   
                   return (

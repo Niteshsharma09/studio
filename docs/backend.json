@@ -1,3 +1,4 @@
+
 {
   "entities": {
     "User": {
@@ -50,13 +51,13 @@
         "name": { "type": "string" },
         "description": { "type": "string" },
         "price": { "type": "number" },
-        "imageId": { "type": "string" },
+        "imageUrl": { "type": "string", "format": "uri" },
         "type": { "type": "string" },
         "brand": { "type": "string" },
         "gender": { "type": "string" },
         "createdAt": { "type": "number" }
       },
-      "required": ["id", "name", "description", "price", "imageId", "type", "brand", "gender"]
+      "required": ["id", "name", "description", "price", "type", "brand"]
     },
     "Frame": {
       "title": "Frame",

@@ -24,14 +24,6 @@ import { PrescriptionDialog } from '@/components/prescription-dialog';
 import { ReviewList } from '@/components/review-list';
 import Image from 'next/image';
 import { cn } from '@/lib/utils';
-import type { CarouselApi } from "@/components/ui/carousel"
-import {
-  Carousel,
-  CarouselContent,
-  CarouselItem,
-  CarouselNext,
-  CarouselPrevious,
-} from "@/components/ui/carousel"
 
 export function ProductDetailClientPage({ product, allProducts, lenses }: { product: Product, allProducts: Product[], lenses: Product[] }) {
   const router = useRouter();
@@ -45,26 +37,8 @@ export function ProductDetailClientPage({ product, allProducts, lenses }: { prod
   const [isPrescriptionDialogOpen, setIsPrescriptionDialogOpen] = useState(false);
   const [actionType, setActionType] = useState<'cart' | 'buy' | null>(null);
 
-  const [api, setApi] = useState<CarouselApi>()
-  const [current, setCurrent] = useState(0)
- 
-  useEffect(() => {
-    if (!api) {
-      return
-    }
- 
-    setCurrent(api.selectedScrollSnap() + 1)
- 
-    api.on("select", () => {
-      setCurrent(api.selectedScrollSnap() + 1)
-    })
-  }, [api])
-
-  const mainImageUrls = useMemo(() => {
-    if (product?.imageUrls && product.imageUrls.length > 0) {
-        return product.imageUrls;
-    }
-    return [`https://placehold.co/600x400?text=${product?.name.charAt(0)}`];
+  const mainImageUrl = useMemo(() => {
+    return product?.imageUrl || `https://placehold.co/600x400?text=${product?.name.charAt(0)}`;
   }, [product]);
 
   const similarProducts = useMemo(() => {
@@ -175,45 +149,15 @@ export function ProductDetailClientPage({ product, allProducts, lenses }: { prod
           <div className="container mx-auto px-4 py-12">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start">
             <div className="space-y-4">
-                 <Carousel setApi={setApi} className="w-full">
-                    <CarouselContent>
-                        {mainImageUrls.map((imgUrl, index) => (
-                        <CarouselItem key={index}>
-                            <div className="relative aspect-[4/3] w-full">
-                                <Image 
-                                    src={imgUrl}
-                                    alt={`${product.name} image ${index + 1}`}
-                                    fill
-                                    className="object-contain rounded-lg"
-                                    sizes="(max-width: 1023px) 100vw, 50vw"
-                                    priority={index === 0}
-                                />
-                            </div>
-                        </CarouselItem>
-                        ))}
-                    </CarouselContent>
-                    <CarouselPrevious className="absolute left-4 top-1/2 -translate-y-1/2 z-10" />
-                    <CarouselNext className="absolute right-4 top-1/2 -translate-y-1/2 z-10" />
-                </Carousel>
-                <div className="grid grid-cols-5 gap-2">
-                    {mainImageUrls.map((thumbUrl, index) => (
-                        <button
-                            key={index}
-                            onClick={() => api?.scrollTo(index)}
-                            className={cn(
-                                'relative aspect-square w-full rounded-md border-2 transition-all duration-200',
-                                current === index + 1 ? 'border-primary shadow-md' : 'border-transparent opacity-70 hover:opacity-100'
-                            )}
-                        >
-                            <Image
-                                src={thumbUrl}
-                                alt={`Thumbnail ${index + 1}`}
-                                fill
-                                className="object-cover rounded-sm"
-                                sizes="20vw"
-                            />
-                        </button>
-                    ))}
+                 <div className="relative aspect-[4/3] w-full">
+                    <Image 
+                        src={mainImageUrl}
+                        alt={product.name}
+                        fill
+                        className="object-contain rounded-lg"
+                        sizes="(max-width: 1023px) 100vw, 50vw"
+                        priority
+                    />
                 </div>
             </div>
               

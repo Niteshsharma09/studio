@@ -78,7 +78,7 @@ export default function OrderSummaryPage() {
                     </CardHeader>
                     <CardContent className="space-y-4">
                         {cartItems.map(item => {
-                            const imageUrl = (item.product.imageUrls && item.product.imageUrls.length > 0) ? item.product.imageUrls[0] : `https://placehold.co/60x60?text=${item.product.name.charAt(0)}`;
+                            const imageUrl = item.product.imageUrl || `https://placehold.co/60x60?text=${item.product.name.charAt(0)}`;
                             const itemPrice = item.product.price + (item.lens?.price ?? 0);
                             return (
                                 <div key={`${item.product.id}-${item.lens?.id || ''}`} className="flex justify-between items-center">

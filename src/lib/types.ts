@@ -7,8 +7,7 @@ export type Product = {
   price: number;
   brand: string;
   type: 'Frames' | 'Lenses' | 'Sunglasses' | 'Contact Lenses';
-  imageId: string; // Keep for fallback or initial data
-  imageUrls?: string[]; // Main image field
+  imageUrl?: string; // Main image field
   material?: string;
   color?: string;
   gender?: string;
