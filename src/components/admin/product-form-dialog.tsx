@@ -20,7 +20,7 @@ import { useToast } from '@/hooks/use-toast';
 import { Loader2, UploadCloud, X } from 'lucide-react';
 import Image from 'next/image';
 import { ScrollArea } from '../ui/scroll-area';
-import { useRouter } from 'next/navigation';
+import { useRouter, usePathname } from 'next/navigation';
 
 const formSchema = z.object({
   name: z.string().min(1, 'Product name is required'),
@@ -46,6 +46,7 @@ export function ProductFormDialog({ isOpen, onOpenChange, product }: ProductForm
   const storage = useStorage();
   const { toast } = useToast();
   const router = useRouter();
+  const pathname = usePathname();
   
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -114,12 +115,10 @@ export function ProductFormDialog({ isOpen, onOpenChange, product }: ProductForm
     try {
         let finalImageUrl: string | null = product?.imageUrl || null;
 
-        // Step 1: Handle image upload if a new image is provided
         if (newImageFile) {
             toast({ title: "Uploading image..." });
             const imageRef = ref(storage, `products/${Date.now()}-${newImageFile.name}`);
             
-            // Delete old image if we are editing and there was an old image
             if (product?.imageUrl) {
                 try {
                     const oldImageRef = ref(storage, product.imageUrl);
@@ -132,7 +131,6 @@ export function ProductFormDialog({ isOpen, onOpenChange, product }: ProductForm
             const snapshot = await uploadBytes(imageRef, newImageFile);
             finalImageUrl = await getDownloadURL(snapshot.ref);
         } else if (imagePreview === null && product?.imageUrl) {
-            // Handle image removal
              try {
                 const oldImageRef = ref(storage, product.imageUrl);
                 await deleteObject(oldImageRef);
@@ -149,14 +147,11 @@ export function ProductFormDialog({ isOpen, onOpenChange, product }: ProductForm
             imageUrl: finalImageUrl,
         };
         
-        // Step 2: Save product data to Firestore
         if (product) {
-            // Update existing product
             const productRef = doc(firestore, 'products', product.id);
             await updateDoc(productRef, productData);
             toast({ title: 'Product Updated', description: `${values.name} has been saved successfully.` });
         } else {
-            // Create new product
             const newDocRef = doc(collection(firestore, 'products'));
             await setDoc(newDocRef, {
                 ...productData,
@@ -166,8 +161,9 @@ export function ProductFormDialog({ isOpen, onOpenChange, product }: ProductForm
             toast({ title: 'Product Created', description: `${values.name} has been saved successfully.` });
         }
         
+        // Use replace to force a hard refresh of the page data
+        router.replace(pathname);
         onOpenChange(false);
-        router.refresh();
 
     } catch (e: any) {
         console.error("Error saving product:", e);
