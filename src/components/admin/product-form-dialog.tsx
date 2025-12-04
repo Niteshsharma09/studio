@@ -117,12 +117,18 @@ export function ProductFormDialog({ isOpen, onOpenChange, product }: ProductForm
     setIsLoading(true);
 
     try {
+        const isNewProduct = !product;
+        // Ensure we have a document reference with an ID *before* we do anything else.
+        const productRef = isNewProduct
+            ? doc(collection(firestore, 'products'))
+            : doc(firestore, 'products', product.id);
+        
         let uploadedUrls: string[] = [...existingImageUrls];
 
         if (newImageFiles.length > 0) {
             const storage = getStorage();
             const uploadPromises = newImageFiles.map(imageFile => {
-                const imageRef = ref(storage, `products/${Date.now()}-${imageFile.file.name}`);
+                const imageRef = ref(storage, `products/${productRef.id}/${Date.now()}-${imageFile.file.name}`);
                 
                 return new Promise<string>((resolve, reject) => {
                     const reader = new FileReader();
@@ -150,14 +156,12 @@ export function ProductFormDialog({ isOpen, onOpenChange, product }: ProductForm
         }
 
         const productData = { 
-            ...values, 
+            ...values,
+            id: productRef.id, // Explicitly add the ID to the data
+            imageId: values.name.toLowerCase().replace(/\s+/g, '-'), // Create a fallback imageId
             imageUrls: uploadedUrls,
-            ...(product ? {} : { createdAt: serverTimestamp() })
+            ...(isNewProduct ? { createdAt: serverTimestamp() } : {})
         };
-
-        const productRef = product 
-            ? doc(firestore, 'products', product.id)
-            : doc(collection(firestore, 'products')); // Generate a new doc ref for new products
 
         await setDoc(productRef, productData, { merge: true });
 
@@ -366,5 +370,7 @@ export function ProductFormDialog({ isOpen, onOpenChange, product }: ProductForm
     </Dialog>
   );
 }
+
+    
 
     
