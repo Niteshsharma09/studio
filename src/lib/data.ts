@@ -1,12 +1,11 @@
 
 import type { Product } from './types';
 import { unstable_cache as cache } from 'next/cache';
-import { collection, getDocs } from 'firebase/firestore';
+import { collection, getDocs, doc, getDoc } from 'firebase/firestore';
 import { db } from './firestore-server';
 
 // This function now reliably fetches products from Firestore on the server-side.
-// All fallback logic has been removed to ensure it's the single source of truth.
-export const getProducts = async (): Promise<Product[]> => {
+export const getProducts = cache(async (): Promise<Product[]> => {
     console.log('Fetching products from Firestore...');
     try {
         if (!db) {
@@ -33,7 +32,7 @@ export const getProducts = async (): Promise<Product[]> => {
         // In case of an error, return an empty array to prevent crashes.
         return [];
     }
-};
+}, ['products'], { revalidate: 1 }); // Revalidate every 1 second to show new products
 
 export const getLenses = cache(
     async () => {
@@ -48,11 +47,26 @@ export const getLenses = cache(
 
 
 export const getProduct = cache(
-    async (id: string) => {
-        const products = await getProducts();
-        console.log(`Fetching product ${id}...`);
-        return products.find(p => p.id === id);
+    async (id: string): Promise<Product | undefined> => {
+        try {
+            if (!db) {
+                console.error("Firestore is not initialized. Cannot fetch product.");
+                return undefined;
+            }
+            console.log(`Fetching product ${id} from Firestore...`);
+            const productDoc = await getDoc(doc(db, 'products', id));
+
+            if (!productDoc.exists()) {
+                console.warn(`Product with id ${id} not found.`);
+                return undefined;
+            }
+
+            return { id: productDoc.id, ...productDoc.data() } as Product;
+        } catch (error) {
+            console.error(`Failed to fetch product ${id}:`, error);
+            return undefined;
+        }
     },
     ['product'],
-    { revalidate: 60 }
+    { revalidate: 60 } // Revalidate every minute
 );
