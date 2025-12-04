@@ -51,9 +51,10 @@
         "name": { "type": "string" },
         "description": { "type": "string" },
         "price": { "type": "number" },
-        "imageUrls": {
-          "type": "array",
-          "items": { "type": "string", "format": "uri" }
+        "imgurl": {
+          "type": "string",
+          "format": "uri",
+          "description": "The URL of the product image."
         },
         "type": { "type": "string" },
         "brand": { "type": "string" },

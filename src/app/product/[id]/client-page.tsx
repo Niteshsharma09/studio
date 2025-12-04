@@ -38,7 +38,7 @@ export function ProductDetailClientPage({ product, allProducts, lenses }: { prod
   const [actionType, setActionType] = useState<'cart' | 'buy' | null>(null);
 
   const mainImageUrl = useMemo(() => {
-    return product?.imageUrls?.[0] || `https://placehold.co/600x400?text=${product?.name.charAt(0)}`;
+    return product?.imgurl || `https://placehold.co/600x400?text=${product?.name.charAt(0)}`;
   }, [product]);
 
   const similarProducts = useMemo(() => {

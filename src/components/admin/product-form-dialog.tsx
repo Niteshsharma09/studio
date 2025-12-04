@@ -71,7 +71,7 @@ export function ProductFormDialog({ isOpen, onOpenChange, product }: ProductForm
           type: product.type,
           gender: product.gender || 'Unisex',
         });
-        setImagePreview(product.imageUrls?.[0] || null);
+        setImagePreview(product.imgurl || null);
       } else {
         form.reset({
           name: '',
@@ -113,15 +113,15 @@ export function ProductFormDialog({ isOpen, onOpenChange, product }: ProductForm
     setIsPending(true);
 
     try {
-        let finalImageUrls: string[] = product?.imageUrls || [];
+        let finalImageUrl: string | null = product?.imgurl || null;
 
         if (newImageFile) {
             toast({ title: "Uploading image..." });
             const imageRef = ref(storage, `products/${Date.now()}-${newImageFile.name}`);
             
-            if (product?.imageUrls?.[0]) {
+            if (product?.imgurl) {
                 try {
-                    const oldImageRef = ref(storage, product.imageUrls[0]);
+                    const oldImageRef = ref(storage, product.imgurl);
                     await deleteObject(oldImageRef).catch(e => console.warn("Old image deletion failed, it might not exist", e));
                 } catch(e) {
                      console.warn("Could not create ref for old image, it might not exist.", e);
@@ -129,23 +129,22 @@ export function ProductFormDialog({ isOpen, onOpenChange, product }: ProductForm
             }
 
             const snapshot = await uploadBytes(imageRef, newImageFile);
-            const downloadUrl = await getDownloadURL(snapshot.ref);
-            finalImageUrls = [downloadUrl];
-        } else if (imagePreview === null && product?.imageUrls?.[0]) {
+            finalImageUrl = await getDownloadURL(snapshot.ref);
+        } else if (imagePreview === null && product?.imgurl) {
              try {
-                const oldImageRef = ref(storage, product.imageUrls[0]);
+                const oldImageRef = ref(storage, product.imgurl);
                 await deleteObject(oldImageRef);
             } catch (e) {
                 console.warn("Could not delete old image.", e)
             }
-            finalImageUrls = [];
+            finalImageUrl = null;
         }
         
         toast({ title: "Saving product..." });
         
         const productData = { 
             ...values,
-            imageUrls: finalImageUrls,
+            imgurl: finalImageUrl,
         };
         
         if (product) {
