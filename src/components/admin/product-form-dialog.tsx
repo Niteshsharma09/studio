@@ -14,7 +14,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { BRANDS, PRODUCT_TYPES } from '@/lib/constants';
 import type { Product } from '@/lib/types';
 import { useFirestore, useStorage } from '@/firebase';
-import { doc, setDoc, collection, serverTimestamp } from 'firebase/firestore';
+import { doc, setDoc, collection, serverTimestamp, updateDoc } from 'firebase/firestore';
 import { ref, uploadBytes, getDownloadURL, deleteObject } from "firebase/storage";
 import { useToast } from '@/hooks/use-toast';
 import { Loader2, UploadCloud, X } from 'lucide-react';
@@ -80,9 +80,9 @@ export function ProductFormDialog({ isOpen, onOpenChange, product }: ProductForm
           type: '',
           gender: 'Unisex',
         });
+        setImagePreview(null);
       }
       setNewImageFile(null);
-      if(!product?.imageUrl) setImagePreview(null);
     }
   }, [product, form, isOpen]);
 
@@ -90,7 +90,11 @@ export function ProductFormDialog({ isOpen, onOpenChange, product }: ProductForm
     const file = event.target.files?.[0];
     if (file) {
       setNewImageFile(file);
-      setImagePreview(URL.createObjectURL(file));
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setImagePreview(reader.result as string);
+      };
+      reader.readAsDataURL(file);
     }
   };
 
@@ -98,7 +102,6 @@ export function ProductFormDialog({ isOpen, onOpenChange, product }: ProductForm
     setNewImageFile(null);
     setImagePreview(null);
   };
-
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     if (!firestore || !storage) {
@@ -112,15 +115,15 @@ export function ProductFormDialog({ isOpen, onOpenChange, product }: ProductForm
         const productId = product?.id || doc(collection(firestore, 'products')).id;
         let finalImageUrl = product?.imageUrl || null;
 
-        // 1. Handle image upload/removal
+        // Step 1: Handle Image Upload if there is a new image file
         if (newImageFile) {
-            // If there's an old image for an existing product, delete it first.
+            // Delete old image if it exists and we're uploading a new one
             if (product?.imageUrl) {
                 try {
                     const oldImageRef = ref(storage, product.imageUrl);
                     await deleteObject(oldImageRef);
                 } catch (e) {
-                    console.warn("Could not delete old image from storage, it might not exist or permissions are missing.", e);
+                    console.warn("Could not delete old image, it might not exist.", e);
                 }
             }
             // Upload the new image
@@ -129,37 +132,46 @@ export function ProductFormDialog({ isOpen, onOpenChange, product }: ProductForm
             finalImageUrl = await getDownloadURL(snapshot.ref);
 
         } else if (imagePreview === null && product?.imageUrl) {
-            // Image was removed without a new one being added
+            // Step 2: Handle Image Removal if the preview is gone but there was an old URL
             try {
                 const oldImageRef = ref(storage, product.imageUrl);
                 await deleteObject(oldImageRef);
             } catch (e) {
-                console.warn("Could not delete old image from storage.", e)
+                console.warn("Could not delete old image.", e)
             }
             finalImageUrl = null;
         }
         
-        // 2. Prepare product data object for Firestore
-        const productData: Product = { 
+        // Step 3: Prepare product data for Firestore
+        const productData = { 
             ...values,
-            id: productId,
             imageUrl: finalImageUrl,
-            createdAt: product?.createdAt || serverTimestamp(),
         };
         
-        // 3. Save the product data to Firestore
+        // Step 4: Save the product data to Firestore
         const productRef = doc(firestore, 'products', productId);
-        await setDoc(productRef, productData, { merge: true });
-
-        toast({ title: product ? 'Product Updated' : 'Product Created', description: `${values.name} has been saved.` });
+        if (product) {
+            // Update existing product
+            await updateDoc(productRef, productData);
+        } else {
+            // Create new product
+            await setDoc(productRef, {
+                ...productData,
+                id: productId,
+                createdAt: serverTimestamp(),
+            });
+        }
+        
+        // Step 5: Show success and refresh
+        toast({ title: product ? 'Product Updated' : 'Product Created', description: `${values.name} has been saved successfully.` });
         onOpenChange(false);
         router.refresh();
 
     } catch (e: any) {
-        console.error("Save product error:", e);
+        console.error("Error saving product:", e);
         toast({ 
             title: 'Error Saving Product', 
-            description: e.message || "An unknown error occurred. Check the console for details.",
+            description: e.message || "An unknown error occurred. Please check the console.",
             variant: 'destructive',
         });
     } finally {
@@ -341,3 +353,5 @@ export function ProductFormDialog({ isOpen, onOpenChange, product }: ProductForm
     </Dialog>
   );
 }
+
+    
