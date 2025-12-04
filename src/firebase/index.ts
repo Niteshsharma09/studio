@@ -12,6 +12,7 @@ import {
 } from './provider';
 import { useUser } from './auth/use-user';
 import { useOrders } from './firestore/use-orders';
+import { useAdmin } from './auth/use-admin';
 
 
 export {
@@ -22,4 +23,5 @@ export {
     useFirestore,
     useUser,
     useOrders,
+    useAdmin,
 };

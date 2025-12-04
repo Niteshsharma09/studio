@@ -28,7 +28,7 @@ import {
 } from "@/components/ui/collapsible"
 import { useState, useEffect } from 'react';
 import { Input } from '@/components/ui/input';
-import { useUser } from '@/firebase';
+import { useUser, useAdmin } from '@/firebase';
 import { signOut } from 'firebase/auth';
 import { useAuth } from '@/firebase/provider';
 import { Avatar, AvatarFallback, AvatarImage } from '../ui/avatar';
@@ -39,6 +39,7 @@ import Image from 'next/image';
 export function Header() {
   const { cartCount } = useCart();
   const { user, loading } = useUser();
+  const { isAdmin } = useAdmin();
   const auth = useAuth();
   const { toast } = useToast();
   const pathname = usePathname();
@@ -123,6 +124,12 @@ export function Header() {
               </div>
             </DropdownMenuLabel>
             <DropdownMenuSeparator />
+            {isAdmin && (
+              <DropdownMenuItem onSelect={() => router.push('/admin')}>
+                <LayoutDashboard className="mr-2 h-4 w-4" />
+                <span>Admin Dashboard</span>
+              </DropdownMenuItem>
+            )}
             <DropdownMenuItem onSelect={() => router.push('/my-orders')}>
               <History className="mr-2 h-4 w-4" />
               <span>My Orders</span>
@@ -171,7 +178,7 @@ export function Header() {
                   <nav className="flex flex-col space-y-1 text-lg">
                     {navLinks.map((link) => 
                       link.submenu ? (
-                        <Collapsible key={link.href} className="flex flex-col space-y-1">
+                        <Collapsible key={link.label} className="flex flex-col space-y-1">
                            <CollapsibleTrigger asChild>
                              <div className='flex items-center justify-between w-full py-2'>
                               <span
@@ -298,15 +305,14 @@ export function Header() {
             return (
               <DropdownMenu key={link.href}>
                 <DropdownMenuTrigger asChild>
-                  <Link
-                    href={link.href}
-                     className={cn(
-                      'flex items-center gap-1 transition-colors hover:text-primary',
+                   <div
+                    className={cn(
+                      'flex items-center gap-1 transition-colors hover:text-primary cursor-pointer',
                       (pathname + '?' + searchParams.toString()).includes('category=frames') ? 'text-primary' : 'text-foreground/80'
                     )}
                   >
                     {link.label}
-                  </Link>
+                  </div>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent>
                   {link.submenu.map(sublink => (

@@ -33,6 +33,10 @@
         "phone": {
           "type": "string",
           "description": "The user's phone number."
+        },
+        "isAdmin": {
+          "type": "boolean",
+          "description": "Whether the user has administrative privileges."
         }
       },
       "required": ["id", "email", "createdAt", "firstName"]
