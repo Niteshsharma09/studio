@@ -11,10 +11,6 @@ import { ai } from '@/ai/genkit';
 import { z } from 'genkit';
 import { getAuth } from 'firebase-admin/auth';
 import { initializeApp, getApps, cert, App } from 'firebase-admin/app';
-import { config } from 'dotenv';
-
-// Load environment variables from .env file at the top level of the module.
-config();
 
 
 const SetAdminInputSchema = z.object({
