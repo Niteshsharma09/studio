@@ -11,6 +11,11 @@ import { ai } from '@/ai/genkit';
 import { z } from 'genkit';
 import { getAuth } from 'firebase-admin/auth';
 import { initializeApp, getApps, cert, App } from 'firebase-admin/app';
+import { config } from 'dotenv';
+
+// Load environment variables from .env file
+config();
+
 
 const SetAdminInputSchema = z.object({
   uid: z.string().describe("The User ID (UID) to grant admin privileges to."),
