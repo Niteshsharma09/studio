@@ -112,30 +112,39 @@ export function ProductFormDialog({ isOpen, onOpenChange, product }: ProductForm
         const productId = product?.id || doc(collection(firestore, 'products')).id;
         let finalImageUrl = product?.imageUrl || null;
 
-        // 1. Upload new image if it exists
+        // 1. Handle image upload/removal
         if (newImageFile) {
+            // If there's an old image for an existing product, delete it first.
+            if (product?.imageUrl) {
+                try {
+                    const oldImageRef = ref(storage, product.imageUrl);
+                    await deleteObject(oldImageRef);
+                } catch (e) {
+                    console.warn("Could not delete old image from storage, it might not exist or permissions are missing.", e);
+                }
+            }
+            // Upload the new image
             const imageRef = ref(storage, `products/${productId}/${Date.now()}-${newImageFile.name}`);
             const snapshot = await uploadBytes(imageRef, newImageFile);
             finalImageUrl = await getDownloadURL(snapshot.ref);
+
         } else if (imagePreview === null && product?.imageUrl) {
-            // Image was removed
-            finalImageUrl = null;
-            // Optionally delete from storage
+            // Image was removed without a new one being added
             try {
-              const oldImageRef = ref(storage, product.imageUrl);
-              await deleteObject(oldImageRef);
+                const oldImageRef = ref(storage, product.imageUrl);
+                await deleteObject(oldImageRef);
             } catch (e) {
-              console.warn("Could not delete old image from storage, it might not exist.", e)
+                console.warn("Could not delete old image from storage.", e)
             }
+            finalImageUrl = null;
         }
         
         // 2. Prepare product data object for Firestore
-        const productData = { 
+        const productData: Product = { 
             ...values,
             id: productId,
             imageUrl: finalImageUrl,
-            // Only set createdAt for new products
-            ...( !product && { createdAt: serverTimestamp() } )
+            createdAt: product?.createdAt || serverTimestamp(),
         };
         
         // 3. Save the product data to Firestore

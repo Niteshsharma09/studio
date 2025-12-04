@@ -32,19 +32,7 @@ export const getProducts = cache(async (): Promise<Product[]> => {
         // In case of an error, return an empty array to prevent crashes.
         return [];
     }
-}, ['products']);
-
-export const getLenses = cache(
-    async () => {
-        console.log('Fetching lenses...');
-        const products = await getProducts();
-        const recentLensNames = ["ClearBlue Lenses", "Photochromic Lenses", "Technoii Drive Lens"];
-        return products.filter(p => p.type === 'Lenses' && recentLensNames.includes(p.name));
-    },
-    ['lenses'],
-    { revalidate: 3600 } // Revalidate every hour
-);
-
+}, ['products'], { revalidate: 1 }); // Revalidate every 1 second to show new products
 
 export const getProduct = cache(
     async (id: string): Promise<Product | undefined> => {
@@ -67,6 +55,18 @@ export const getProduct = cache(
             return undefined;
         }
     },
-    ['product'],
+    ['product', 'id'],
     { revalidate: 60 } // Revalidate every minute
+);
+
+
+export const getLenses = cache(
+    async () => {
+        console.log('Fetching lenses...');
+        const products = await getProducts();
+        const recentLensNames = ["ClearBlue Lenses", "Photochromic Lenses", "Technoii Drive Lens"];
+        return products.filter(p => p.type === 'Lenses' && recentLensNames.includes(p.name));
+    },
+    ['lenses'],
+    { revalidate: 3600 } // Revalidate every hour
 );
