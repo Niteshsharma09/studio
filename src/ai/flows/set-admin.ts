@@ -11,7 +11,7 @@ import { ai } from '@/ai/genkit';
 import { z } from 'genkit';
 import { getAuth } from 'firebase-admin/auth';
 import { initializeApp, getApps, cert, App } from 'firebase-admin/app';
-
+import { firebaseConfig } from '@/firebase/config';
 
 const SetAdminInputSchema = z.object({
   uid: z.string().describe("The User ID (UID) to grant admin privileges to."),
@@ -29,20 +29,24 @@ function initializeFirebaseAdmin(): App | undefined {
     if (getApps().length > 0) {
         return getApps()[0];
     }
+    // Directly use the firebaseConfig from the auto-generated config file.
+    // This bypasses any issues with .env file loading.
     const serviceAccountKey = process.env.FIREBASE_SERVICE_ACCOUNT_KEY;
-    if (serviceAccountKey) {
-        try {
-            const serviceAccount = JSON.parse(serviceAccountKey);
-            return initializeApp({
-                credential: cert(serviceAccount),
-            });
-        } catch (e) {
-            console.error("Failed to parse FIREBASE_SERVICE_ACCOUNT_KEY or initialize Firebase Admin SDK:", e);
-            return undefined;
-        }
+
+    if (!serviceAccountKey) {
+        console.error("FIREBASE_SERVICE_ACCOUNT_KEY not found. Admin features will not work.");
+        return undefined;
     }
-    console.warn("FIREBASE_SERVICE_ACCOUNT_KEY not found. Admin features will not work.");
-    return undefined;
+    
+    try {
+        const serviceAccount = JSON.parse(serviceAccountKey);
+        return initializeApp({
+            credential: cert(serviceAccount),
+        });
+    } catch (e) {
+        console.error("Failed to parse FIREBASE_SERVICE_ACCOUNT_KEY or initialize Firebase Admin SDK:", e);
+        return undefined;
+    }
 }
 
 
