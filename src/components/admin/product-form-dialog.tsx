@@ -122,39 +122,28 @@ export function ProductFormDialog({ isOpen, onOpenChange, product }: ProductForm
     try {
         const productId = product?.id || doc(collection(firestore, 'products')).id;
 
+        // 1. Upload new images to Firebase Storage and get their URLs
         const newUploadedUrls = await Promise.all(
             newImageFiles.map(async (imageFile) => {
                 const imageRef = ref(storage, `products/${productId}/${Date.now()}-${imageFile.file.name}`);
-                // This is the corrected part: using imageFile.file instead of imageFile
                 const snapshot = await uploadBytes(imageRef, imageFile.file);
                 return getDownloadURL(snapshot.ref);
             })
         );
         
+        // 2. Combine existing URLs with newly uploaded URLs
         const finalImageUrls = [...existingImageUrls, ...newUploadedUrls];
         
-        let productData;
-
-        if (product) { // This is an update
-            productData = { 
-                ...values,
-                id: productId,
-                imageUrls: finalImageUrls,
-            };
-        } else { // This is a new product
-             productData = {
-                name: values.name,
-                description: values.description,
-                price: values.price,
-                brand: values.brand,
-                type: values.type,
-                gender: values.gender,
-                id: productId,
-                imageUrls: finalImageUrls,
-                createdAt: new Date(),
-            };
-        }
+        // 3. Prepare product data object for Firestore
+        const productData = { 
+            ...values,
+            id: productId,
+            imageUrls: finalImageUrls,
+            // Only set createdAt for new products
+            ...( !product && { createdAt: new Date() } )
+        };
         
+        // 4. Save the product data to Firestore
         const productRef = doc(firestore, 'products', productId);
         await setDoc(productRef, productData, { merge: true });
 
