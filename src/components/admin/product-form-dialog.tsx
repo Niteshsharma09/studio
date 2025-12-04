@@ -115,9 +115,7 @@ export function ProductFormDialog({ isOpen, onOpenChange, product }: ProductForm
         const productId = product?.id || doc(collection(firestore, 'products')).id;
         let finalImageUrl = product?.imageUrl || null;
 
-        // Step 1: Handle Image Upload if there is a new image file
         if (newImageFile) {
-            // Delete old image if it exists and we're uploading a new one
             if (product?.imageUrl) {
                 try {
                     const oldImageRef = ref(storage, product.imageUrl);
@@ -126,13 +124,12 @@ export function ProductFormDialog({ isOpen, onOpenChange, product }: ProductForm
                     console.warn("Could not delete old image, it might not exist.", e);
                 }
             }
-            // Upload the new image
+            toast({ title: "Uploading image..." });
             const imageRef = ref(storage, `products/${productId}/${Date.now()}-${newImageFile.name}`);
             const snapshot = await uploadBytes(imageRef, newImageFile);
             finalImageUrl = await getDownloadURL(snapshot.ref);
 
         } else if (imagePreview === null && product?.imageUrl) {
-            // Step 2: Handle Image Removal if the preview is gone but there was an old URL
             try {
                 const oldImageRef = ref(storage, product.imageUrl);
                 await deleteObject(oldImageRef);
@@ -142,19 +139,16 @@ export function ProductFormDialog({ isOpen, onOpenChange, product }: ProductForm
             finalImageUrl = null;
         }
         
-        // Step 3: Prepare product data for Firestore
+        toast({ title: "Saving product..." });
         const productData = { 
             ...values,
             imageUrl: finalImageUrl,
         };
         
-        // Step 4: Save the product data to Firestore
         const productRef = doc(firestore, 'products', productId);
         if (product) {
-            // Update existing product
             await updateDoc(productRef, productData);
         } else {
-            // Create new product
             await setDoc(productRef, {
                 ...productData,
                 id: productId,
@@ -162,7 +156,6 @@ export function ProductFormDialog({ isOpen, onOpenChange, product }: ProductForm
             });
         }
         
-        // Step 5: Show success and refresh
         toast({ title: product ? 'Product Updated' : 'Product Created', description: `${values.name} has been saved successfully.` });
         onOpenChange(false);
         router.refresh();
@@ -353,5 +346,3 @@ export function ProductFormDialog({ isOpen, onOpenChange, product }: ProductForm
     </Dialog>
   );
 }
-
-    
