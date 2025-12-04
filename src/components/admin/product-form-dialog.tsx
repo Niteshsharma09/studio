@@ -119,28 +119,31 @@ export function ProductFormDialog({ isOpen, onOpenChange, product }: ProductForm
         const isNewProduct = !product;
         const productId = product ? product.id : doc(collection(firestore, 'products')).id;
 
-        let newUploadedUrls: string[] = [];
-        if (newImageFiles.length > 0) {
-            const storage = getStorage();
-            const uploadPromises = newImageFiles.map(imageFile => {
-                const imageRef = ref(storage, `products/${productId}/${Date.now()}-${imageFile.file.name}`);
-                return uploadBytes(imageRef, imageFile.file).then(snapshot => getDownloadURL(snapshot.ref));
-            });
-            newUploadedUrls = await Promise.all(uploadPromises);
-        }
+        // 1. Upload new images and get their URLs
+        const newUploadedUrls = await Promise.all(
+            newImageFiles.map(async (imageFile) => {
+                const imageRef = ref(getStorage(), `products/${productId}/${Date.now()}-${imageFile.file.name}`);
+                const snapshot = await uploadBytes(imageRef, imageFile.file);
+                return getDownloadURL(snapshot.ref);
+            })
+        );
 
+        // 2. Combine existing and new image URLs
         const finalImageUrls = [...existingImageUrls, ...newUploadedUrls];
-
-        const productData: Omit<Product, 'createdAt'> & { imageUrls: string[], createdAt?: any } = { 
+        
+        // 3. Prepare product data for Firestore
+        const productData: Omit<Product, 'createdAt'> & { imageUrls: string[], createdAt?: any, imageId?: string } = { 
             ...values,
             id: productId,
             imageUrls: finalImageUrls,
+            imageId: productId, // Required by schema
         };
         
         if (isNewProduct) {
             productData.createdAt = serverTimestamp();
         }
         
+        // 4. Save the product document to Firestore
         const productRef = doc(firestore, 'products', productId);
         await setDoc(productRef, productData, { merge: true });
 
@@ -152,7 +155,7 @@ export function ProductFormDialog({ isOpen, onOpenChange, product }: ProductForm
         console.error("Save product error:", e);
         toast({ 
             title: 'Error Saving Product', 
-            description: e.message || "An unknown error occurred.",
+            description: e.message || "An unknown error occurred. Check the console for details.",
             variant: 'destructive',
         });
     } finally {
