@@ -8,10 +8,11 @@ import { Checkbox } from '@/components/ui/checkbox';
 import { Label } from '@/components/ui/label';
 import { Slider } from '@/components/ui/slider';
 import { Button } from '@/components/ui/button';
-import { PRODUCTS, BRANDS, PRODUCT_TYPES } from '@/lib/data';
+import { BRANDS } from '@/lib/data';
 import { Separator } from './ui/separator';
+import type { Product } from '@/lib/types';
 
-export function FilterSidebar() {
+export function FilterSidebar({ allProducts }: { allProducts: Product[] }) {
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
@@ -22,7 +23,7 @@ export function FilterSidebar() {
   const minPrice = useMemo(() => Number(searchParams.get('minPrice') || 0), [searchParams]);
   const maxPrice = useMemo(() => Number(searchParams.get('maxPrice') || 9999), [searchParams]);
 
-  const maxProductPrice = useMemo(() => Math.max(...PRODUCTS.map(p => p.price), 500), []);
+  const maxProductPrice = useMemo(() => Math.max(...allProducts.map(p => p.price), 500), [allProducts]);
   const genders = ['Men', 'Women', 'Kids', 'Unisex'];
   const mainCategories = ['Frames', 'Sunglasses', 'Lenses', 'Contact Lenses'];
 

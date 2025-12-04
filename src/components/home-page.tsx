@@ -287,7 +287,7 @@ export function HomePageContent({ allProducts }: { allProducts: Product[] }) {
         <div className="container mx-auto px-4 grid grid-cols-12 gap-8 items-start">
           <aside className="hidden lg:block lg:col-span-3 sticky top-20 animate-fade-in">
             <Suspense fallback={<p>Loading filters...</p>}>
-              <FilterSidebar />
+              <FilterSidebar allProducts={allProducts} />
             </Suspense>
           </aside>
 

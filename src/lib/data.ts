@@ -1,221 +1,60 @@
 
 import type { Product } from './types';
 import { unstable_cache as cache } from 'next/cache';
+import { collection, getDocs, query } from 'firebase/firestore';
+import { db } from './firestore-server';
+
 
 export const BRANDS = ['titan', 'fastrack', 'Technoii', 'velocity', 'X-Ford', 'Lauredale Eyewear', 'NVG'] as const;
-export const PRODUCT_TYPES = ['Frames', 'Lenses', 'Sunglasses', 'Contact Lenses', 'Men', 'Women', 'Kids', 'Unisex'] as const;
+export const PRODUCT_TYPES = ['Frames', 'Lenses', 'Sunglasses', 'Contact Lenses'] as const;
+
+export const getProducts = cache(
+    async (): Promise<Product[]> => {
+        console.log('Fetching products from Firestore...');
+        try {
+            const productsCollection = collection(db, 'products');
+            const productSnapshot = await getDocs(productsCollection);
+            const products: Product[] = productSnapshot.docs.map(doc => ({
+                id: doc.id,
+                ...doc.data()
+            } as Product));
+
+            if (products.length > 0) {
+                return products;
+            } else {
+                // Fallback to local data if firestore is empty
+                return PRODUCTS_DATA;
+            }
+        } catch (error) {
+            console.error("Failed to fetch products from Firestore:", error);
+            // Fallback to local data if Firestore fails
+            return PRODUCTS_DATA;
+        }
+    },
+    ['products'],
+    { revalidate: 60 } // Revalidate every minute
+);
 
 export const getLenses = cache(
     async () => {
         console.log('Fetching lenses...');
-        // In a real app, this would be a database call.
-        return LENS_TYPES_DATA;
+        const products = await getProducts();
+        return products.filter(p => p.type === 'Lenses');
     },
     ['lenses'],
     { revalidate: 3600 } // Revalidate every hour
 );
 
-export const getProducts = cache(
-    async () => {
-        console.log('Fetching products...');
-        return PRODUCTS_DATA;
-    },
-    ['products'],
-    { revalidate: 3600 }
-);
 
 export const getProduct = cache(
     async (id: string) => {
+        const products = await getProducts();
         console.log(`Fetching product ${id}...`);
-        return PRODUCTS_DATA.find(p => p.id === id);
+        return products.find(p => p.id === id);
     },
     ['product'],
-    { revalidate: 3600 }
+    { revalidate: 60 }
 );
-
-
-const LENS_TYPES_DATA: Product[] = [
-  {
-    id: 'lens-zero',
-    name: 'Zero Power',
-    description: 'Standard lenses with no prescription. Includes anti-glare coating.',
-    price: 450.00,
-    brand: 'Generic',
-    type: 'Lenses',
-    imageId: 'clearblue-lenses',
-  },
-  {
-    id: 'lens-single-vision-basic',
-    name: 'Single Vision - Basic',
-    description: 'Standard single vision lenses for one field of vision. Includes anti-glare.',
-    price: 450.00,
-    brand: 'Generic',
-    type: 'Lenses',
-    imageId: 'clearblue-lenses',
-  },
-  {
-    id: 'lens-single-vision-premium',
-    name: 'Single Vision - Premium',
-    description: 'Thinner and lighter lenses with superior scratch resistance and UV protection.',
-    price: 650.00,
-    brand: 'Generic',
-    type: 'Lenses',
-    imageId: 'clearblue-lenses',
-  },
-  {
-    id: 'lens-single-vision-ultra-premium',
-    name: 'Single Vision - Ultra Premium',
-    description: 'Digitally surfaced lenses for wider fields of view and reduced distortion.',
-    price: 1050.00,
-    brand: 'Generic',
-    type: 'Lenses',
-    imageId: 'clearblue-lenses',
-  },
-  {
-    id: 'lens-single-vision-ultra-thin',
-    name: 'Single Vision - Ultra Thin',
-    description: 'Our thinnest and lightest lenses, ideal for high prescriptions.',
-    price: 2250.00,
-    brand: 'Generic',
-    type: 'Lenses',
-    imageId: 'clearblue-lenses',
-  },
-  {
-    id: 'lens-single-vision-antifog',
-    name: 'Single Vision - Antifog',
-    description: 'Lenses with a special coating to prevent fogging in various conditions.',
-    price: 3050.00,
-    brand: 'Generic',
-    type: 'Lenses',
-    imageId: 'clearblue-lenses',
-  },
-  {
-    id: 'lens-progressive-basic',
-    name: 'Progressive - Basic',
-    description: 'Seamless multifocal lenses for clear vision at all distances. Includes anti-glare coating.',
-    price: 1150.00,
-    brand: 'Generic',
-    type: 'Lenses',
-    imageId: 'photochromic-lenses',
-  },
-  {
-    id: 'lens-progressive-premium',
-    name: 'Progressive - Premium',
-    description: 'Thinner and lighter progressive lenses for enhanced comfort and aesthetics.',
-    price: 1700.00,
-    brand: 'Generic',
-    type: 'Lenses',
-    imageId: 'photochromic-lenses',
-  },
-  {
-    id: 'lens-progressive-ultra-premium',
-    name: 'Progressive - Ultra Premium',
-    description: 'Digitally surfaced progressive lenses for the widest and clearest viewing zones.',
-    price: 2450.00,
-    brand: 'Generic',
-    type: 'Lenses',
-    imageId: 'photochromic-lenses',
-  },
-  {
-    id: 'lens-progressive-ultra-thin',
-    name: 'Progressive - Ultra Thin',
-    description: 'The thinnest progressive lenses available, perfect for strong prescriptions.',
-    price: 4500.00,
-    brand: 'Generic',
-    type: 'Lenses',
-    imageId: 'photochromic-lenses',
-  },
-  {
-    id: 'lens-progressive-photochromic',
-    name: 'Progressive - Photochromic',
-    description: 'Progressive lenses that darken in sunlight and lighten indoors.',
-    price: 2450.00,
-    brand: 'Generic',
-    type: 'Lenses',
-    imageId: 'photochromic-lenses',
-  },
-  {
-    id: 'lens-progressive-antifog',
-    name: 'Progressive - Antifog',
-    description: 'Progressive lenses with an anti-fog coating for clear vision in all conditions.',
-    price: 6500.00,
-    brand: 'Generic',
-    type: 'Lenses',
-    imageId: 'photochromic-lenses',
-  },
-  {
-    id: 'lens-progressive-tinted-single',
-    name: 'Progressive - Tinted Single',
-    description: 'Progressive lenses with a single, uniform tint for sun protection and style.',
-    price: 1650.00,
-    brand: 'Generic',
-    type: 'Lenses',
-    imageId: 'polarized-pro-lenses',
-  },
-  {
-    id: 'lens-progressive-tinted-double',
-    name: 'Progressive - Tinted Double',
-    description: 'Progressive lenses with a gradient tint, transitioning from a darker top to a lighter bottom.',
-    price: 2050.00,
-    brand: 'Generic',
-    type: 'Lenses',
-    imageId: 'polarized-pro-lenses',
-  },
-  {
-    id: 'lens-bifocal-basic',
-    name: 'Bifocal - Basic',
-    description: 'Bifocal lenses with two distinct optical powers and an anti-glare coating.',
-    price: 450.00,
-    brand: 'Generic',
-    type: 'Lenses',
-    imageId: 'polarized-pro-lenses',
-  },
-  {
-    id: 'lens-bifocal-premium',
-    name: 'Bifocal - Premium',
-    description: 'Thinner and lighter bifocal lenses for enhanced comfort.',
-    price: 650.00,
-    brand: 'Generic',
-    type: 'Lenses',
-    imageId: 'polarized-pro-lenses',
-  },
-  {
-    id: 'lens-bifocal-ultra-premium',
-    name: 'Bifocal - Ultra Premium',
-    description: 'Digitally surfaced bifocal lenses for clearer vision.',
-    price: 1050.00,
-    brand: 'Generic',
-    type: 'Lenses',
-    imageId: 'polarized-pro-lenses',
-  },
-  {
-    id: 'lens-bifocal-ultra-thin',
-    name: 'Bifocal - Ultra Thin',
-    description: 'The thinnest bifocal lenses available for strong prescriptions.',
-    price: 2050.00,
-    brand: 'Generic',
-    type: 'Lenses',
-    imageId: 'polarized-pro-lenses',
-  },
-  {
-    id: 'lens-bifocal-tinted-single',
-    name: 'Bifocal - Tinted Single',
-    description: 'Bifocal lenses with a uniform tint for sun protection.',
-    price: 850.00,
-    brand: 'Generic',
-    type: 'Lenses',
-    imageId: 'polarized-pro-lenses',
-  },
-  {
-    id: 'lens-bifocal-tinted-double',
-    name: 'Bifocal - Tinted Double',
-    description: 'Bifocal lenses with a gradient tint for style and function.',
-    price: 1250.00,
-    brand: 'Generic',
-    type: 'Lenses',
-    imageId: 'polarized-pro-lenses',
-  },
-];
 
 
 const PRODUCTS_DATA: Product[] = [
@@ -559,9 +398,3 @@ const PRODUCTS_DATA: Product[] = [
     imageId: 'contact-color-blue',
   },
 ];
-
-// For backwards compatibility before caching was introduced
-export const PRODUCTS = PRODUCTS_DATA;
-export const LENS_TYPES = LENS_TYPES_DATA;
-
-    

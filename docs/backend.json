@@ -50,16 +50,13 @@
         "name": { "type": "string" },
         "description": { "type": "string" },
         "price": { "type": "number" },
-        "imageUrl": { "type": "string" },
-        "category": { "type": "string" },
-        "createdAt": { "type": "number" },
+        "imageId": { "type": "string" },
+        "type": { "type": "string" },
         "brand": { "type": "string" },
-        "material": { "type": "string" },
-        "color": { "type": "string" },
         "gender": { "type": "string" },
-        "SKU": { "type": "string" }
+        "createdAt": { "type": "number" }
       },
-      "required": ["id", "name", "description", "price", "imageUrl", "category", "createdAt"]
+      "required": ["id", "name", "description", "price", "imageId", "type", "brand", "gender"]
     },
     "Frame": {
       "title": "Frame",
