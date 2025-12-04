@@ -111,14 +111,18 @@ export function ProductFormDialog({ isOpen, onOpenChange, product }: ProductForm
 
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
-    if (!firestore) return;
+    if (!firestore) {
+        toast({ title: 'Error', description: 'Database not available.', variant: 'destructive' });
+        return;
+    }
     
     setIsPending(true);
 
     try {
         const isNewProduct = !product;
-        const productId = product ? product.id : doc(collection(firestore, 'products')).id;
+        const productId = product?.id || doc(collection(firestore, 'products')).id;
 
+        // 1. Upload new images and get their URLs
         const newUploadedUrls = await Promise.all(
             newImageFiles.map(async (imageFile) => {
                 const imageRef = ref(getStorage(), `products/${productId}/${Date.now()}-${imageFile.file.name}`);
@@ -127,16 +131,19 @@ export function ProductFormDialog({ isOpen, onOpenChange, product }: ProductForm
             })
         );
         
+        // 2. Combine existing and new image URLs
         const finalImageUrls = [...existingImageUrls, ...newUploadedUrls];
         
+        // 3. Prepare product data for Firestore
         const productData = { 
             ...values,
             id: productId,
-            imageId: productId, // Required by schema
-            imageUrls: finalImageUrls, // Correctly assign the final URLs
+            imageId: productId, // Still required by backend.json schema for now
+            imageUrls: finalImageUrls,
             ...(isNewProduct && { createdAt: serverTimestamp() }),
         };
         
+        // 4. Save to Firestore
         const productRef = doc(firestore, 'products', productId);
         await setDoc(productRef, productData, { merge: true });
 
