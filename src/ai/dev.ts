@@ -8,11 +8,5 @@ import '@/ai/flows/virtual-try-on.ts';
 import '@/ai/flows/chatbot.ts';
 import { setAdmin } from '@/ai/flows/set-admin.ts';
 
-// To set an admin user, get their UID from the app's user menu,
-// paste it below, then run `npm run genkit:dev` in your terminal.
-// After it runs, you can remove the code.
-
-setAdmin({ uid: "1d54RntVoYRPOlEpuS5AxuvKLKC3" })
-  .then(console.log)
-  .catch(console.error)
-  .finally(() => process.exit());
+// This file is now only for starting the Genkit Developer UI.
+// To set an admin, please run `npm run set-admin`
