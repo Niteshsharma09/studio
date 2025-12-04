@@ -14,7 +14,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { BRANDS, PRODUCT_TYPES } from '@/lib/constants';
 import type { Product } from '@/lib/types';
 import { useFirestore } from '@/firebase';
-import { doc, setDoc, addDoc, collection } from 'firebase/firestore';
+import { doc, setDoc, addDoc, collection, serverTimestamp } from 'firebase/firestore';
 import { getStorage, ref, uploadString, getDownloadURL } from "firebase/storage";
 import { useToast } from '@/hooks/use-toast';
 import { Loader2, UploadCloud, X } from 'lucide-react';
@@ -37,10 +37,16 @@ interface ProductFormDialogProps {
   product?: Product;
 }
 
+type ImageFile = {
+    file: File;
+    preview: string;
+};
+
 export function ProductFormDialog({ isOpen, onOpenChange, product }: ProductFormDialogProps) {
   const [isLoading, setIsLoading] = useState(false);
-  const [imageFiles, setImageFiles] = useState<File[]>([]);
-  const [imagePreviews, setImagePreviews] = useState<string[]>([]);
+  const [newImageFiles, setNewImageFiles] = useState<ImageFile[]>([]);
+  const [existingImageUrls, setExistingImageUrls] = useState<string[]>([]);
+
   const firestore = useFirestore();
   const { toast } = useToast();
   
@@ -58,57 +64,52 @@ export function ProductFormDialog({ isOpen, onOpenChange, product }: ProductForm
   });
 
   useEffect(() => {
-    if (product) {
-      form.reset({
-        name: product.name,
-        description: product.description,
-        price: product.price,
-        brand: product.brand,
-        type: product.type,
-        imageUrls: product.imageUrls,
-        gender: product.gender || 'Unisex',
-      });
-      setImagePreviews(product.imageUrls || []);
-    } else {
+    if (isOpen) {
+      if (product) {
         form.reset({
-            name: '',
-            description: '',
-            price: 0,
-            brand: '',
-            type: '',
-            imageUrls: [],
-            gender: 'Unisex',
+          name: product.name,
+          description: product.description,
+          price: product.price,
+          brand: product.brand,
+          type: product.type,
+          imageUrls: product.imageUrls || [],
+          gender: product.gender || 'Unisex',
         });
-        setImagePreviews([]);
+        setExistingImageUrls(product.imageUrls || []);
+      } else {
+        form.reset({
+          name: '',
+          description: '',
+          price: 0,
+          brand: '',
+          type: '',
+          imageUrls: [],
+          gender: 'Unisex',
+        });
+        setExistingImageUrls([]);
+      }
+      setNewImageFiles([]);
     }
-    setImageFiles([]);
   }, [product, form, isOpen]);
 
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const files = event.target.files;
     if (files) {
-      const newFiles = Array.from(files);
-      setImageFiles(prev => [...prev, ...newFiles]);
-      
-      const newPreviews = [...imagePreviews];
-      newFiles.forEach(file => {
-          const reader = new FileReader();
-          reader.onloadend = () => {
-              newPreviews.push(reader.result as string);
-              // This might cause multiple re-renders, but it's okay for this use-case
-              setImagePreviews([...newPreviews]);
-          };
-          reader.readAsDataURL(file);
-      })
+      const newFiles = Array.from(files).map(file => ({
+        file,
+        preview: URL.createObjectURL(file),
+      }));
+      setNewImageFiles(prev => [...prev, ...newFiles]);
     }
   };
 
-  const removeImage = (index: number) => {
-    setImagePreviews(previews => previews.filter((_, i) => i !== index));
-    // This is a simplification. For a more robust solution, you'd track which files correspond to which previews.
-    // In this case, we just clear the "newly added" files if a preview is removed. A better way would be to manage a list of objects with file and preview.
-    setImageFiles([]); // Simple reset for now.
-  }
+  const removeNewImage = (index: number) => {
+    setNewImageFiles(current => current.filter((_, i) => i !== index));
+  };
+
+  const removeExistingImage = (index: number) => {
+    setExistingImageUrls(current => current.filter((_, i) => i !== index));
+  };
 
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
@@ -116,21 +117,43 @@ export function ProductFormDialog({ isOpen, onOpenChange, product }: ProductForm
     setIsLoading(true);
 
     try {
-        let uploadedUrls = [...imagePreviews]; // Start with existing/non-removed URLs
+        let uploadedUrls: string[] = [...existingImageUrls];
 
-        if (imageFiles.length > 0) {
+        if (newImageFiles.length > 0) {
             const storage = getStorage();
-            const uploadPromises = imageFiles.map(file => {
-                const imageRef = ref(storage, `products/${Date.now()}-${file.name}`);
-                return uploadString(imageRef, imagePreviews[imagePreviews.length - imageFiles.length], 'data_url').then(() => getDownloadURL(imageRef));
+            const uploadPromises = newImageFiles.map(imageFile => {
+                const imageRef = ref(storage, `products/${Date.now()}-${imageFile.file.name}`);
+                
+                return new Promise<string>((resolve, reject) => {
+                    const reader = new FileReader();
+                    reader.onload = async (e) => {
+                        try {
+                            const dataUrl = e.target?.result as string;
+                            if (dataUrl) {
+                                await uploadString(imageRef, dataUrl, 'data_url');
+                                const downloadUrl = await getDownloadURL(imageRef);
+                                resolve(downloadUrl);
+                            } else {
+                                reject(new Error("Couldn't read file"));
+                            }
+                        } catch (uploadError) {
+                            reject(uploadError);
+                        }
+                    };
+                    reader.onerror = (error) => reject(error);
+                    reader.readAsDataURL(imageFile.file);
+                });
             });
+            
             const newUrls = await Promise.all(uploadPromises);
-            // This logic is simplified; it assumes new files are appended.
-            uploadedUrls = [...(values.imageUrls || []), ...newUrls];
+            uploadedUrls = [...uploadedUrls, ...newUrls];
         }
 
-
-        const productData = { ...values, imageUrls: uploadedUrls };
+        const productData = { 
+            ...values, 
+            imageUrls: uploadedUrls,
+            ...(product ? {} : { createdAt: serverTimestamp() })
+        };
 
         if (product) {
             const productRef = doc(firestore, 'products', product.id);
@@ -211,7 +234,7 @@ export function ProductFormDialog({ isOpen, onOpenChange, product }: ProductForm
                         render={({ field }) => (
                             <FormItem>
                             <FormLabel>Brand</FormLabel>
-                            <Select onValueChange={field.onChange} defaultValue={field.value}>
+                            <Select onValueChange={field.onChange} value={field.value}>
                                 <FormControl>
                                 <SelectTrigger>
                                     <SelectValue placeholder="Select a brand" />
@@ -231,7 +254,7 @@ export function ProductFormDialog({ isOpen, onOpenChange, product }: ProductForm
                         render={({ field }) => (
                             <FormItem>
                             <FormLabel>Type</FormLabel>
-                            <Select onValueChange={field.onChange} defaultValue={field.value}>
+                            <Select onValueChange={field.onChange} value={field.value}>
                                 <FormControl>
                                 <SelectTrigger>
                                     <SelectValue placeholder="Select a product type" />
@@ -253,7 +276,7 @@ export function ProductFormDialog({ isOpen, onOpenChange, product }: ProductForm
                         render={({ field }) => (
                             <FormItem>
                             <FormLabel>Gender</FormLabel>
-                            <Select onValueChange={field.onChange} defaultValue={field.value}>
+                            <Select onValueChange={field.onChange} value={field.value}>
                                 <FormControl>
                                 <SelectTrigger>
                                     <SelectValue placeholder="Select a gender" />
@@ -276,11 +299,11 @@ export function ProductFormDialog({ isOpen, onOpenChange, product }: ProductForm
                     <div>
                         <FormLabel>Product Images</FormLabel>
                         <div className='grid grid-cols-2 md:grid-cols-3 gap-2 mt-2'>
-                        {imagePreviews.map((src, index) => (
-                             <div key={index} className='relative aspect-square w-full bg-muted rounded-md'>
+                        {existingImageUrls.map((src, index) => (
+                             <div key={src} className='relative aspect-square w-full bg-muted rounded-md'>
                                 <Image 
                                     src={src}
-                                    alt="Product image preview" 
+                                    alt="Existing product image preview" 
                                     fill 
                                     className="object-contain rounded-md"
                                     sizes="(max-width: 768px) 50vw, 33vw"
@@ -290,14 +313,35 @@ export function ProductFormDialog({ isOpen, onOpenChange, product }: ProductForm
                                     variant="destructive"
                                     size="icon"
                                     className="absolute -top-2 -right-2 h-6 w-6 rounded-full"
-                                    onClick={() => removeImage(index)}
+                                    onClick={() => removeExistingImage(index)}
+                                >
+                                    <X className='h-4 w-4'/>
+                                </Button>
+                            </div>
+                        ))}
+                        {newImageFiles.map((imageFile, index) => (
+                             <div key={imageFile.preview} className='relative aspect-square w-full bg-muted rounded-md'>
+                                <Image 
+                                    src={imageFile.preview}
+                                    alt="New product image preview" 
+                                    fill 
+                                    className="object-contain rounded-md"
+                                    sizes="(max-width: 768px) 50vw, 33vw"
+                                    onLoad={() => URL.revokeObjectURL(imageFile.preview)}
+                                />
+                                <Button
+                                    type="button"
+                                    variant="destructive"
+                                    size="icon"
+                                    className="absolute -top-2 -right-2 h-6 w-6 rounded-full"
+                                    onClick={() => removeNewImage(index)}
                                 >
                                     <X className='h-4 w-4'/>
                                 </Button>
                             </div>
                         ))}
                         </div>
-                         {imagePreviews.length === 0 && (
+                         {existingImageUrls.length === 0 && newImageFiles.length === 0 && (
                             <div className='relative aspect-[4/3] w-full bg-muted rounded-md mt-2 flex items-center justify-center'>
                                 <p className='text-sm text-muted-foreground'>No Images</p>
                             </div>
@@ -324,3 +368,5 @@ export function ProductFormDialog({ isOpen, onOpenChange, product }: ProductForm
     </Dialog>
   );
 }
+
+    
