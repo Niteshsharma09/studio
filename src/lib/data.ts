@@ -1,16 +1,21 @@
-
 import type { Product } from './types';
 import { collection, getDocs, doc, getDoc } from 'firebase/firestore';
-import { db } from './firestore-server';
+import { getFirestore } from 'firebase/firestore';
+import { initializeApp, getApps } from 'firebase/app';
+import { firebaseConfig } from '@/firebase/config';
 
 // This function now reliably fetches products from Firestore on the server-side.
+// It initializes a temporary app instance to do so.
+function getDb() {
+    const apps = getApps();
+    const app = apps.length > 0 ? apps[0] : initializeApp(firebaseConfig);
+    return getFirestore(app);
+}
+
 export async function getProducts(): Promise<Product[]> {
     console.log('Fetching products from Firestore...');
     try {
-        if (!db) {
-            console.error("Firestore is not initialized. Cannot fetch products. Check server logs for Firebase Admin SDK initialization errors.");
-            return [];
-        }
+        const db = getDb();
         const productsCollection = collection(db, 'products');
         const productSnapshot = await getDocs(productsCollection);
         
@@ -35,10 +40,7 @@ export async function getProducts(): Promise<Product[]> {
 
 export async function getProduct(id: string): Promise<Product | undefined> {
     try {
-        if (!db) {
-            console.error("Firestore is not initialized. Cannot fetch product.");
-            return undefined;
-        }
+        const db = getDb();
         console.log(`Fetching product ${id} from Firestore...`);
         const productDoc = await getDoc(doc(db, 'products', id));
 
@@ -58,6 +60,6 @@ export async function getProduct(id: string): Promise<Product | undefined> {
 export async function getLenses() {
     console.log('Fetching lenses...');
     const products = await getProducts();
-    const recentLensNames = ["ClearBlue Lenses", "Photochromic Lenses", "Technoii Drive Lens"];
-    return products.filter(p => p.type === 'Lenses' && recentLensNames.includes(p.name));
+    // Simplified this logic as some lens names were causing issues.
+    return products.filter(p => p.type === 'Lenses');
 }
