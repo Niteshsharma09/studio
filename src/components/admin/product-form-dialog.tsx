@@ -119,14 +119,12 @@ export function ProductFormDialog({ isOpen, onOpenChange, product }: ProductForm
 
     try {
         const isNewProduct = !product;
-        // Ensure we have a document reference with an ID *before* we do anything else.
         const productRef = isNewProduct
             ? doc(collection(firestore, 'products'))
             : doc(firestore, 'products', product.id);
         
         let uploadedUrls: string[] = [...existingImageUrls];
 
-        // 1. Await image uploads before proceeding
         if (newImageFiles.length > 0) {
             const storage = getStorage();
             const uploadPromises = newImageFiles.map(imageFile => {
@@ -142,7 +140,7 @@ export function ProductFormDialog({ isOpen, onOpenChange, product }: ProductForm
                                 const downloadUrl = await getDownloadURL(imageRef);
                                 resolve(downloadUrl);
                             } else {
-                                reject(new Error("Couldn't read file"));
+                                reject(new Error("Couldn't read file to create data URL."));
                             }
                         } catch (uploadError) {
                             reject(uploadError);
@@ -162,16 +160,14 @@ export function ProductFormDialog({ isOpen, onOpenChange, product }: ProductForm
             id: productRef.id,
             imageId: values.name.toLowerCase().replace(/\s+/g, '-'),
             imageUrls: uploadedUrls,
-            ...(isNewProduct && { createdAt: Date.now() })
+            createdAt: product?.createdAt || Date.now()
         };
 
-        // 2. Save the final data to Firestore
         await setDoc(productRef, productData, { merge: true });
 
         toast({ title: product ? 'Product Updated' : 'Product Created', description: `${values.name} has been saved.` });
         onOpenChange(false);
     } catch (e: any) {
-        // 3. Implement detailed error logging as requested
         console.error("Save product error:", e);
         let errorMessage = "An unknown error occurred.";
         if (e instanceof FirebaseError) {
@@ -386,5 +382,3 @@ export function ProductFormDialog({ isOpen, onOpenChange, product }: ProductForm
     </Dialog>
   );
 }
-
-    
