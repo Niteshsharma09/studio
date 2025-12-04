@@ -3,18 +3,24 @@ import type { Product } from './types';
 import { unstable_cache as cache } from 'next/cache';
 import { collection, getDocs } from 'firebase/firestore';
 import { db } from './firestore-server';
-import { PRODUCTS_DATA } from './constants';
 
-
+// This function now reliably fetches products from Firestore on the server-side.
+// All fallback logic has been removed to ensure it's the single source of truth.
 export const getProducts = async (): Promise<Product[]> => {
     console.log('Fetching products from Firestore...');
     try {
         if (!db) {
-            console.warn("Firestore is not initialized. Cannot fetch products.");
+            console.error("Firestore is not initialized. Cannot fetch products. Check server logs for Firebase Admin SDK initialization errors.");
             return [];
         }
         const productsCollection = collection(db, 'products');
         const productSnapshot = await getDocs(productsCollection);
+        
+        if (productSnapshot.empty) {
+            console.log("No products found in the 'products' collection.");
+            return [];
+        }
+
         const products: Product[] = productSnapshot.docs.map(doc => ({
             id: doc.id,
             ...doc.data()
