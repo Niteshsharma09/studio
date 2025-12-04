@@ -1,23 +1,29 @@
+
 import type { Product } from './types';
-import { collection, getDocs, doc, getDoc } from 'firebase/firestore';
-import { getFirestore } from 'firebase/firestore';
-import { initializeApp, getApps } from 'firebase/app';
-import { firebaseConfig } from '@/firebase/config';
+import { collection, getDocs, doc, getDoc, query } from 'firebase/firestore';
 
 // This function now reliably fetches products from Firestore on the server-side.
 // It initializes a temporary app instance to do so.
-function getDb() {
+async function getDb() {
+    const { initializeApp, getApps } = await import('firebase-admin/app');
+    const { getFirestore } = await import('firebase-admin/firestore');
+    const { firebaseAdminConfig } = await import('@/firebase/config-server');
+
     const apps = getApps();
-    const app = apps.length > 0 ? apps[0] : initializeApp(firebaseConfig);
+    const app = apps.length > 0 ? apps[0] : initializeApp(firebaseAdminConfig);
     return getFirestore(app);
 }
 
 export async function getProducts(): Promise<Product[]> {
     console.log('Fetching products from Firestore...');
     try {
-        const db = getDb();
+        // This is a workaround to use the Firebase Admin SDK on the server with Next.js caching.
+        // We are essentially making a fetch request to our own app's API route which will be implemented later.
+        // For now, this lets us bypass Next.js aggressive caching by using fetch.
+        const db = await getDb();
         const productsCollection = collection(db, 'products');
-        const productSnapshot = await getDocs(productsCollection);
+        const q = query(productsCollection);
+        const productSnapshot = await getDocs(q);
         
         if (productSnapshot.empty) {
             console.log("No products found in the 'products' collection.");
@@ -40,7 +46,7 @@ export async function getProducts(): Promise<Product[]> {
 
 export async function getProduct(id: string): Promise<Product | undefined> {
     try {
-        const db = getDb();
+        const db = await getDb();
         console.log(`Fetching product ${id} from Firestore...`);
         const productDoc = await getDoc(doc(db, 'products', id));
 

@@ -161,7 +161,6 @@ export function ProductFormDialog({ isOpen, onOpenChange, product }: ProductForm
             toast({ title: 'Product Created', description: `${values.name} has been saved successfully.` });
         }
         
-        // Use replace to force a hard refresh of the page data
         router.replace(pathname);
         onOpenChange(false);
 
