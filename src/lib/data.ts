@@ -6,38 +6,34 @@ import { db } from './firestore-server';
 import { PRODUCTS_DATA } from './constants';
 
 
-export const getProducts = cache(
-    async (): Promise<Product[]> => {
-        console.log('Fetching products from Firestore...');
-        try {
-            const productsCollection = collection(db, 'products');
-            const productSnapshot = await getDocs(productsCollection);
-            const products: Product[] = productSnapshot.docs.map(doc => ({
-                id: doc.id,
-                ...doc.data()
-            } as Product));
+export const getProducts = async (): Promise<Product[]> => {
+    console.log('Fetching products from Firestore...');
+    try {
+        const productsCollection = collection(db, 'products');
+        const productSnapshot = await getDocs(productsCollection);
+        const products: Product[] = productSnapshot.docs.map(doc => ({
+            id: doc.id,
+            ...doc.data()
+        } as Product));
 
-            if (products.length > 0) {
-                return products;
-            } else {
-                // Fallback to local data if firestore is empty
-                return PRODUCTS_DATA.map(p => ({
-                    ...p,
-                    imageUrls: p.imageUrl ? [p.imageUrl] : [],
-                }));
-            }
-        } catch (error) {
-            console.error("Failed to fetch products from Firestore:", error);
-            // Fallback to local data if Firestore fails
+        if (products.length > 0) {
+            return products;
+        } else {
+            // Fallback to local data if firestore is empty
             return PRODUCTS_DATA.map(p => ({
                 ...p,
                 imageUrls: p.imageUrl ? [p.imageUrl] : [],
             }));
         }
-    },
-    ['products'],
-    { revalidate: 60 } // Revalidate every minute
-);
+    } catch (error) {
+        console.error("Failed to fetch products from Firestore:", error);
+        // Fallback to local data if Firestore fails
+        return PRODUCTS_DATA.map(p => ({
+            ...p,
+            imageUrls: p.imageUrl ? [p.imageUrl] : [],
+        }));
+    }
+};
 
 export const getLenses = cache(
     async () => {
