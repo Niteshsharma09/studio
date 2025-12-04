@@ -125,6 +125,7 @@ export function ProductFormDialog({ isOpen, onOpenChange, product }: ProductForm
         const newUploadedUrls = await Promise.all(
             newImageFiles.map(async (imageFile) => {
                 const imageRef = ref(storage, `products/${productId}/${Date.now()}-${imageFile.file.name}`);
+                // This is the corrected part: using imageFile.file instead of imageFile
                 const snapshot = await uploadBytes(imageRef, imageFile.file);
                 return getDownloadURL(snapshot.ref);
             })
@@ -369,5 +370,4 @@ export function ProductFormDialog({ isOpen, onOpenChange, product }: ProductForm
   );
 }
 
-    
     
