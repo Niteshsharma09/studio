@@ -124,7 +124,6 @@ export function Header() {
                 {user.displayName && <p className="text-xs leading-none text-muted-foreground">
                   {user.email}
                 </p>}
-                 <p className="text-xs leading-none text-muted-foreground pt-2">UID: {user.uid}</p>
               </div>
             </DropdownMenuLabel>
             <DropdownMenuSeparator />
