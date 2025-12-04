@@ -4,6 +4,7 @@ import {useEffect, useState} from 'react';
 import {initializeApp, type FirebaseApp} from 'firebase/app';
 import {getAuth, type Auth} from 'firebase/auth';
 import {getFirestore, type Firestore} from 'firebase/firestore';
+import { getStorage, type FirebaseStorage } from 'firebase/storage';
 import {firebaseConfig} from './config';
 import {FirebaseProvider} from './provider';
 import { Loader2 } from 'lucide-react';
@@ -11,6 +12,7 @@ import { Loader2 } from 'lucide-react';
 let firebaseApp: FirebaseApp | null = null;
 let auth: Auth | null = null;
 let firestore: Firestore | null = null;
+let storage: FirebaseStorage | null = null;
 
 // This function is extracted to ensure it's only called on the client side.
 function getFirebaseInstances() {
@@ -19,10 +21,11 @@ function getFirebaseInstances() {
       firebaseApp = initializeApp(firebaseConfig);
       auth = getAuth(firebaseApp);
       firestore = getFirestore(firebaseApp);
+      storage = getStorage(firebaseApp);
     }
-    return {firebaseApp, auth, firestore};
+    return {firebaseApp, auth, firestore, storage};
   }
-  return {firebaseApp: null, auth: null, firestore: null};
+  return {firebaseApp: null, auth: null, firestore: null, storage: null};
 }
 
 /**
@@ -40,7 +43,7 @@ export function FirebaseClientProvider({children}: {children: React.ReactNode}) 
     }
   }, [instances.firebaseApp]);
 
-  if (!instances.firebaseApp || !instances.auth || !instances.firestore) {
+  if (!instances.firebaseApp || !instances.auth || !instances.firestore || !instances.storage) {
     // You can return a loading spinner here if you want.
     // Returning null until Firebase is initialized.
     return (
@@ -55,8 +58,11 @@ export function FirebaseClientProvider({children}: {children: React.ReactNode}) 
       firebaseApp={instances.firebaseApp}
       auth={instances.auth}
       firestore={instances.firestore}
+      storage={instances.storage}
     >
       {children}
     </FirebaseProvider>
   );
 }
+
+    

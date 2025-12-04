@@ -13,9 +13,9 @@ import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { BRANDS, PRODUCT_TYPES } from '@/lib/constants';
 import type { Product } from '@/lib/types';
-import { useFirestore } from '@/firebase';
+import { useFirestore, useStorage } from '@/firebase';
 import { doc, setDoc, collection, serverTimestamp } from 'firebase/firestore';
-import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
+import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { useToast } from '@/hooks/use-toast';
 import { Loader2, UploadCloud, X } from 'lucide-react';
 import Image from 'next/image';
@@ -48,6 +48,7 @@ export function ProductFormDialog({ isOpen, onOpenChange, product }: ProductForm
   const [existingImageUrls, setExistingImageUrls] = useState<string[]>([]);
 
   const firestore = useFirestore();
+  const storage = useStorage();
   const { toast } = useToast();
   const router = useRouter();
   
@@ -111,8 +112,8 @@ export function ProductFormDialog({ isOpen, onOpenChange, product }: ProductForm
 
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
-    if (!firestore) {
-        toast({ title: 'Error', description: 'Database not available.', variant: 'destructive' });
+    if (!firestore || !storage) {
+        toast({ title: 'Error', description: 'Database or Storage not available.', variant: 'destructive' });
         return;
     }
     
@@ -125,7 +126,7 @@ export function ProductFormDialog({ isOpen, onOpenChange, product }: ProductForm
         // 1. Upload new images and get their URLs
         const newUploadedUrls = await Promise.all(
             newImageFiles.map(async (imageFile) => {
-                const imageRef = ref(getStorage(), `products/${productId}/${Date.now()}-${imageFile.file.name}`);
+                const imageRef = ref(storage, `products/${productId}/${Date.now()}-${imageFile.file.name}`);
                 const snapshot = await uploadBytes(imageRef, imageFile.file);
                 return getDownloadURL(snapshot.ref);
             })
@@ -357,5 +358,7 @@ export function ProductFormDialog({ isOpen, onOpenChange, product }: ProductForm
     </Dialog>
   );
 }
+
+    
 
     

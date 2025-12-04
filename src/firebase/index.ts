@@ -9,6 +9,7 @@ import {
   useFirebaseApp,
   useAuth,
   useFirestore,
+  useStorage,
 } from './provider';
 import { useUser } from './auth/use-user';
 import { useOrders } from './firestore/use-orders';
@@ -21,7 +22,10 @@ export {
     useFirebaseApp,
     useAuth,
     useFirestore,
+    useStorage,
     useUser,
     useOrders,
     useAdmin,
 };
+
+    
