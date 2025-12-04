@@ -121,7 +121,6 @@ export function Header() {
                 {user.displayName && <p className="text-xs leading-none text-muted-foreground">
                   {user.email}
                 </p>}
-                 <p className="text-xs leading-none text-muted-foreground pt-2">UID: {user.uid}</p>
               </div>
             </DropdownMenuLabel>
             <DropdownMenuSeparator />
@@ -180,8 +179,7 @@ export function Header() {
                     {navLinks.map((link) => 
                       link.submenu ? (
                         <Collapsible key={link.label} className="flex flex-col space-y-1">
-                           <CollapsibleTrigger asChild>
-                             <div className='flex items-center justify-between w-full py-2'>
+                           <CollapsibleTrigger className='flex items-center justify-between w-full py-2'>
                               <span
                                   className={cn(
                                   'font-medium transition-colors hover:text-foreground/80 flex-1 text-left',
@@ -191,7 +189,6 @@ export function Header() {
                                   {link.label}
                                 </span>
                                 <ChevronDown className="h-5 w-5 shrink-0 transition-transform duration-200" />
-                              </div>
                            </CollapsibleTrigger>
                           <CollapsibleContent>
                             <div className="flex flex-col pl-6 space-y-2 mt-2 border-l-2 ml-2">
