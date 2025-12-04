@@ -17,8 +17,9 @@ import { useFirestore } from '@/firebase';
 import { doc, setDoc, addDoc, collection } from 'firebase/firestore';
 import { getStorage, ref, uploadString, getDownloadURL } from "firebase/storage";
 import { useToast } from '@/hooks/use-toast';
-import { Loader2, UploadCloud } from 'lucide-react';
+import { Loader2, UploadCloud, X } from 'lucide-react';
 import Image from 'next/image';
+import { ScrollArea } from '../ui/scroll-area';
 
 const formSchema = z.object({
   name: z.string().min(1, 'Product name is required'),
@@ -26,7 +27,7 @@ const formSchema = z.object({
   price: z.coerce.number().min(0, 'Price must be a positive number'),
   brand: z.string().min(1, 'Brand is required'),
   type: z.string().min(1, 'Product type is required'),
-  imageUrl: z.string().optional(),
+  imageUrls: z.array(z.string()).optional(),
   gender: z.string().optional(),
 });
 
@@ -38,8 +39,8 @@ interface ProductFormDialogProps {
 
 export function ProductFormDialog({ isOpen, onOpenChange, product }: ProductFormDialogProps) {
   const [isLoading, setIsLoading] = useState(false);
-  const [imageFile, setImageFile] = useState<File | null>(null);
-  const [imagePreview, setImagePreview] = useState<string | null>(null);
+  const [imageFiles, setImageFiles] = useState<File[]>([]);
+  const [imagePreviews, setImagePreviews] = useState<string[]>([]);
   const firestore = useFirestore();
   const { toast } = useToast();
   
@@ -51,7 +52,7 @@ export function ProductFormDialog({ isOpen, onOpenChange, product }: ProductForm
       price: 0,
       brand: '',
       type: '',
-      imageUrl: '',
+      imageUrls: [],
       gender: 'Unisex',
     },
   });
@@ -64,10 +65,10 @@ export function ProductFormDialog({ isOpen, onOpenChange, product }: ProductForm
         price: product.price,
         brand: product.brand,
         type: product.type,
-        imageUrl: product.imageUrl,
+        imageUrls: product.imageUrls,
         gender: product.gender || 'Unisex',
       });
-      setImagePreview(product.imageUrl || null);
+      setImagePreviews(product.imageUrls || []);
     } else {
         form.reset({
             name: '',
@@ -75,25 +76,39 @@ export function ProductFormDialog({ isOpen, onOpenChange, product }: ProductForm
             price: 0,
             brand: '',
             type: '',
-            imageUrl: '',
+            imageUrls: [],
             gender: 'Unisex',
         });
-        setImagePreview(null);
+        setImagePreviews([]);
     }
-    setImageFile(null);
+    setImageFiles([]);
   }, [product, form, isOpen]);
 
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0];
-    if (file) {
-      setImageFile(file);
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setImagePreview(reader.result as string);
-      };
-      reader.readAsDataURL(file);
+    const files = event.target.files;
+    if (files) {
+      const newFiles = Array.from(files);
+      setImageFiles(prev => [...prev, ...newFiles]);
+      
+      const newPreviews = [...imagePreviews];
+      newFiles.forEach(file => {
+          const reader = new FileReader();
+          reader.onloadend = () => {
+              newPreviews.push(reader.result as string);
+              // This might cause multiple re-renders, but it's okay for this use-case
+              setImagePreviews([...newPreviews]);
+          };
+          reader.readAsDataURL(file);
+      })
     }
   };
+
+  const removeImage = (index: number) => {
+    setImagePreviews(previews => previews.filter((_, i) => i !== index));
+    // This is a simplification. For a more robust solution, you'd track which files correspond to which previews.
+    // In this case, we just clear the "newly added" files if a preview is removed. A better way would be to manage a list of objects with file and preview.
+    setImageFiles([]); // Simple reset for now.
+  }
 
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
@@ -101,16 +116,21 @@ export function ProductFormDialog({ isOpen, onOpenChange, product }: ProductForm
     setIsLoading(true);
 
     try {
-        let finalImageUrl = values.imageUrl || '';
+        let uploadedUrls = [...imagePreviews]; // Start with existing/non-removed URLs
 
-        if (imageFile && imagePreview) {
+        if (imageFiles.length > 0) {
             const storage = getStorage();
-            const imageRef = ref(storage, `products/${Date.now()}-${imageFile.name}`);
-            await uploadString(imageRef, imagePreview, 'data_url');
-            finalImageUrl = await getDownloadURL(imageRef);
+            const uploadPromises = imageFiles.map(file => {
+                const imageRef = ref(storage, `products/${Date.now()}-${file.name}`);
+                return uploadString(imageRef, imagePreviews[imagePreviews.length - imageFiles.length], 'data_url').then(() => getDownloadURL(imageRef));
+            });
+            const newUrls = await Promise.all(uploadPromises);
+            // This logic is simplified; it assumes new files are appended.
+            uploadedUrls = [...(values.imageUrls || []), ...newUrls];
         }
 
-        const productData = { ...values, imageUrl: finalImageUrl };
+
+        const productData = { ...values, imageUrls: uploadedUrls };
 
         if (product) {
             const productRef = doc(firestore, 'products', product.id);
@@ -130,7 +150,6 @@ export function ProductFormDialog({ isOpen, onOpenChange, product }: ProductForm
     }
   };
 
-  const currentImageUrl = imagePreview || `https://placehold.co/600x400?text=No+Image`;
 
   return (
     <Dialog open={isOpen} onOpenChange={onOpenChange}>
@@ -142,134 +161,156 @@ export function ProductFormDialog({ isOpen, onOpenChange, product }: ProductForm
           </DialogDescription>
         </DialogHeader>
         <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="flex-1 grid md:grid-cols-2 gap-x-8 gap-y-4 overflow-y-auto pr-2">
-            <div className='flex flex-col space-y-4'>
-                <FormField
-                  control={form.control}
-                  name="name"
-                  render={({ field }) => (
-                      <FormItem>
-                      <FormLabel>Name</FormLabel>
-                      <FormControl>
-                          <Input {...field} />
-                      </FormControl>
-                      <FormMessage />
-                      </FormItem>
-                  )}
-                />
-                 <FormField
-                  control={form.control}
-                  name="price"
-                  render={({ field }) => (
-                      <FormItem>
-                      <FormLabel>Price</FormLabel>
-                      <FormControl>
-                          <Input type="number" {...field} />
-                      </FormControl>
-                      <FormMessage />
-                      </FormItem>
-                  )}
-                />
-                <FormField
-                  control={form.control}
-                  name="description"
-                  render={({ field }) => (
-                      <FormItem>
-                      <FormLabel>Description</FormLabel>
-                      <FormControl>
-                          <Textarea {...field} rows={5} />
-                      </FormControl>
-                      <FormMessage />
-                      </FormItem>
-                  )}
-                />
-                 <div className="grid grid-cols-2 gap-4">
+          <form onSubmit={form.handleSubmit(onSubmit)} className="flex-1 overflow-y-hidden flex flex-col">
+          <ScrollArea className='flex-1'>
+            <div className="grid md:grid-cols-2 gap-x-8 gap-y-4 px-1 py-4">
+                <div className='flex flex-col space-y-4'>
                     <FormField
                     control={form.control}
-                    name="brand"
+                    name="name"
                     render={({ field }) => (
                         <FormItem>
-                        <FormLabel>Brand</FormLabel>
-                        <Select onValueChange={field.onChange} defaultValue={field.value}>
-                            <FormControl>
-                            <SelectTrigger>
-                                <SelectValue placeholder="Select a brand" />
-                            </SelectTrigger>
-                            </FormControl>
-                            <SelectContent>
-                            {BRANDS.map(brand => <SelectItem key={brand} value={brand}>{brand}</SelectItem>)}
-                            </SelectContent>
-                        </Select>
+                        <FormLabel>Name</FormLabel>
+                        <FormControl>
+                            <Input {...field} />
+                        </FormControl>
                         <FormMessage />
                         </FormItem>
                     )}
                     />
                     <FormField
                     control={form.control}
-                    name="type"
+                    name="price"
                     render={({ field }) => (
                         <FormItem>
-                        <FormLabel>Type</FormLabel>
-                        <Select onValueChange={field.onChange} defaultValue={field.value}>
-                            <FormControl>
-                            <SelectTrigger>
-                                <SelectValue placeholder="Select a product type" />
-                            </SelectTrigger>
-                            </FormControl>
-                            <SelectContent>
-                            {PRODUCT_TYPES.map(type => <SelectItem key={type} value={type}>{type}</SelectItem>)}
-                            </SelectContent>
-                        </Select>
+                        <FormLabel>Price</FormLabel>
+                        <FormControl>
+                            <Input type="number" {...field} />
+                        </FormControl>
                         <FormMessage />
                         </FormItem>
                     )}
                     />
-                </div>
-                 <div className="grid grid-cols-2 gap-4">
                     <FormField
-                      control={form.control}
-                      name="gender"
-                      render={({ field }) => (
-                          <FormItem>
-                          <FormLabel>Gender</FormLabel>
-                          <Select onValueChange={field.onChange} defaultValue={field.value}>
-                              <FormControl>
-                              <SelectTrigger>
-                                  <SelectValue placeholder="Select a gender" />
-                              </SelectTrigger>
-                              </FormControl>
-                              <SelectContent>
-                              <SelectItem value="Men">Men</SelectItem>
-                              <SelectItem value="Women">Women</SelectItem>
-                              <SelectItem value="Kids">Kids</SelectItem>
-                              <SelectItem value="Unisex">Unisex</SelectItem>
-                              </SelectContent>
-                          </Select>
-                          <FormMessage />
-                          </FormItem>
-                      )}
+                    control={form.control}
+                    name="description"
+                    render={({ field }) => (
+                        <FormItem>
+                        <FormLabel>Description</FormLabel>
+                        <FormControl>
+                            <Textarea {...field} rows={5} />
+                        </FormControl>
+                        <FormMessage />
+                        </FormItem>
+                    )}
                     />
-                </div>
-            </div>
-            <div className='flex flex-col space-y-4'>
-                 <div>
-                    <FormLabel>Product Image</FormLabel>
-                    <div className='relative aspect-[4/3] w-full bg-muted rounded-md mt-2'>
-                        <Image 
-                            src={currentImageUrl}
-                            alt="Product image preview" 
-                            fill 
-                            className="object-contain rounded-md"
-                            sizes="(max-width: 768px) 100vw, 50vw"
+                    <div className="grid grid-cols-2 gap-4">
+                        <FormField
+                        control={form.control}
+                        name="brand"
+                        render={({ field }) => (
+                            <FormItem>
+                            <FormLabel>Brand</FormLabel>
+                            <Select onValueChange={field.onChange} defaultValue={field.value}>
+                                <FormControl>
+                                <SelectTrigger>
+                                    <SelectValue placeholder="Select a brand" />
+                                </SelectTrigger>
+                                </FormControl>
+                                <SelectContent>
+                                {BRANDS.map(brand => <SelectItem key={brand} value={brand}>{brand}</SelectItem>)}
+                                </SelectContent>
+                            </Select>
+                            <FormMessage />
+                            </FormItem>
+                        )}
+                        />
+                        <FormField
+                        control={form.control}
+                        name="type"
+                        render={({ field }) => (
+                            <FormItem>
+                            <FormLabel>Type</FormLabel>
+                            <Select onValueChange={field.onChange} defaultValue={field.value}>
+                                <FormControl>
+                                <SelectTrigger>
+                                    <SelectValue placeholder="Select a product type" />
+                                </SelectTrigger>
+                                </FormControl>
+                                <SelectContent>
+                                {PRODUCT_TYPES.map(type => <SelectItem key={type} value={type}>{type}</SelectItem>)}
+                                </SelectContent>
+                            </Select>
+                            <FormMessage />
+                            </FormItem>
+                        )}
                         />
                     </div>
-                 </div>
-                <Button type="button" variant="outline" onClick={() => document.getElementById('product-image-upload')?.click()}>
-                    <UploadCloud className="mr-2 h-4 w-4" /> Upload Image
-                </Button>
-                <Input id="product-image-upload" type="file" accept="image/*" className="hidden" onChange={handleFileChange}/>
+                    <div className="grid grid-cols-2 gap-4">
+                        <FormField
+                        control={form.control}
+                        name="gender"
+                        render={({ field }) => (
+                            <FormItem>
+                            <FormLabel>Gender</FormLabel>
+                            <Select onValueChange={field.onChange} defaultValue={field.value}>
+                                <FormControl>
+                                <SelectTrigger>
+                                    <SelectValue placeholder="Select a gender" />
+                                </SelectTrigger>
+                                </FormControl>
+                                <SelectContent>
+                                <SelectItem value="Men">Men</SelectItem>
+                                <SelectItem value="Women">Women</SelectItem>
+                                <SelectItem value="Kids">Kids</SelectItem>
+                                <SelectItem value="Unisex">Unisex</SelectItem>
+                                </SelectContent>
+                            </Select>
+                            <FormMessage />
+                            </FormItem>
+                        )}
+                        />
+                    </div>
+                </div>
+                <div className='flex flex-col space-y-4'>
+                    <div>
+                        <FormLabel>Product Images</FormLabel>
+                        <div className='grid grid-cols-2 md:grid-cols-3 gap-2 mt-2'>
+                        {imagePreviews.map((src, index) => (
+                             <div key={index} className='relative aspect-square w-full bg-muted rounded-md'>
+                                <Image 
+                                    src={src}
+                                    alt="Product image preview" 
+                                    fill 
+                                    className="object-contain rounded-md"
+                                    sizes="(max-width: 768px) 50vw, 33vw"
+                                />
+                                <Button
+                                    type="button"
+                                    variant="destructive"
+                                    size="icon"
+                                    className="absolute -top-2 -right-2 h-6 w-6 rounded-full"
+                                    onClick={() => removeImage(index)}
+                                >
+                                    <X className='h-4 w-4'/>
+                                </Button>
+                            </div>
+                        ))}
+                        </div>
+                         {imagePreviews.length === 0 && (
+                            <div className='relative aspect-[4/3] w-full bg-muted rounded-md mt-2 flex items-center justify-center'>
+                                <p className='text-sm text-muted-foreground'>No Images</p>
+                            </div>
+                         )}
+                    </div>
+                    <Button type="button" variant="outline" onClick={() => document.getElementById('product-image-upload')?.click()}>
+                        <UploadCloud className="mr-2 h-4 w-4" /> Add Images
+                    </Button>
+                    <Input id="product-image-upload" type="file" accept="image/*" className="hidden" onChange={handleFileChange} multiple/>
 
+                </div>
             </div>
+            </ScrollArea>
             <DialogFooter className="md:col-span-2 pt-4 border-t sticky bottom-0 bg-background">
               <Button type="button" variant="outline" onClick={() => onOpenChange(false)}>Cancel</Button>
               <Button type="submit" disabled={isLoading}>

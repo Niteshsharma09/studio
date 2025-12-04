@@ -53,33 +53,19 @@ export function ProductDetailClientPage({ product, allProducts, lenses }: { prod
       return
     }
  
-    setCurrent(api.selectedScrollSnap())
+    setCurrent(api.selectedScrollSnap() + 1)
  
-    const handleSelect = (api: CarouselApi) => {
-      setCurrent(api.selectedScrollSnap())
-    }
-
-    api.on("select", handleSelect)
- 
-    return () => {
-      api.off("select", handleSelect)
-    }
+    api.on("select", () => {
+      setCurrent(api.selectedScrollSnap() + 1)
+    })
   }, [api])
 
-
-  const mainImageUrl = product?.imageUrl ?? `https://placehold.co/600x400?text=${product?.name.charAt(0)}`;
-
-   const thumbnails = useMemo(() => {
-    if (!product) return [];
-    // In a real app, you'd have multiple images for a product. Here, we'll just use the main one.
-    return [
-      mainImageUrl,
-      // You could add more placeholder images for a gallery effect
-      `https://picsum.photos/seed/${product.id}a/600/400`,
-      `https://picsum.photos/seed/${product.id}b/600/400`,
-      `https://picsum.photos/seed/${product.id}c/600/400`,
-    ];
-  }, [product, mainImageUrl]);
+  const mainImageUrls = useMemo(() => {
+    if (product?.imageUrls && product.imageUrls.length > 0) {
+        return product.imageUrls;
+    }
+    return [`https://placehold.co/600x400?text=${product?.name.charAt(0)}`];
+  }, [product]);
 
   const similarProducts = useMemo(() => {
     if (!product) return [];
@@ -191,7 +177,7 @@ export function ProductDetailClientPage({ product, allProducts, lenses }: { prod
             <div className="space-y-4">
                  <Carousel setApi={setApi} className="w-full">
                     <CarouselContent>
-                        {thumbnails.map((imgUrl, index) => (
+                        {mainImageUrls.map((imgUrl, index) => (
                         <CarouselItem key={index}>
                             <div className="relative aspect-[4/3] w-full">
                                 <Image 
@@ -209,14 +195,14 @@ export function ProductDetailClientPage({ product, allProducts, lenses }: { prod
                     <CarouselPrevious className="absolute left-4 top-1/2 -translate-y-1/2 z-10" />
                     <CarouselNext className="absolute right-4 top-1/2 -translate-y-1/2 z-10" />
                 </Carousel>
-                <div className="grid grid-cols-4 gap-4">
-                    {thumbnails.map((thumbUrl, index) => (
+                <div className="grid grid-cols-5 gap-2">
+                    {mainImageUrls.map((thumbUrl, index) => (
                         <button
                             key={index}
                             onClick={() => api?.scrollTo(index)}
                             className={cn(
                                 'relative aspect-square w-full rounded-md border-2 transition-all duration-200',
-                                current === index ? 'border-primary shadow-md' : 'border-transparent opacity-70 hover:opacity-100'
+                                current === index + 1 ? 'border-primary shadow-md' : 'border-transparent opacity-70 hover:opacity-100'
                             )}
                         >
                             <Image

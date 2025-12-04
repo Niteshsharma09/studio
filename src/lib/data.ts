@@ -21,12 +21,18 @@ export const getProducts = cache(
                 return products;
             } else {
                 // Fallback to local data if firestore is empty
-                return PRODUCTS_DATA;
+                return PRODUCTS_DATA.map(p => ({
+                    ...p,
+                    imageUrls: p.imageUrl ? [p.imageUrl] : [],
+                }));
             }
         } catch (error) {
             console.error("Failed to fetch products from Firestore:", error);
             // Fallback to local data if Firestore fails
-            return PRODUCTS_DATA;
+            return PRODUCTS_DATA.map(p => ({
+                ...p,
+                imageUrls: p.imageUrl ? [p.imageUrl] : [],
+            }));
         }
     },
     ['products'],

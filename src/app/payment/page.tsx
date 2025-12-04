@@ -199,7 +199,7 @@ export default function PaymentPage() {
                 </CardHeader>
                 <CardContent className="space-y-4">
                     {cartItems.map(item => {
-                        const imageUrl = item.product.imageUrl || `https://placehold.co/64x64?text=${item.product.name.charAt(0)}`;
+                        const imageUrl = (item.product.imageUrls && item.product.imageUrls.length > 0) ? item.product.imageUrls[0] : `https://placehold.co/64x64?text=${item.product.name.charAt(0)}`;
                         return (
                             <div key={item.product.id} className="flex justify-between items-center">
                                 <div className="flex items-center gap-4">
