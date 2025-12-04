@@ -11,6 +11,8 @@ import { ai } from '@/ai/genkit';
 import { z } from 'genkit';
 import { getAuth } from 'firebase-admin/auth';
 import { initializeApp, getApps, cert, App } from 'firebase-admin/app';
+import * as fs from 'fs';
+import * as path from 'path';
 
 const SetAdminInputSchema = z.object({
   uid: z.string().describe("The User ID (UID) to grant admin privileges to."),
@@ -23,13 +25,45 @@ const SetAdminOutputSchema = z.object({
 });
 export type SetAdminOutput = z.infer<typeof SetAdminOutputSchema>;
 
+function getServiceAccountKeyManually(): string | undefined {
+    try {
+        const envPath = path.resolve(process.cwd(), '.env');
+        if (!fs.existsSync(envPath)) {
+            console.error('.env file not found in project root.');
+            return undefined;
+        }
+        
+        const envFileContent = fs.readFileSync(envPath, 'utf8');
+        const match = envFileContent.match(/^FIREBASE_SERVICE_ACCOUNT_KEY=(.*)$/m);
+        
+        if (match && match[1]) {
+            // Remove potential wrapping quotes if they exist
+            let key = match[1];
+            if ((key.startsWith('"') && key.endsWith('"')) || (key.startsWith('\'') && key.endsWith('\''))) {
+                key = key.substring(1, key.length - 1);
+            }
+            return key;
+        }
+        return undefined;
+    } catch (e) {
+        console.error("Error manually reading .env file:", e);
+        return undefined;
+    }
+}
+
+
 // Ensure Firebase Admin is initialized securely
 function initializeFirebaseAdmin(): App | undefined {
     if (getApps().length > 0) {
         return getApps()[0];
     }
     
-    const serviceAccountKey = process.env.FIREBASE_SERVICE_ACCOUNT_KEY;
+    // Prioritize environment variable, but fall back to manual read.
+    let serviceAccountKey = process.env.FIREBASE_SERVICE_ACCOUNT_KEY;
+
+    if (!serviceAccountKey) {
+       serviceAccountKey = getServiceAccountKeyManually();
+    }
 
     if (!serviceAccountKey) {
         console.error("FIREBASE_SERVICE_ACCOUNT_KEY not found. Admin features will not work.");
