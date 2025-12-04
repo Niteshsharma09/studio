@@ -138,7 +138,6 @@ export function ProductFormDialog({ isOpen, onOpenChange, product }: ProductForm
         const productData = { 
             ...values,
             id: productId,
-            imageId: productId, // Still required by backend.json schema for now
             imageUrls: finalImageUrls,
             ...(isNewProduct && { createdAt: serverTimestamp() }),
         };
