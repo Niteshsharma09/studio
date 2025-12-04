@@ -5,7 +5,6 @@
 import { Suspense, useMemo } from 'react';
 import { ProductCard } from '@/components/product-card';
 import Image from 'next/image';
-import { PlaceHolderImages } from '@/lib/placeholder-images';
 import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
 import type { Product } from '@/lib/types';
@@ -30,32 +29,32 @@ const HeroSection = () => {
 
     const slides = [
         {
-            desktopImageId: 'hero-carousel-1-desktop',
-            mobileImageId: 'hero-carousel-1-mobile',
+            desktopImageUrl: "https://images.unsplash.com/photo-1511499767150-a48a237f0083?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHxmYXNoaW9uJTIwbW9kZWwlMjBzdW5nbGFzc2VzfGVufDB8fHx8MTc2NDc0ODExNHww&ixlib=rb-4.1.0&q=80&w=1920",
+            mobileImageUrl: "https://images.unsplash.com/photo-1511499767150-a48a237f0083?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHxmYXNoaW9uJTIwbW9kZWwlMjBzdW5nbGFzc2VzfGVufDB8fHx8MTc2NDc0ODExNHww&ixlib=rb-4.1.0&q=80&w=800",
             title: 'Clarity in Sight, Style in Mind',
             subtitle: 'Discover our exclusive collection of premium eyewear, crafted with precision for unparalleled comfort and style.',
             buttonText: 'Shop The Collection',
             buttonLink: '/#featured',
         },
         {
-            desktopImageId: 'hero-carousel-bogo-desktop',
-            mobileImageId: 'hero-carousel-bogo-mobile',
+            desktopImageUrl: 'https://images.unsplash.com/photo-1585486451366-5b5b9520797e?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwzfHxzcGVjdGFjbGUlMjBmcmFtZXN8ZW58MHx8fHwxNzY0MzQ1MjUyfDA&ixlib=rb-4.1.0&q=80&w=1920',
+            mobileImageUrl: 'https://images.unsplash.com/photo-1585486451366-5b5b9520797e?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwzfHxzcGVjdGFjbGUlMjBmcmFtZXN8ZW58MHx8fHwxNzY0MzQ1MjUyfDA&ixlibrb-4.1.0&q=80&w=800',
             title: 'Buy One, Get One Free',
             subtitle: 'Select two frames from Titan or Fastrack, and get the second one on us. Perfect for a new look or a spare pair.',
             buttonText: 'Shop The BOGO Sale',
             buttonLink: '/?category=frames&brands=titan,fastrack',
         },
         {
-            desktopImageId: 'hero-carousel-2-desktop',
-            mobileImageId: 'hero-carousel-2-mobile',
+            desktopImageUrl: 'https://images.unsplash.com/photo-1574494349420-ecf8ccbff974?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw0fHxleWV3ZWFyJTIwZmFzaGlvbnxlbnwwfHx8fDE3NjQ3NDgxMTR8MA&ixlib=rb-4.1.0&q=80&w=1920',
+            mobileImageUrl: 'https://images.unsplash.com/photo-1574494349420-ecf8ccbff974?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw0fHxleWV3ZWFyJTIwZmFzaGlvbnxlbnwwfHx8fDE3NjQ3NDgxMTR8MA&ixlib=rb-4.1.0&q=80&w=800',
             title: 'Advanced Lens Technology',
             subtitle: 'Experience the world in high definition with our cutting-edge lens options, from blue light filtering to photochromic.',
             buttonText: 'Explore Lenses',
             buttonLink: '/?category=lenses',
         },
         {
-            desktopImageId: 'hero-carousel-3-desktop',
-            mobileImageId: 'hero-carousel-3-mobile',
+            desktopImageUrl: 'https://images.unsplash.com/photo-1611012595366-18cf16280487?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw1fHxnbGFzc2VzJTIwY29sbGVjdGlvbnxlbnwwfHx8fDE3NjQ3NDgxMTR8MA&ixlib=rb-4.1.0&q=80&w=1920',
+            mobileImageUrl: 'https://images.unsplash.com/photo-1611012595366-18cf16280487?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw1fHxnbGFzc2VzJTIwY29sbGVjdGlvbnxlbnwwfHx8fDE3NjQ3NDgxMTR8MA&ixlib=rb-4.1.0&q=80&w=800',
             title: 'Sunglasses for Every Season',
             subtitle: 'Protect your eyes and elevate your look with our diverse range of sunglasses, featuring 100% UV protection.',
             buttonText: 'View Sunglasses',
@@ -73,31 +72,23 @@ const HeroSection = () => {
             >
                 <CarouselContent className="h-full">
                     {slides.map((slide, index) => {
-                        const desktopImage = PlaceHolderImages.find(p => p.id === slide.desktopImageId);
-                        const mobileImage = PlaceHolderImages.find(p => p.id === slide.mobileImageId);
                         return (
                             <CarouselItem key={index} className="h-full">
                                 <div className="w-full h-full relative">
-                                    {desktopImage && (
-                                        <Image
-                                            src={desktopImage.imageUrl}
-                                            alt={desktopImage.description}
-                                            fill
-                                            className="object-cover hidden md:block animate-zoom-in"
-                                            data-ai-hint={desktopImage.imageHint}
-                                            priority={index === 0}
-                                        />
-                                    )}
-                                    {mobileImage && (
-                                        <Image
-                                            src={mobileImage.imageUrl}
-                                            alt={mobileImage.description}
-                                            fill
-                                            className="object-cover md:hidden animate-zoom-in"
-                                            data-ai-hint={mobileImage.imageHint}
-                                            priority={index === 0}
-                                        />
-                                    )}
+                                    <Image
+                                        src={slide.desktopImageUrl}
+                                        alt={slide.title}
+                                        fill
+                                        className="object-cover hidden md:block animate-zoom-in"
+                                        priority={index === 0}
+                                    />
+                                    <Image
+                                        src={slide.mobileImageUrl}
+                                        alt={slide.title}
+                                        fill
+                                        className="object-cover md:hidden animate-zoom-in"
+                                        priority={index === 0}
+                                    />
                                     <div className="absolute inset-0 bg-black/50" />
                                     <div className="absolute inset-0 z-10 flex flex-col items-center justify-center text-center p-4 text-white">
                                         <div className="max-w-3xl animate-fade-in-up">
@@ -136,19 +127,16 @@ const PromoBanner = () => {
     )
 }
 
-const CategoryCard = ({ title, imageId, href }: { title: string, imageId: string, href: string }) => {
-    const placeholder = PlaceHolderImages.find(p => p.id === imageId);
+const CategoryCard = ({ title, imageUrl, href }: { title: string, imageUrl: string, href: string }) => {
     return (
         <Link href={href} className="group relative block w-full h-48 md:h-64 overflow-hidden rounded-lg shadow-lg animate-fade-in-up">
-             {placeholder && (
-                <Image
-                    src={placeholder.imageUrl}
-                    alt={title}
-                    fill
-                    className="object-cover transition-transform duration-500 ease-in-out group-hover:scale-110"
-                    sizes="(max-width: 768px) 100vw, 50vw"
-                />
-            )}
+            <Image
+                src={imageUrl}
+                alt={title}
+                fill
+                className="object-cover transition-transform duration-500 ease-in-out group-hover:scale-110"
+                sizes="(max-width: 768px) 100vw, 50vw"
+            />
             <div className="absolute inset-0 bg-black/40 transition-colors duration-300 group-hover:bg-black/20" />
             <div className="absolute inset-0 flex items-center justify-center">
                 <h3 className="text-2xl font-bold text-white tracking-wider">{title}</h3>
@@ -258,10 +246,10 @@ function FeaturedProducts({ allProducts }: { allProducts: Product[] }) {
 
 export function HomePageContent({ allProducts }: { allProducts: Product[] }) {
     const categories = [
-        { title: 'Eyeglasses', imageId: 'category-eyeglasses', href: '/?category=frames' },
-        { title: 'Sunglasses', imageId: 'category-sunglasses', href: '/?category=sunglasses' },
-        { title: 'Lenses', imageId: 'category-lenses', href: '/?category=lenses' },
-        { title: 'Contact Lenses', imageId: 'contact-monthly-wear', href: '/?category=contact-lenses' },
+        { title: 'Eyeglasses', imageUrl: 'https://images.unsplash.com/photo-1574494349420-ecf8ccbff974?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxMHx8ZXllZ2xhc3Nlc3xlbnwwfHx8fDE3NjQzNDUyNTJ8MA&ixlib=rb-4.1.0&q=80&w=600', href: '/?category=frames' },
+        { title: 'Sunglasses', imageUrl: 'https://images.unsplash.com/photo-1511499767150-a48a237f0083?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw4fHxzdW5nbGFzc2VzfGVufDB8fHx8MTc2NDMzMDA0Mnww&ixlib=rb-4.1.0&q=80&w=600', href: '/?category=sunglasses' },
+        { title: 'Lenses', imageUrl: 'https://images.unsplash.com/photo-1608498522396-18d45a7e6b48?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxleWVnbGFzcyUyMGxlbnNlcyUyMHN0YWNrfGVufDB8fHx8MTc2NDk5Mjk0Nnww&ixlib=rb-4.1.0&q=80&w=600', href: '/?category=lenses' },
+        { title: 'Contact Lenses', imageUrl: 'https://images.unsplash.com/photo-1588863668858-3d7b63e9f45a?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHxjb250YWN0JTIwbGVucyUyMGNhc2V8ZW58MHx8fHwxNzY0OTc3Njc2fDA&ixlib=rb-4.1.0&q=80&w=600', href: '/?category=contact-lenses' },
     ]
     const searchParams = useSearchParams();
     const hasFilters = searchParams.has('brands') || searchParams.has('minPrice') || searchParams.has('maxPrice') || searchParams.has('q') || searchParams.has('category') || searchParams.has('gender');

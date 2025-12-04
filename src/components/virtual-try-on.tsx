@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useState, type ReactNode } from "react";
@@ -15,7 +16,6 @@ import { Input } from "@/components/ui/input";
 import { useToast } from "@/hooks/use-toast";
 import { virtualTryOn } from "@/ai/flows/virtual-try-on";
 import { convertImageToBase64 } from "@/lib/actions";
-import { PlaceHolderImages } from "@/lib/placeholder-images";
 import type { Product } from "@/lib/types";
 import Image from "next/image";
 import { Loader2, Camera } from "lucide-react";
@@ -58,11 +58,11 @@ export function VirtualTryOn({ children, product }: VirtualTryOnProps) {
     setResultImage(null);
 
     try {
-      const placeholder = PlaceHolderImages.find(p => p.id === product.imageId);
-      if (!placeholder) throw new Error("Product image not found.");
+      const productImageUrl = product.imageUrl;
+      if (!productImageUrl) throw new Error("Product image not found.");
 
       const [glassesDataUri, photoDataUri] = await Promise.all([
-        convertImageToBase64(placeholder.imageUrl),
+        convertImageToBase64(productImageUrl),
         Promise.resolve(userImage) // userImage is already a data URI
       ]);
 

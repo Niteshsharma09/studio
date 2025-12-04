@@ -15,10 +15,9 @@ import { BRANDS, PRODUCT_TYPES } from '@/lib/constants';
 import type { Product } from '@/lib/types';
 import { useFirestore } from '@/firebase';
 import { doc, setDoc, addDoc, collection } from 'firebase/firestore';
+import { getStorage, ref, uploadString, getDownloadURL } from "firebase/storage";
 import { useToast } from '@/hooks/use-toast';
-import { Loader2 } from 'lucide-react';
-import { ScrollArea } from '../ui/scroll-area';
-import { PlaceHolderImages } from '@/lib/placeholder-images';
+import { Loader2, UploadCloud } from 'lucide-react';
 import Image from 'next/image';
 
 const formSchema = z.object({
@@ -27,7 +26,7 @@ const formSchema = z.object({
   price: z.coerce.number().min(0, 'Price must be a positive number'),
   brand: z.string().min(1, 'Brand is required'),
   type: z.string().min(1, 'Product type is required'),
-  imageId: z.string().min(1, 'Image ID is required'),
+  imageUrl: z.string().optional(),
   gender: z.string().optional(),
 });
 
@@ -39,6 +38,8 @@ interface ProductFormDialogProps {
 
 export function ProductFormDialog({ isOpen, onOpenChange, product }: ProductFormDialogProps) {
   const [isLoading, setIsLoading] = useState(false);
+  const [imageFile, setImageFile] = useState<File | null>(null);
+  const [imagePreview, setImagePreview] = useState<string | null>(null);
   const firestore = useFirestore();
   const { toast } = useToast();
   
@@ -50,14 +51,10 @@ export function ProductFormDialog({ isOpen, onOpenChange, product }: ProductForm
       price: 0,
       brand: '',
       type: '',
-      imageId: '',
+      imageUrl: '',
       gender: 'Unisex',
     },
   });
-
-  const imageId = form.watch('imageId');
-  const imageUrl = PlaceHolderImages.find(p => p.id === imageId)?.imageUrl || `https://placehold.co/600x400?text=No+Image`;
-
 
   useEffect(() => {
     if (product) {
@@ -67,9 +64,10 @@ export function ProductFormDialog({ isOpen, onOpenChange, product }: ProductForm
         price: product.price,
         brand: product.brand,
         type: product.type,
-        imageId: product.imageId,
+        imageUrl: product.imageUrl,
         gender: product.gender || 'Unisex',
       });
+      setImagePreview(product.imageUrl || null);
     } else {
         form.reset({
             name: '',
@@ -77,31 +75,53 @@ export function ProductFormDialog({ isOpen, onOpenChange, product }: ProductForm
             price: 0,
             brand: '',
             type: '',
-            imageId: '',
+            imageUrl: '',
             gender: 'Unisex',
-        })
+        });
+        setImagePreview(null);
     }
+    setImageFile(null);
   }, [product, form, isOpen]);
+
+  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (file) {
+      setImageFile(file);
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setImagePreview(reader.result as string);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     if (!firestore) return;
     setIsLoading(true);
 
     try {
+        let finalImageUrl = values.imageUrl || '';
+
+        if (imageFile && imagePreview) {
+            const storage = getStorage();
+            const imageRef = ref(storage, `products/${Date.now()}-${imageFile.name}`);
+            await uploadString(imageRef, imagePreview, 'data_url');
+            finalImageUrl = await getDownloadURL(imageRef);
+        }
+
+        const productData = { ...values, imageUrl: finalImageUrl };
+
         if (product) {
-            // Update existing product
             const productRef = doc(firestore, 'products', product.id);
-            await setDoc(productRef, values, { merge: true });
+            await setDoc(productRef, productData, { merge: true });
             toast({ title: 'Product Updated', description: `${values.name} has been updated.` });
         } else {
-            // Create new product
             const productsCollection = collection(firestore, 'products');
-            await addDoc(productsCollection, values);
+            await addDoc(productsCollection, productData);
             toast({ title: 'Product Created', description: `${values.name} has been added.` });
         }
         onOpenChange(false);
-        // This won't auto-refresh since getProducts is cached, a full page reload or revalidation is needed.
-        // For this simple case, we'll rely on the user refreshing.
     } catch (e) {
         console.error("Product form submission error:", e);
         toast({ title: 'Error', description: 'Failed to save product.', variant: 'destructive' });
@@ -109,6 +129,8 @@ export function ProductFormDialog({ isOpen, onOpenChange, product }: ProductForm
         setIsLoading(false);
     }
   };
+
+  const currentImageUrl = imagePreview || `https://placehold.co/600x400?text=No+Image`;
 
   return (
     <Dialog open={isOpen} onOpenChange={onOpenChange}>
@@ -120,7 +142,7 @@ export function ProductFormDialog({ isOpen, onOpenChange, product }: ProductForm
           </DialogDescription>
         </DialogHeader>
         <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="flex-1 grid md:grid-cols-2 gap-x-8 gap-y-4 min-h-0">
+          <form onSubmit={form.handleSubmit(onSubmit)} className="flex-1 grid md:grid-cols-2 gap-x-8 gap-y-4 overflow-y-auto pr-2">
             <div className='flex flex-col space-y-4'>
                 <FormField
                   control={form.control}
@@ -230,31 +252,25 @@ export function ProductFormDialog({ isOpen, onOpenChange, product }: ProductForm
                 </div>
             </div>
             <div className='flex flex-col space-y-4'>
-                <FormField
-                  control={form.control}
-                  name="imageId"
-                  render={({ field }) => (
-                      <FormItem>
-                      <FormLabel>Image ID</FormLabel>
-                      <FormControl>
-                          <Input placeholder="e.g., classic-aviator" {...field} />
-                      </FormControl>
-                      <FormMessage />
-                      </FormItem>
-                  )}
-                />
-                <div className='relative aspect-[4/3] w-full bg-muted rounded-md'>
-                    <Image 
-                        src={imageUrl} 
-                        alt="Product image preview" 
-                        fill 
-                        className="object-contain rounded-md"
-                        sizes="(max-width: 768px) 100vw, 50vw"
-                    />
-                </div>
-                <p className="text-xs text-muted-foreground">The image preview will update based on the Image ID. You can find available IDs in the placeholder images data.</p>
+                 <div>
+                    <FormLabel>Product Image</FormLabel>
+                    <div className='relative aspect-[4/3] w-full bg-muted rounded-md mt-2'>
+                        <Image 
+                            src={currentImageUrl}
+                            alt="Product image preview" 
+                            fill 
+                            className="object-contain rounded-md"
+                            sizes="(max-width: 768px) 100vw, 50vw"
+                        />
+                    </div>
+                 </div>
+                <Button type="button" variant="outline" onClick={() => document.getElementById('product-image-upload')?.click()}>
+                    <UploadCloud className="mr-2 h-4 w-4" /> Upload Image
+                </Button>
+                <Input id="product-image-upload" type="file" accept="image/*" className="hidden" onChange={handleFileChange}/>
+
             </div>
-            <DialogFooter className="md:col-span-2 pt-4 border-t">
+            <DialogFooter className="md:col-span-2 pt-4 border-t sticky bottom-0 bg-background">
               <Button type="button" variant="outline" onClick={() => onOpenChange(false)}>Cancel</Button>
               <Button type="submit" disabled={isLoading}>
                 {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}

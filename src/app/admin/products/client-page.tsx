@@ -1,10 +1,10 @@
+
 'use client';
 import type { Product } from '@/lib/types';
 import { useState } from 'react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import Image from 'next/image';
-import { PlaceHolderImages } from '@/lib/placeholder-images';
 import { Badge } from '@/components/ui/badge';
 import {
   DropdownMenu,
@@ -93,7 +93,6 @@ export function AdminProductsClientPage({ products }: { products: Product[]}) {
                         </TableHeader>
                         <TableBody>
                             {products.map(product => {
-                                const placeholder = PlaceHolderImages.find(p => p.id === product.imageId);
                                 return (
                                 <TableRow key={product.id}>
                                     <TableCell className="hidden sm:table-cell">
@@ -101,7 +100,7 @@ export function AdminProductsClientPage({ products }: { products: Product[]}) {
                                             alt={product.name}
                                             className="aspect-square rounded-md object-cover"
                                             height="64"
-                                            src={placeholder?.imageUrl || '/placeholder.svg'}
+                                            src={product.imageUrl || `https://placehold.co/64x64?text=${product.name.charAt(0)}`}
                                             width="64"
                                         />
                                     </TableCell>

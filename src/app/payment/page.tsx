@@ -6,7 +6,6 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Separator } from "@/components/ui/separator";
 import Image from "next/image";
-import { PlaceHolderImages } from "@/lib/placeholder-images";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
@@ -200,17 +199,17 @@ export default function PaymentPage() {
                 </CardHeader>
                 <CardContent className="space-y-4">
                     {cartItems.map(item => {
-                        const placeholder = PlaceHolderImages.find(p => p.id === item.product.imageId);
+                        const imageUrl = item.product.imageUrl || `https://placehold.co/64x64?text=${item.product.name.charAt(0)}`;
                         return (
                             <div key={item.product.id} className="flex justify-between items-center">
                                 <div className="flex items-center gap-4">
-                                    {placeholder && <Image
-                                        src={placeholder.imageUrl}
+                                    <Image
+                                        src={imageUrl}
                                         alt={item.product.name}
                                         width={64}
                                         height={64}
                                         className="rounded-md"
-                                    />}
+                                    />
                                     <div>
                                         <p className="font-medium">{item.product.name}</p>
                                         <p className="text-sm text-muted-foreground">Qty: {item.quantity}</p>

@@ -4,7 +4,6 @@
 import { useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/button';
 import { useCart } from '@/context/cart-context';
-import { PlaceHolderImages } from '@/lib/placeholder-images';
 import { Star, ShieldCheck, Zap, MapPin, Loader2, Undo2, ShoppingCart } from 'lucide-react';
 import { useState, useMemo, useEffect } from 'react';
 import { Input } from '@/components/ui/input';
@@ -68,14 +67,14 @@ export function ProductDetailClientPage({ product, allProducts, lenses }: { prod
   }, [api])
 
 
-  const placeholder = PlaceHolderImages.find(p => p.id === product?.imageId);
-  const mainImageUrl = placeholder?.imageUrl ?? `https://picsum.photos/seed/${product?.id}/600/400`;
+  const mainImageUrl = product?.imageUrl ?? `https://placehold.co/600x400?text=${product?.name.charAt(0)}`;
 
    const thumbnails = useMemo(() => {
     if (!product) return [];
-    // Using placeholder images for thumbnails. In a real app, these would be different product shots.
+    // In a real app, you'd have multiple images for a product. Here, we'll just use the main one.
     return [
       mainImageUrl,
+      // You could add more placeholder images for a gallery effect
       `https://picsum.photos/seed/${product.id}a/600/400`,
       `https://picsum.photos/seed/${product.id}b/600/400`,
       `https://picsum.photos/seed/${product.id}c/600/400`,

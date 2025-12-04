@@ -5,7 +5,6 @@ import { useCart } from "@/context/cart-context";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import Image from "next/image";
-import { PlaceHolderImages } from "@/lib/placeholder-images";
 import { Card, CardContent, CardHeader, CardTitle, CardFooter } from "@/components/ui/card";
 import { ArrowRight, Loader2, MapPin, Pencil } from "lucide-react";
 import { useRouter } from "next/navigation";
@@ -79,18 +78,18 @@ export default function OrderSummaryPage() {
                     </CardHeader>
                     <CardContent className="space-y-4">
                         {cartItems.map(item => {
-                            const placeholder = PlaceHolderImages.find(p => p.id === item.product.imageId);
+                            const imageUrl = item.product.imageUrl || `https://placehold.co/60x60?text=${item.product.name.charAt(0)}`;
                             const itemPrice = item.product.price + (item.lens?.price ?? 0);
                             return (
                                 <div key={`${item.product.id}-${item.lens?.id || ''}`} className="flex justify-between items-center">
                                     <div className="flex items-center gap-4">
-                                        {placeholder && <Image
-                                            src={placeholder.imageUrl}
+                                        <Image
+                                            src={imageUrl}
                                             alt={item.product.name}
                                             width={60}
                                             height={60}
                                             className="rounded-md border"
-                                        />}
+                                        />
                                         <div>
                                             <p className="font-medium">{item.product.name}</p>
                                             {item.lens && <p className="text-sm text-muted-foreground">+ {item.lens.name}</p>}

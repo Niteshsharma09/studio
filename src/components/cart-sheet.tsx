@@ -18,7 +18,6 @@ import { useCart } from '@/context/cart-context';
 import { Separator } from './ui/separator';
 import { Input } from './ui/input';
 import { Trash2, ShoppingBag } from 'lucide-react';
-import { PlaceHolderImages } from '@/lib/placeholder-images';
 
 export function CartSheet({ children }: { children: React.ReactNode }) {
   const { cartItems, cartCount, cartTotal, updateQuantity, removeItem } = useCart();
@@ -43,9 +42,7 @@ export function CartSheet({ children }: { children: React.ReactNode }) {
             <ScrollArea className="flex-1">
               <div className="flex flex-col gap-6 p-6">
                 {cartItems.map((item) => {
-                  const placeholder = PlaceHolderImages.find(p => p.id === item.product.imageId);
-                  const imageUrl = placeholder?.imageUrl ?? `https://picsum.photos/seed/${item.product.id}/100/100`;
-                  const imageHint = placeholder?.imageHint ?? '';
+                  const imageUrl = item.product.imageUrl ?? `https://placehold.co/100x100?text=${item.product.name.charAt(0)}`;
                   const itemPrice = item.product.price + (item.lens?.price ?? 0);
                   
                   return (
@@ -57,7 +54,6 @@ export function CartSheet({ children }: { children: React.ReactNode }) {
                           width={80}
                           height={80}
                           className="rounded-md object-cover"
-                          data-ai-hint={imageHint}
                         />
                       </div>
                       <div className="flex-1">

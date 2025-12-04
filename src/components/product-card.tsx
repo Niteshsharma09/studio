@@ -4,7 +4,6 @@ import Link from 'next/link';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import type { Product } from '@/lib/types';
-import { PlaceHolderImages } from '@/lib/placeholder-images';
 import { Eye, ShoppingCart } from 'lucide-react';
 import { useCart } from '@/context/cart-context';
 import { useToast } from '@/hooks/use-toast';
@@ -14,12 +13,11 @@ import { cn } from '@/lib/utils';
 interface ProductCardProps {
   product: Product;
   className?: string;
+  style?: React.CSSProperties;
 }
 
-export function ProductCard({ product, className }: ProductCardProps) {
-  const placeholder = PlaceHolderImages.find(p => p.id === product.imageId);
-  const imageUrl = placeholder?.imageUrl ?? `https://picsum.photos/seed/${product.id}/600/400`;
-  const imageHint = placeholder?.imageHint ?? '';
+export function ProductCard({ product, className, style }: ProductCardProps) {
+  const imageUrl = product.imageUrl ?? `https://placehold.co/600x400?text=${product.name.charAt(0)}`;
   const { addItem } = useCart();
   const { toast } = useToast();
 
@@ -41,7 +39,7 @@ export function ProductCard({ product, className }: ProductCardProps) {
   };
 
   return (
-    <Card className={cn("overflow-hidden group transition-all duration-300 border hover:shadow-xl hover:-translate-y-1", className)}>
+    <Card className={cn("overflow-hidden group transition-all duration-300 border hover:shadow-xl hover:-translate-y-1", className)} style={style}>
       <Link href={`/product/${product.id}`} aria-label={`View details for ${product.name}`} className="block">
         <div className="relative aspect-[4/3] w-full bg-secondary/30">
             <Image
@@ -49,7 +47,6 @@ export function ProductCard({ product, className }: ProductCardProps) {
               alt={product.name}
               fill
               className="object-cover transition-transform duration-500 ease-in-out group-hover:scale-105"
-              data-ai-hint={imageHint}
               sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
             />
             <div className="absolute top-2 right-2 flex flex-col gap-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
