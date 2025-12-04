@@ -6,9 +6,9 @@ import { initializeApp, getApps, cert } from 'firebase-admin/app';
 
 let serviceAccount: any;
 try {
-  serviceAccount = process.env.FIREBASE_SERVICE_ACCOUNT_KEY 
-    ? JSON.parse(process.env.FIREBASE_SERVICE_ACCOUNT_KEY)
-    : undefined;
+  if (process.env.FIREBASE_SERVICE_ACCOUNT_KEY) {
+    serviceAccount = JSON.parse(process.env.FIREBASE_SERVICE_ACCOUNT_KEY);
+  }
 } catch (e) {
     console.error("Failed to parse FIREBASE_SERVICE_ACCOUNT_KEY:", e);
     serviceAccount = undefined;
@@ -30,7 +30,7 @@ export async function middleware(request: NextRequest) {
   if (pathname.startsWith('/admin')) {
     // If the SDK wasn't initialized, we can't check auth.
     // Redirect to login as a safe default.
-    if (!serviceAccount || !getApps().length) {
+    if (!getApps().length) {
         console.warn("Redirecting to login due to uninitialized Firebase Admin SDK in middleware.");
         const url = request.nextUrl.clone()
         url.pathname = '/login'

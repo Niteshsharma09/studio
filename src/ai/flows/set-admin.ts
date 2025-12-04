@@ -13,7 +13,7 @@ import { getAuth } from 'firebase-admin/auth';
 import { initializeApp, getApps, cert, App } from 'firebase-admin/app';
 import { config } from 'dotenv';
 
-// Load environment variables from .env file
+// Load environment variables from .env file at the top level of the module.
 config();
 
 
@@ -28,7 +28,7 @@ const SetAdminOutputSchema = z.object({
 });
 export type SetAdminOutput = z.infer<typeof SetAdminOutputSchema>;
 
-// Ensure Firebase Admin is initialized
+// Ensure Firebase Admin is initialized securely
 function initializeFirebaseAdmin(): App | undefined {
     if (getApps().length > 0) {
         return getApps()[0];
