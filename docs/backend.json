@@ -51,7 +51,7 @@
         "name": { "type": "string" },
         "description": { "type": "string" },
         "price": { "type": "number" },
-        "imageUrl": { "type": "string", "format": "uri" },
+        "imageUrl": { "$ref": "#/entities/Image" },
         "type": { "type": "string" },
         "brand": { "type": "string" },
         "gender": { "type": "string" },
@@ -137,6 +137,23 @@
             "createdAt": { "type": "number" }
         },
         "required": ["id", "productId", "userId", "userName", "rating", "comment", "createdAt"]
+    },
+    "Image": {
+      "title": "Image",
+      "description": "Represents an image with its URL and storage path.",
+      "type": "object",
+      "properties": {
+        "url": {
+          "type": "string",
+          "format": "uri",
+          "description": "The public URL of the image."
+        },
+        "path": {
+          "type": "string",
+          "description": "The path of the image file in Firebase Storage."
+        }
+      },
+      "required": ["url", "path"]
     }
   },
   "auth": {
