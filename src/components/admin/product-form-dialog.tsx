@@ -106,7 +106,7 @@ export function ProductFormDialog({ isOpen, onOpenChange, product }: ProductForm
 
   return (
     <Dialog open={isOpen} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-md flex flex-col h-full sm:h-auto">
+      <DialogContent className="sm:max-w-2xl flex flex-col h-full sm:h-auto">
         <DialogHeader>
           <DialogTitle>{product ? 'Edit Product' : 'Add New Product'}</DialogTitle>
           <DialogDescription>
@@ -116,121 +116,121 @@ export function ProductFormDialog({ isOpen, onOpenChange, product }: ProductForm
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="flex-1 flex flex-col min-h-0">
             <ScrollArea className="flex-1 -mx-6">
-                <div className="grid gap-4 py-4 px-6">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 py-4 px-6">
                     <FormField
-                    control={form.control}
-                    name="name"
-                    render={({ field }) => (
-                        <FormItem>
-                        <FormLabel>Name</FormLabel>
-                        <FormControl>
-                            <Input {...field} />
-                        </FormControl>
-                        <FormMessage />
-                        </FormItem>
-                    )}
+                      control={form.control}
+                      name="name"
+                      render={({ field }) => (
+                          <FormItem>
+                          <FormLabel>Name</FormLabel>
+                          <FormControl>
+                              <Input {...field} />
+                          </FormControl>
+                          <FormMessage />
+                          </FormItem>
+                      )}
+                    />
+                     <FormField
+                      control={form.control}
+                      name="price"
+                      render={({ field }) => (
+                          <FormItem>
+                          <FormLabel>Price</FormLabel>
+                          <FormControl>
+                              <Input type="number" {...field} />
+                          </FormControl>
+                          <FormMessage />
+                          </FormItem>
+                      )}
                     />
                     <FormField
-                    control={form.control}
-                    name="description"
-                    render={({ field }) => (
-                        <FormItem>
-                        <FormLabel>Description</FormLabel>
-                        <FormControl>
-                            <Textarea {...field} />
-                        </FormControl>
-                        <FormMessage />
-                        </FormItem>
-                    )}
+                      control={form.control}
+                      name="description"
+                      render={({ field }) => (
+                          <FormItem className="md:col-span-2">
+                          <FormLabel>Description</FormLabel>
+                          <FormControl>
+                              <Textarea {...field} />
+                          </FormControl>
+                          <FormMessage />
+                          </FormItem>
+                      )}
                     />
                     <FormField
-                    control={form.control}
-                    name="price"
-                    render={({ field }) => (
-                        <FormItem>
-                        <FormLabel>Price</FormLabel>
-                        <FormControl>
-                            <Input type="number" {...field} />
-                        </FormControl>
-                        <FormMessage />
-                        </FormItem>
-                    )}
+                      control={form.control}
+                      name="brand"
+                      render={({ field }) => (
+                          <FormItem>
+                          <FormLabel>Brand</FormLabel>
+                          <Select onValueChange={field.onChange} defaultValue={field.value}>
+                              <FormControl>
+                              <SelectTrigger>
+                                  <SelectValue placeholder="Select a brand" />
+                              </SelectTrigger>
+                              </FormControl>
+                              <SelectContent>
+                              {BRANDS.map(brand => <SelectItem key={brand} value={brand}>{brand}</SelectItem>)}
+                              </SelectContent>
+                          </Select>
+                          <FormMessage />
+                          </FormItem>
+                      )}
                     />
                     <FormField
-                    control={form.control}
-                    name="brand"
-                    render={({ field }) => (
-                        <FormItem>
-                        <FormLabel>Brand</FormLabel>
-                        <Select onValueChange={field.onChange} defaultValue={field.value}>
-                            <FormControl>
-                            <SelectTrigger>
-                                <SelectValue placeholder="Select a brand" />
-                            </SelectTrigger>
-                            </FormControl>
-                            <SelectContent>
-                            {BRANDS.map(brand => <SelectItem key={brand} value={brand}>{brand}</SelectItem>)}
-                            </SelectContent>
-                        </Select>
-                        <FormMessage />
-                        </FormItem>
-                    )}
+                      control={form.control}
+                      name="type"
+                      render={({ field }) => (
+                          <FormItem>
+                          <FormLabel>Type</FormLabel>
+                          <Select onValueChange={field.onChange} defaultValue={field.value}>
+                              <FormControl>
+                              <SelectTrigger>
+                                  <SelectValue placeholder="Select a product type" />
+                              </SelectTrigger>
+                              </FormControl>
+                              <SelectContent>
+                              {PRODUCT_TYPES.map(type => <SelectItem key={type} value={type}>{type}</SelectItem>)}
+                              </SelectContent>
+                          </Select>
+                          <FormMessage />
+                          </FormItem>
+                      )}
                     />
                     <FormField
-                    control={form.control}
-                    name="type"
-                    render={({ field }) => (
-                        <FormItem>
-                        <FormLabel>Type</FormLabel>
-                        <Select onValueChange={field.onChange} defaultValue={field.value}>
-                            <FormControl>
-                            <SelectTrigger>
-                                <SelectValue placeholder="Select a product type" />
-                            </SelectTrigger>
-                            </FormControl>
-                            <SelectContent>
-                            {PRODUCT_TYPES.map(type => <SelectItem key={type} value={type}>{type}</SelectItem>)}
-                            </SelectContent>
-                        </Select>
-                        <FormMessage />
-                        </FormItem>
-                    )}
+                      control={form.control}
+                      name="imageId"
+                      render={({ field }) => (
+                          <FormItem>
+                          <FormLabel>Image ID</FormLabel>
+                          <FormControl>
+                              <Input placeholder="e.g., classic-aviator" {...field} />
+                          </FormControl>
+                          <FormMessage />
+                          </FormItem>
+                      )}
                     />
                     <FormField
-                    control={form.control}
-                    name="imageId"
-                    render={({ field }) => (
-                        <FormItem>
-                        <FormLabel>Image ID</FormLabel>
-                        <FormControl>
-                            <Input placeholder="e.g., classic-aviator" {...field} />
-                        </FormControl>
-                        <FormMessage />
-                        </FormItem>
-                    )}
-                    />
-                    <FormField
-                    control={form.control}
-                    name="gender"
-                    render={({ field }) => (
-                        <FormItem>
-                        <FormLabel>Gender</FormLabel>
-                        <Select onValueChange={field.onChange} defaultValue={field.value}>
-                            <FormControl>
-                            <SelectTrigger>
-                                <SelectValue placeholder="Select a gender" />
-                            </SelectTrigger>
-                            </FormControl>
-                            <SelectContent>
-                            <SelectItem value="Men">Men</SelectItem>
-                            <SelectItem value="Women">Women</SelectItem>
-                            <SelectItem value="Kids">Kids</SelectItem>
-                            <SelectItem value="Unisex">Unisex</SelectItem>
-                            </SelectContent>
-                        </Select>
-                        <FormMessage />
-                        </FormItem>
-                    )}
+                      control={form.control}
+                      name="gender"
+                      render={({ field }) => (
+                          <FormItem>
+                          <FormLabel>Gender</FormLabel>
+                          <Select onValueChange={field.onChange} defaultValue={field.value}>
+                              <FormControl>
+                              <SelectTrigger>
+                                  <SelectValue placeholder="Select a gender" />
+                              </SelectTrigger>
+                              </FormControl>
+                              <SelectContent>
+                              <SelectItem value="Men">Men</SelectItem>
+                              <SelectItem value="Women">Women</SelectItem>
+                              <SelectItem value="Kids">Kids</SelectItem>
+                              <SelectItem value="Unisex">Unisex</SelectItem>
+                              </SelectContent>
+                          </Select>
+                          <FormMessage />
+                          </FormItem>
+                      )}
                     />
                 </div>
             </ScrollArea>
