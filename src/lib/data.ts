@@ -43,7 +43,8 @@ export const getLenses = cache(
     async () => {
         console.log('Fetching lenses...');
         const products = await getProducts();
-        return products.filter(p => p.type === 'Lenses');
+        const recentLensNames = ["ClearBlue Lenses", "Photochromic Lenses", "Technoii Drive Lens"];
+        return products.filter(p => p.type === 'Lenses' && recentLensNames.includes(p.name));
     },
     ['lenses'],
     { revalidate: 3600 } // Revalidate every hour
