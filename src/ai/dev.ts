@@ -12,9 +12,9 @@ import { setAdmin } from '@/ai/flows/set-admin.ts';
 // paste it below, then run `npm run genkit:dev` in your terminal.
 // After it runs, you can remove the code.
 
-
-setAdmin({ uid: "1d54RntVoYRPOlEpuS5AxuvKLKC3" })
+/*
+setAdmin({ uid: "PASTE_YOUR_USER_ID_HERE" })
   .then(console.log)
   .catch(console.error)
   .finally(() => process.exit());
-
+*/

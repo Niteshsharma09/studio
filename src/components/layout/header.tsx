@@ -2,7 +2,7 @@
 "use client";
 
 import Link from 'next/link';
-import { ShoppingBag, Search, Menu, LogOut, LayoutDashboard, History, ChevronDown } from 'lucide-react';
+import { ShoppingBag, Search, Menu, LogOut, LayoutDashboard, History, ChevronDown, User as UserIcon } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { CartSheet } from '@/components/cart-sheet';
 import { useCart } from '@/context/cart-context';
@@ -15,6 +15,9 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
+  DropdownMenuSub,
+  DropdownMenuSubTrigger,
+  DropdownMenuSubContent
 } from "@/components/ui/dropdown-menu"
 import {
   Sheet,
@@ -121,6 +124,7 @@ export function Header() {
                 {user.displayName && <p className="text-xs leading-none text-muted-foreground">
                   {user.email}
                 </p>}
+                 <p className="text-xs leading-none text-muted-foreground pt-2">UID: {user.uid}</p>
               </div>
             </DropdownMenuLabel>
             <DropdownMenuSeparator />
@@ -285,7 +289,7 @@ export function Header() {
                   <Button variant="ghost" size="icon">
                       <Avatar className="h-8 w-8">
                         <AvatarFallback>
-                            U
+                            <UserIcon className="h-5 w-5" />
                         </AvatarFallback>
                       </Avatar>
                       <span className="sr-only">Account</span>
@@ -310,6 +314,7 @@ export function Header() {
                     )}
                   >
                     {link.label}
+                     <ChevronDown className="h-4 w-4" />
                   </div>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent>
