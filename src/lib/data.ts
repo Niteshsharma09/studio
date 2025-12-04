@@ -9,6 +9,10 @@ import { PRODUCTS_DATA } from './constants';
 export const getProducts = async (): Promise<Product[]> => {
     console.log('Fetching products from Firestore...');
     try {
+        if (!db) {
+            console.warn("Firestore is not initialized. Cannot fetch products.");
+            return [];
+        }
         const productsCollection = collection(db, 'products');
         const productSnapshot = await getDocs(productsCollection);
         const products: Product[] = productSnapshot.docs.map(doc => ({
@@ -16,22 +20,12 @@ export const getProducts = async (): Promise<Product[]> => {
             ...doc.data()
         } as Product));
 
-        if (products.length > 0) {
-            return products;
-        } else {
-            // Fallback to local data if firestore is empty
-            return PRODUCTS_DATA.map(p => ({
-                ...p,
-                imageUrls: p.imageUrl ? [p.imageUrl] : [],
-            }));
-        }
+        return products;
+
     } catch (error) {
         console.error("Failed to fetch products from Firestore:", error);
-        // Fallback to local data if Firestore fails
-        return PRODUCTS_DATA.map(p => ({
-            ...p,
-            imageUrls: p.imageUrl ? [p.imageUrl] : [],
-        }));
+        // In case of an error, return an empty array to prevent crashes.
+        return [];
     }
 };
 
