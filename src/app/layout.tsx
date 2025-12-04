@@ -12,6 +12,7 @@ import { Suspense } from 'react';
 import { FirebaseClientProvider } from '@/firebase/client-provider';
 import { Inter } from 'next/font/google';
 import { usePathname } from 'next/navigation';
+import { Chatbot } from '@/components/chatbot';
 
 const inter = Inter({
   subsets: ['latin'],
@@ -60,6 +61,7 @@ function LayoutContent({ children }: { children: React.ReactNode }) {
       {!isAdminPage && <Header />}
       <main className={cn("flex-1 bg-background", { "flex flex-col": isAdminPage })}>{children}</main>
       {!isAdminPage && <Footer />}
+      {!isAdminPage && <Chatbot />}
     </>
   );
 }
