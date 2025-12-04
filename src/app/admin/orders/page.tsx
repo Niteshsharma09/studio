@@ -1,7 +1,7 @@
 
 'use client';
 import { useAllOrders } from '@/hooks/useAdminDashboard';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Loader2 } from 'lucide-react';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Badge } from '@/components/ui/badge';
@@ -53,7 +53,8 @@ export default function AdminOrdersPage() {
     return (
         <Card>
             <CardHeader>
-                <CardTitle>All Orders ({allOrders.length})</CardTitle>
+                <CardTitle>All Orders</CardTitle>
+                <CardDescription>A list of all orders placed in your store.</CardDescription>
             </CardHeader>
             <CardContent>
                 <Table>

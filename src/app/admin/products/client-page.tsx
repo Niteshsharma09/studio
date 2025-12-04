@@ -62,8 +62,7 @@ export function AdminProductsClientPage({ products }: { products: Product[]}) {
         try {
             await deleteDoc(doc(firestore, "products", selectedProduct.id));
             toast({ title: "Product Deleted", description: `${selectedProduct.name} has been deleted.` });
-            // This won't auto-refresh since getProducts is cached, a full page reload or revalidation is needed.
-            // For this simple case, we'll rely on the user refreshing.
+            // For this simple case, we'll rely on the user refreshing after delete.
         } catch(e) {
             console.error(e);
             toast({ title: "Error", description: "Failed to delete product.", variant: "destructive" });
@@ -78,7 +77,7 @@ export function AdminProductsClientPage({ products }: { products: Product[]}) {
                 <Button onClick={handleNew}>Add New Product</Button>
             </div>
             <Card>
-                <CardContent>
+                <CardContent className="p-0">
                     <Table>
                         <TableHeader>
                             <TableRow>
@@ -122,7 +121,7 @@ export function AdminProductsClientPage({ products }: { products: Product[]}) {
                                                 <DropdownMenuLabel>Actions</DropdownMenuLabel>
                                                 <DropdownMenuItem onClick={() => handleEdit(product)}>Edit</DropdownMenuItem>
                                                 <DropdownMenuSeparator />
-                                                <DropdownMenuItem onClick={() => handleDelete(product)} className="text-destructive">Delete</DropdownMenuItem>
+                                                <DropdownMenuItem onClick={() => handleDelete(product)} className="text-destructive focus:text-destructive focus:bg-destructive/10">Delete</DropdownMenuItem>
                                             </DropdownMenuContent>
                                         </DropdownMenu>
                                     </TableCell>
@@ -130,6 +129,7 @@ export function AdminProductsClientPage({ products }: { products: Product[]}) {
                             )})}
                         </TableBody>
                     </Table>
+                     {products.length === 0 && <p className="p-4 text-center text-muted-foreground">No products found.</p>}
                 </CardContent>
             </Card>
 

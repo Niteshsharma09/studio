@@ -5,7 +5,6 @@ import { useState, useEffect, useCallback } from 'react';
 import { useFirestore } from '@/firebase';
 import { collection, collectionGroup, getDocs, query, orderBy, limit } from 'firebase/firestore';
 import type { Order, Product, User } from '@/lib/types';
-import { getAuth } from "firebase/auth";
 
 interface DashboardStats {
   totalRevenue: number;

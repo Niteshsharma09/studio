@@ -1,7 +1,5 @@
 
-
 import { getProducts } from '@/lib/data';
-import type { Product } from '@/lib/types';
 import { Suspense } from 'react';
 import { Loader2 } from 'lucide-react';
 import { AdminProductsClientPage } from './client-page';
