@@ -20,6 +20,7 @@ import { useToast } from '@/hooks/use-toast';
 import { Loader2, UploadCloud, X } from 'lucide-react';
 import Image from 'next/image';
 import { ScrollArea } from '../ui/scroll-area';
+import { FirebaseError } from 'firebase/app';
 
 const formSchema = z.object({
   name: z.string().min(1, 'Product name is required'),
@@ -125,6 +126,7 @@ export function ProductFormDialog({ isOpen, onOpenChange, product }: ProductForm
         
         let uploadedUrls: string[] = [...existingImageUrls];
 
+        // 1. Await image uploads before proceeding
         if (newImageFiles.length > 0) {
             const storage = getStorage();
             const uploadPromises = newImageFiles.map(imageFile => {
@@ -155,21 +157,35 @@ export function ProductFormDialog({ isOpen, onOpenChange, product }: ProductForm
             uploadedUrls = [...uploadedUrls, ...newUrls];
         }
 
-        const productData = { 
+        const productData: Product = { 
             ...values,
-            id: productRef.id, // Explicitly add the ID to the data
-            imageId: values.name.toLowerCase().replace(/\s+/g, '-'), // Create a fallback imageId
+            id: productRef.id,
+            imageId: values.name.toLowerCase().replace(/\s+/g, '-'),
             imageUrls: uploadedUrls,
-            ...(isNewProduct ? { createdAt: serverTimestamp() } : {})
+            ...(isNewProduct && { createdAt: Date.now() })
         };
 
+        // 2. Save the final data to Firestore
         await setDoc(productRef, productData, { merge: true });
 
         toast({ title: product ? 'Product Updated' : 'Product Created', description: `${values.name} has been saved.` });
         onOpenChange(false);
-    } catch (e) {
-        console.error("Product form submission error:", e);
-        toast({ title: 'Error', description: 'Failed to save product.', variant: 'destructive' });
+    } catch (e: any) {
+        // 3. Implement detailed error logging as requested
+        console.error("Save product error:", e);
+        let errorMessage = "An unknown error occurred.";
+        if (e instanceof FirebaseError) {
+            errorMessage = `Firebase Error: ${e.code} - ${e.message}`;
+        } else if (e instanceof Error) {
+            errorMessage = e.message;
+        }
+
+        toast({ 
+            title: 'Error', 
+            description: `Failed to save product: ${errorMessage}`,
+            variant: 'destructive',
+            duration: 9000,
+        });
     } finally {
         setIsLoading(false);
     }
@@ -370,7 +386,5 @@ export function ProductFormDialog({ isOpen, onOpenChange, product }: ProductForm
     </Dialog>
   );
 }
-
-    
 
     
