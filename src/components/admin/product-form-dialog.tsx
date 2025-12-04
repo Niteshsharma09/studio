@@ -15,7 +15,7 @@ import { BRANDS, PRODUCT_TYPES } from '@/lib/constants';
 import type { Product } from '@/lib/types';
 import { useFirestore } from '@/firebase';
 import { doc, setDoc, collection, serverTimestamp } from 'firebase/firestore';
-import { getStorage, ref, uploadString, getDownloadURL } from "firebase/storage";
+import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { useToast } from '@/hooks/use-toast';
 import { Loader2, UploadCloud, X } from 'lucide-react';
 import Image from 'next/image';
@@ -119,6 +119,7 @@ export function ProductFormDialog({ isOpen, onOpenChange, product }: ProductForm
 
     try {
         const isNewProduct = !product;
+        // Ensure productRef has an ID from the start
         const productRef = isNewProduct
             ? doc(collection(firestore, 'products'))
             : doc(firestore, 'products', product.id);
@@ -127,28 +128,12 @@ export function ProductFormDialog({ isOpen, onOpenChange, product }: ProductForm
 
         if (newImageFiles.length > 0) {
             const storage = getStorage();
-            const uploadPromises = newImageFiles.map(imageFile => {
+            const uploadPromises = newImageFiles.map(async (imageFile) => {
                 const imageRef = ref(storage, `products/${productRef.id}/${Date.now()}-${imageFile.file.name}`);
-                
-                return new Promise<string>((resolve, reject) => {
-                    const reader = new FileReader();
-                    reader.onload = async (e) => {
-                        try {
-                            const dataUrl = e.target?.result as string;
-                            if (dataUrl) {
-                                await uploadString(imageRef, dataUrl, 'data_url');
-                                const downloadUrl = await getDownloadURL(imageRef);
-                                resolve(downloadUrl);
-                            } else {
-                                reject(new Error("Couldn't read file to create data URL."));
-                            }
-                        } catch (uploadError) {
-                            reject(uploadError);
-                        }
-                    };
-                    reader.onerror = (error) => reject(error);
-                    reader.readAsDataURL(imageFile.file);
-                });
+                // Use uploadBytes with the File object directly
+                const snapshot = await uploadBytes(imageRef, imageFile.file);
+                const downloadUrl = await getDownloadURL(snapshot.ref);
+                return downloadUrl;
             });
             
             const newUrls = await Promise.all(uploadPromises);
@@ -160,7 +145,7 @@ export function ProductFormDialog({ isOpen, onOpenChange, product }: ProductForm
             id: productRef.id,
             imageId: values.name.toLowerCase().replace(/\s+/g, '-'),
             imageUrls: uploadedUrls,
-            createdAt: product?.createdAt || Date.now()
+            createdAt: product?.createdAt || serverTimestamp()
         };
 
         await setDoc(productRef, productData, { merge: true });
@@ -171,14 +156,14 @@ export function ProductFormDialog({ isOpen, onOpenChange, product }: ProductForm
         console.error("Save product error:", e);
         let errorMessage = "An unknown error occurred.";
         if (e instanceof FirebaseError) {
-            errorMessage = `Firebase Error: ${e.code} - ${e.message}`;
+            errorMessage = `${e.code} - ${e.message}`;
         } else if (e instanceof Error) {
             errorMessage = e.message;
         }
 
         toast({ 
-            title: 'Error', 
-            description: `Failed to save product: ${errorMessage}`,
+            title: 'Error Saving Product', 
+            description: errorMessage,
             variant: 'destructive',
             duration: 9000,
         });
