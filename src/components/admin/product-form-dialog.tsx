@@ -119,7 +119,6 @@ export function ProductFormDialog({ isOpen, onOpenChange, product }: ProductForm
 
     try {
         const isNewProduct = !product;
-        // Ensure productRef has an ID from the start
         const productRef = isNewProduct
             ? doc(collection(firestore, 'products'))
             : doc(firestore, 'products', product.id);
@@ -130,23 +129,24 @@ export function ProductFormDialog({ isOpen, onOpenChange, product }: ProductForm
             const storage = getStorage();
             const uploadPromises = newImageFiles.map(async (imageFile) => {
                 const imageRef = ref(storage, `products/${productRef.id}/${Date.now()}-${imageFile.file.name}`);
-                // Use uploadBytes with the File object directly
                 const snapshot = await uploadBytes(imageRef, imageFile.file);
-                const downloadUrl = await getDownloadURL(snapshot.ref);
-                return downloadUrl;
+                return getDownloadURL(snapshot.ref);
             });
             
             const newUrls = await Promise.all(uploadPromises);
             uploadedUrls = [...uploadedUrls, ...newUrls];
         }
 
-        const productData: Product = { 
+        const productData: Omit<Product, 'createdAt'> & { createdAt?: any } = { 
             ...values,
             id: productRef.id,
             imageId: values.name.toLowerCase().replace(/\s+/g, '-'),
             imageUrls: uploadedUrls,
-            createdAt: product?.createdAt || serverTimestamp()
         };
+        
+        if (isNewProduct) {
+            productData.createdAt = serverTimestamp();
+        }
 
         await setDoc(productRef, productData, { merge: true });
 
@@ -367,3 +367,5 @@ export function ProductFormDialog({ isOpen, onOpenChange, product }: ProductForm
     </Dialog>
   );
 }
+
+    
