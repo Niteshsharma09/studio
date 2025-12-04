@@ -29,20 +29,24 @@ function initializeFirebaseAdmin(): App | undefined {
         return getApps()[0];
     }
     
-    const serviceAccountKey = process.env.FIREBASE_SERVICE_ACCOUNT_KEY;
+    // The service account key is now expected to be a Base64 encoded string
+    const serviceAccountKeyBase64 = process.env.FIREBASE_SERVICE_ACCOUNT_KEY;
 
-    if (!serviceAccountKey) {
+    if (!serviceAccountKeyBase64) {
         console.error("FIREBASE_SERVICE_ACCOUNT_KEY not found. Admin features will not work.");
         return undefined;
     }
     
     try {
-        const serviceAccount = JSON.parse(serviceAccountKey);
+        // Decode the Base64 string to get the original JSON string
+        const serviceAccountJson = Buffer.from(serviceAccountKeyBase64, 'base64').toString('utf8');
+        const serviceAccount = JSON.parse(serviceAccountJson);
+        
         return initializeApp({
             credential: cert(serviceAccount),
         });
     } catch (e) {
-        console.error("Failed to parse FIREBASE_SERVICE_ACCOUNT_KEY or initialize Firebase Admin SDK:", e);
+        console.error("Failed to decode/parse FIREBASE_SERVICE_ACCOUNT_KEY or initialize Firebase Admin SDK. Make sure it is a valid Base64 encoded JSON string.", e);
         return undefined;
     }
 }
