@@ -122,26 +122,24 @@ export function ProductFormDialog({ isOpen, onOpenChange, product }: ProductForm
         const productRef = isNewProduct
             ? doc(collection(firestore, 'products'))
             : doc(firestore, 'products', product.id);
-        
-        let uploadedUrls: string[] = [...existingImageUrls];
 
+        let newUploadedUrls: string[] = [];
         if (newImageFiles.length > 0) {
             const storage = getStorage();
-            const uploadPromises = newImageFiles.map(async (imageFile) => {
+            const uploadPromises = newImageFiles.map(imageFile => {
                 const imageRef = ref(storage, `products/${productRef.id}/${Date.now()}-${imageFile.file.name}`);
-                const snapshot = await uploadBytes(imageRef, imageFile.file);
-                return getDownloadURL(snapshot.ref);
+                return uploadBytes(imageRef, imageFile.file).then(snapshot => getDownloadURL(snapshot.ref));
             });
-            
-            const newUrls = await Promise.all(uploadPromises);
-            uploadedUrls = [...uploadedUrls, ...newUrls];
+            newUploadedUrls = await Promise.all(uploadPromises);
         }
 
-        const productData: Omit<Product, 'createdAt'> & { createdAt?: any } = { 
+        const finalImageUrls = [...existingImageUrls, ...newUploadedUrls];
+
+        const productData: Partial<Product> & { createdAt?: any } = { 
             ...values,
             id: productRef.id,
             imageId: values.name.toLowerCase().replace(/\s+/g, '-'),
-            imageUrls: uploadedUrls,
+            imageUrls: finalImageUrls,
         };
         
         if (isNewProduct) {
@@ -154,9 +152,9 @@ export function ProductFormDialog({ isOpen, onOpenChange, product }: ProductForm
         onOpenChange(false);
     } catch (e: any) {
         console.error("Save product error:", e);
-        let errorMessage = "An unknown error occurred.";
+        let errorMessage = "An unknown error occurred while saving the product.";
         if (e instanceof FirebaseError) {
-            errorMessage = `${e.code} - ${e.message}`;
+            errorMessage = e.message;
         } else if (e instanceof Error) {
             errorMessage = e.message;
         }
@@ -367,5 +365,3 @@ export function ProductFormDialog({ isOpen, onOpenChange, product }: ProductForm
     </Dialog>
   );
 }
-
-    
