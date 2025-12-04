@@ -120,7 +120,6 @@ export function ProductFormDialog({ isOpen, onOpenChange, product }: ProductForm
     setIsPending(true);
 
     try {
-        const isNewProduct = !product;
         const productId = product?.id || doc(collection(firestore, 'products')).id;
 
         const newUploadedUrls = await Promise.all(
@@ -133,12 +132,27 @@ export function ProductFormDialog({ isOpen, onOpenChange, product }: ProductForm
         
         const finalImageUrls = [...existingImageUrls, ...newUploadedUrls];
         
-        const productData = { 
-            ...values,
-            id: productId,
-            imageUrls: finalImageUrls,
-            ...(isNewProduct && { createdAt: new Date() }),
-        };
+        let productData;
+
+        if (product) { // This is an update
+            productData = { 
+                ...values,
+                id: productId,
+                imageUrls: finalImageUrls,
+            };
+        } else { // This is a new product
+             productData = {
+                name: values.name,
+                description: values.description,
+                price: values.price,
+                brand: values.brand,
+                type: values.type,
+                gender: values.gender,
+                id: productId,
+                imageUrls: finalImageUrls,
+                createdAt: new Date(),
+            };
+        }
         
         const productRef = doc(firestore, 'products', productId);
         await setDoc(productRef, productData, { merge: true });
