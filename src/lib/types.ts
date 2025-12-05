@@ -14,6 +14,7 @@ export type Product = {
   gender?: string;
   SKU?: string;
   createdAt?: string | null;
+  stockQuantity: number;
 };
 
 export type Frame = Product & {

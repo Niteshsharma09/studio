@@ -1,4 +1,5 @@
 
+
 'use client';
 
 import { useEffect, useState } from 'react';
@@ -26,6 +27,7 @@ const formSchema = z.object({
   name: z.string().min(1, 'Product name is required'),
   description: z.string().min(1, 'Description is required'),
   price: z.coerce.number().min(0, 'Price must be a positive number'),
+  stockQuantity: z.coerce.number().min(0, 'Stock must be a positive number'),
   brand: z.string().min(1, 'Brand is required'),
   type: z.string().min(1, 'Product type is required'),
   gender: z.string().optional(),
@@ -53,6 +55,7 @@ export function ProductFormDialog({ isOpen, onOpenChange, product }: ProductForm
       name: '',
       description: '',
       price: 0,
+      stockQuantity: 0,
       brand: '',
       type: '',
       gender: 'Unisex',
@@ -66,6 +69,7 @@ export function ProductFormDialog({ isOpen, onOpenChange, product }: ProductForm
           name: product.name,
           description: product.description,
           price: product.price,
+          stockQuantity: product.stockQuantity,
           brand: product.brand,
           type: product.type,
           gender: product.gender || 'Unisex',
@@ -76,6 +80,7 @@ export function ProductFormDialog({ isOpen, onOpenChange, product }: ProductForm
           name: '',
           description: '',
           price: 0,
+          stockQuantity: 0,
           brand: '',
           type: '',
           gender: 'Unisex',
@@ -117,27 +122,28 @@ export function ProductFormDialog({ isOpen, onOpenChange, product }: ProductForm
       toast({ title: 'Error', description: 'Database or Storage not available.', variant: 'destructive' });
       return;
     }
-
+  
     setIsPending(true);
     let finalImageUrl: string | null = product?.imgurl || null;
     let finalImagePath: string | null = product?.imgpath || null;
     const oldImagePath = product?.imgpath;
-
+  
     try {
       // 1. Handle image upload if a new file is selected
       if (newImageFile) {
         toast({ title: "Uploading image..." });
         const imagePath = `products/${Date.now()}-${newImageFile.name}`;
         const imageRef = ref(storage, imagePath);
-
+  
+        // upload the raw File (no data URL)
         const snapshot = await uploadBytes(imageRef, newImageFile);
         const downloadURL = await getDownloadURL(snapshot.ref);
-
+  
         finalImageUrl = downloadURL;
-        finalImagePath = imagePath;
+        finalImagePath = imagePath; // we save the path to allow later deletion
         toast({ title: "Image uploaded!" });
-      } else if (!imagePreview) {
-        // Handle case where image was removed
+      } else if (!imagePreview && product?.imgpath) {
+        // Image was removed by the user
         finalImageUrl = null;
         finalImagePath = null;
       }
@@ -147,7 +153,7 @@ export function ProductFormDialog({ isOpen, onOpenChange, product }: ProductForm
         imgurl: finalImageUrl,
         imgpath: finalImagePath,
       };
-
+  
       toast({ title: "Saving product..." });
       // 2. Save product data to Firestore
       if (product) {
@@ -165,7 +171,7 @@ export function ProductFormDialog({ isOpen, onOpenChange, product }: ProductForm
         });
         toast({ title: 'Product Created', description: `${values.name} has been saved successfully.` });
       }
-
+  
       // 3. Delete old image from storage if it has changed
       if (oldImagePath && oldImagePath !== finalImagePath) {
         try {
@@ -175,7 +181,7 @@ export function ProductFormDialog({ isOpen, onOpenChange, product }: ProductForm
           console.warn("Could not delete old image, it might have been already removed:", e);
         }
       }
-
+  
       router.refresh(); // Refresh server components to show new data
       onOpenChange(false);
     } catch (e: any) {
@@ -218,19 +224,34 @@ export function ProductFormDialog({ isOpen, onOpenChange, product }: ProductForm
                         </FormItem>
                     )}
                     />
-                    <FormField
-                    control={form.control}
-                    name="price"
-                    render={({ field }) => (
-                        <FormItem>
-                        <FormLabel>Price</FormLabel>
-                        <FormControl>
-                            <Input type="number" {...field} />
-                        </FormControl>
-                        <FormMessage />
-                        </FormItem>
-                    )}
-                    />
+                    <div className="grid grid-cols-2 gap-4">
+                        <FormField
+                        control={form.control}
+                        name="price"
+                        render={({ field }) => (
+                            <FormItem>
+                            <FormLabel>Price</FormLabel>
+                            <FormControl>
+                                <Input type="number" {...field} />
+                            </FormControl>
+                            <FormMessage />
+                            </FormItem>
+                        )}
+                        />
+                        <FormField
+                        control={form.control}
+                        name="stockQuantity"
+                        render={({ field }) => (
+                            <FormItem>
+                            <FormLabel>Stock Quantity</FormLabel>
+                            <FormControl>
+                                <Input type="number" {...field} />
+                            </FormControl>
+                            <FormMessage />
+                            </FormItem>
+                        )}
+                        />
+                    </div>
                     <FormField
                     control={form.control}
                     name="description"
