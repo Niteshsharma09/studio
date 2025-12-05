@@ -115,12 +115,10 @@ export function ProductFormDialog({ isOpen, onOpenChange, product }: ProductForm
     try {
         let finalImageUrl: string | null = product?.imgurl || null;
 
-        // Step 1: Upload image if a new one is selected
         if (newImageFile) {
             toast({ title: "Uploading image..." });
             const imageRef = ref(storage, `products/${Date.now()}-${newImageFile.name}`);
             
-            // If editing, try to delete the old image
             if (product?.imgurl) {
                 try {
                     const oldImageRef = ref(storage, product.imgurl);
@@ -133,7 +131,6 @@ export function ProductFormDialog({ isOpen, onOpenChange, product }: ProductForm
             const snapshot = await uploadBytes(imageRef, newImageFile);
             finalImageUrl = await getDownloadURL(snapshot.ref);
         } else if (imagePreview === null && product?.imgurl) {
-            // If image was removed, delete from storage
              try {
                 const oldImageRef = ref(storage, product.imgurl);
                 await deleteObject(oldImageRef);
@@ -145,20 +142,16 @@ export function ProductFormDialog({ isOpen, onOpenChange, product }: ProductForm
         
         toast({ title: "Saving product..." });
         
-        // Step 2: Prepare product data
         const productData = { 
             ...values,
             imgurl: finalImageUrl,
         };
         
-        // Step 3: Save product to Firestore
         if (product) {
-            // Update existing product
             const productRef = doc(firestore, 'products', product.id);
             await updateDoc(productRef, productData);
             toast({ title: 'Product Updated', description: `${values.name} has been saved successfully.` });
         } else {
-            // Create new product
             const newDocRef = doc(collection(firestore, 'products'));
             await setDoc(newDocRef, {
                 ...productData,

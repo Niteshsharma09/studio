@@ -63,7 +63,7 @@ export function VirtualTryOn({ children, product }: VirtualTryOnProps) {
 
       const [glassesDataUri, photoDataUri] = await Promise.all([
         convertImageToBase64(productImageUrl),
-        Promise.resolve(userImage) // userImage is already a data URI
+        Promise.resolve(userImage)
       ]);
 
       const result = await virtualTryOn({ glassesDataUri, photoDataUri });

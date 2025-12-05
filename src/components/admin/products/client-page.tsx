@@ -62,7 +62,6 @@ export function AdminProductsClientPage({ products }: { products: Product[]}) {
         try {
             await deleteDoc(doc(firestore, "products", selectedProduct.id));
             toast({ title: "Product Deleted", description: `${selectedProduct.name} has been deleted.` });
-            // For this simple case, we'll rely on the user refreshing after delete.
         } catch(e) {
             console.error(e);
             toast({ title: "Error", description: "Failed to delete product.", variant: "destructive" });

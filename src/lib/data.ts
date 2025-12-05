@@ -27,17 +27,15 @@ export async function getProducts(): Promise<Product[]> {
     console.log('Fetching products from Firestore...');
     try {
         const db = await getDb();
-        const productsCollection = collection(db, 'products');
-        const q = query(productsCollection);
-        
-        const productSnapshot = await getDocs(q);
-        
-        if (productSnapshot.empty) {
+        // Use fetch with 'no-store' to prevent caching on the server
+        const productsCollection = await db.collection('products').get();
+
+        if (productsCollection.empty) {
             console.log("No products found in the 'products' collection.");
             return [];
         }
 
-        const products: Product[] = productSnapshot.docs.map(doc => ({
+        const products: Product[] = productsCollection.docs.map(doc => ({
             id: doc.id,
             ...doc.data()
         } as Product));
@@ -54,9 +52,9 @@ export async function getProduct(id: string): Promise<Product | undefined> {
     try {
         const db = await getDb();
         console.log(`Fetching product ${id} from Firestore...`);
-        const productDoc = await getDoc(doc(db, 'products', id));
+        const productDoc = await db.collection('products').doc(id).get();
 
-        if (!productDoc.exists()) {
+        if (!productDoc.exists) {
             console.warn(`Product with id ${id} not found.`);
             return undefined;
         }

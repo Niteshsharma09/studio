@@ -24,6 +24,7 @@ import { PrescriptionDialog } from '@/components/prescription-dialog';
 import { ReviewList } from '@/components/review-list';
 import Image from 'next/image';
 import { cn } from '@/lib/utils';
+import { VirtualTryOn } from '@/components/virtual-try-on';
 
 export function ProductDetailClientPage({ product, allProducts, lenses }: { product: Product, allProducts: Product[], lenses: Product[] }) {
   const router = useRouter();
@@ -133,7 +134,6 @@ export function ProductDetailClientPage({ product, allProducts, lenses }: { prod
     // Simulate API call
     setTimeout(() => {
         const firstDigit = parseInt(pincode.charAt(0), 10);
-        // Simulate serviceability for major metro areas (digits 1-8 are generally used in India)
         if (firstDigit >= 1 && firstDigit <= 8) {
             setDeliveryStatus('available');
             setDeliveryDate(addDays(new Date(), 5));
@@ -158,6 +158,13 @@ export function ProductDetailClientPage({ product, allProducts, lenses }: { prod
                         sizes="(max-width: 1023px) 100vw, 50vw"
                         priority
                     />
+                    {product.imgurl && (
+                        <VirtualTryOn product={product}>
+                             <Button variant="outline" className="absolute bottom-4 right-4 bg-background/80 backdrop-blur-sm">
+                                Virtual Try-On
+                            </Button>
+                        </VirtualTryOn>
+                    )}
                 </div>
             </div>
               
