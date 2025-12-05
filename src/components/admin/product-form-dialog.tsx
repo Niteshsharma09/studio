@@ -83,16 +83,21 @@ export function ProductFormDialog({ isOpen, onOpenChange, product }: ProductForm
         setImagePreview(null);
       }
       setNewImageFile(null);
+    } else {
+        // Cleanup object URL when dialog is closed
+        if (imagePreview && imagePreview.startsWith('blob:')) {
+            URL.revokeObjectURL(imagePreview);
+        }
     }
-  }, [product, form, isOpen]);
+  }, [product, form, isOpen, imagePreview]);
 
   // 1) handleFileChange - use createObjectURL for immediate preview
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0] ?? null;
     if (file) {
       setNewImageFile(file);
-      // immediate local preview
-      if (imagePreview) {
+       // immediate local preview
+      if (imagePreview && imagePreview.startsWith('blob:')) {
         URL.revokeObjectURL(imagePreview);
       }
       const objectUrl = URL.createObjectURL(file);
@@ -102,8 +107,8 @@ export function ProductFormDialog({ isOpen, onOpenChange, product }: ProductForm
 
   const removeImage = () => {
     setNewImageFile(null);
-    if (imagePreview) {
-      URL.revokeObjectURL(imagePreview);
+    if (imagePreview && imagePreview.startsWith('blob:')) {
+        URL.revokeObjectURL(imagePreview);
     }
     setImagePreview(null);
   };
@@ -184,9 +189,6 @@ export function ProductFormDialog({ isOpen, onOpenChange, product }: ProductForm
       });
     } finally {
       setIsPending(false);
-      if (newImageFile && imagePreview) {
-        URL.revokeObjectURL(imagePreview);
-      }
     }
   };
 
@@ -364,3 +366,5 @@ export function ProductFormDialog({ isOpen, onOpenChange, product }: ProductForm
     </Dialog>
   );
 }
+
+    

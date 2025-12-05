@@ -4,7 +4,7 @@ rules_version = '2';
 service firebase.storage {
   match /b/{bucket}/o {
     
-    // Allow public read access to all product images
+    // Allow public read access to all product images.
     // Allow any authenticated user to write. This is secure because only admins 
     // can access the product form in the app to trigger an upload.
     match /products/{allPaths=**} {
@@ -20,3 +20,5 @@ service firebase.storage {
     }
   }
 }
+
+    
