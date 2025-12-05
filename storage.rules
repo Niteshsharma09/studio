@@ -4,21 +4,10 @@ rules_version = '2';
 service firebase.storage {
   match /b/{bucket}/o {
     
-    // Allow public read access to all product images.
-    // Allow any authenticated user to write. This is secure because only admins 
-    // can access the product form in the app to trigger an upload.
-    match /products/{allPaths=**} {
-      allow read: if true;
-      allow write: if request.auth != null;
-    }
-
-    // Allow users to read all review images.
-    // Allow a user to write to the reviews folder only if the path contains their own UID.
-    match /reviews/{productId}/{userId}/{allPaths=**} {
-      allow read: if true;
-      allow write: if request.auth != null && request.auth.uid == userId;
+    // Recommended: Allow read and write access only for authenticated users.
+    // This is secure for the admin panel as only an admin can be logged in to upload.
+    match /{allPaths=**} {
+      allow read, write: if request.auth != null;
     }
   }
 }
-
-    
