@@ -89,7 +89,7 @@ export function ProductFormDialog({ isOpen, onOpenChange, product }: ProductForm
             URL.revokeObjectURL(imagePreview);
         }
     }
-  }, [product, form, isOpen, imagePreview]);
+  }, [product, form, isOpen]);
 
   // 1) handleFileChange - use createObjectURL for immediate preview
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {

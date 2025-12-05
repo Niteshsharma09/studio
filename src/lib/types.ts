@@ -41,7 +41,7 @@ export type Lens = Product & {
 export type User = {
   id: string;
   email: string;
-  createdAt: number;
+  createdAt: any; // Firestore Timestamp
   firstName?: string;
   lastName?: string;
   address?: string;
@@ -99,3 +99,5 @@ export type Review = {
     imageUrl?: string;
     createdAt: any; // Firestore Timestamp
 };
+
+    

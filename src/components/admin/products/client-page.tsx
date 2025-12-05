@@ -27,16 +27,20 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog"
-import { useFirestore } from '@/firebase';
+import { useFirestore, useStorage } from '@/firebase';
 import { deleteDoc, doc } from 'firebase/firestore';
 import { useToast } from '@/hooks/use-toast';
+import { deleteObject, ref } from 'firebase/storage';
+import { useRouter } from 'next/navigation';
 
 export function AdminProductsClientPage({ products }: { products: Product[]}) {
     const [dialogOpen, setDialogOpen] = useState(false);
     const [selectedProduct, setSelectedProduct] = useState<Product | undefined>(undefined);
     const [deleteAlertOpen, setDeleteAlertOpen] = useState(false);
     const firestore = useFirestore();
+    const storage = useStorage();
     const { toast } = useToast();
+    const router = useRouter();
 
     const formatPrice = (price: number) => {
         return new Intl.NumberFormat("en-IN", { style: "currency", currency: "INR" }).format(price);
@@ -60,11 +64,20 @@ export function AdminProductsClientPage({ products }: { products: Product[]}) {
     const confirmDelete = async () => {
         if (!selectedProduct || !firestore) return;
         try {
+            // Delete Firestore document
             await deleteDoc(doc(firestore, "products", selectedProduct.id));
+
+            // Delete image from Storage if path exists
+            if (selectedProduct.imgpath && storage) {
+                const imageRef = ref(storage, selectedProduct.imgpath);
+                await deleteObject(imageRef);
+            }
+
             toast({ title: "Product Deleted", description: `${selectedProduct.name} has been deleted.` });
-        } catch(e) {
-            console.error(e);
-            toast({ title: "Error", description: "Failed to delete product.", variant: "destructive" });
+            router.refresh(); // Refresh data on the page
+        } catch(e: any) {
+            console.error("Error deleting product:", e);
+            toast({ title: "Error", description: `Failed to delete product. ${e.message}`, variant: "destructive" });
         }
         setDeleteAlertOpen(false);
     };
@@ -144,8 +157,8 @@ export function AdminProductsClientPage({ products }: { products: Product[]}) {
                     <AlertDialogTitle>Are you sure?</AlertDialogTitle>
                     <AlertDialogDescription>
                         This action cannot be undone. This will permanently delete the product
-                        &quot;{selectedProduct?.name}&quot;.
-                    </AlertDialogDescription>
+                        &quot;{selectedProduct?.name}&quot; and its associated image.
+                    </d_AlertDialogDescription>
                     </AlertDialogHeader>
                     <AlertDialogFooter>
                     <AlertDialogCancel>Cancel</AlertDialogCancel>
@@ -156,3 +169,5 @@ export function AdminProductsClientPage({ products }: { products: Product[]}) {
         </>
     )
 }
+
+    
