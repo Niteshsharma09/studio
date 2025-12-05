@@ -6,16 +6,23 @@ import { getFirestore } from 'firebase-admin/firestore';
 import { firebaseAdminConfig } from '@/firebase/config-server';
 
 // Helper function to safely transform Firestore Timestamps.
-const transformTimestamp = (timestamp: any): string => {
+const transformTimestamp = (timestamp: any): string | null => {
   if (timestamp instanceof Timestamp) {
     return timestamp.toDate().toISOString();
   }
-  // If it's already a string or other primitive, return as is.
   if (typeof timestamp === 'string' || typeof timestamp === 'number') {
-    return new Date(timestamp).toISOString();
+    try {
+        const date = new Date(timestamp);
+        if (!isNaN(date.getTime())) {
+            return date.toISOString();
+        }
+    } catch (e) {
+        // Fallback for invalid date strings/numbers
+        return null;
+    }
   }
   // Fallback for unexpected types
-  return new Date().toISOString();
+  return null;
 };
 
 
@@ -41,7 +48,6 @@ export async function getProducts(): Promise<Product[]> {
     console.log('Fetching products from Firestore...');
     try {
         const db = await getDb();
-        // Use fetch with 'no-store' to prevent caching on the server
         const productsCollection = await db.collection('products').get();
 
         if (productsCollection.empty) {
@@ -54,7 +60,6 @@ export async function getProducts(): Promise<Product[]> {
             return {
                 id: doc.id,
                 ...data,
-                // Transform timestamp to a serializable format
                 createdAt: data.createdAt ? transformTimestamp(data.createdAt) : undefined,
             } as Product;
         });
@@ -84,7 +89,6 @@ export async function getProduct(id: string): Promise<Product | undefined> {
         return { 
             id: productDoc.id, 
             ...data,
-            // Transform timestamp to a serializable format
             createdAt: data.createdAt ? transformTimestamp(data.createdAt) : undefined,
         } as Product;
     } catch (error) {

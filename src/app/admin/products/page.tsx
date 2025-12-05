@@ -5,6 +5,8 @@ import { Loader2 } from 'lucide-react';
 import { AdminProductsClientPage } from './client-page';
 
 
+export const dynamic = 'force-dynamic';
+
 export default function AdminProductsPage() {
     return (
         <Suspense fallback={<div className="flex h-full items-center justify-center"><Loader2 className="h-16 w-16 animate-spin" /></div>}>
