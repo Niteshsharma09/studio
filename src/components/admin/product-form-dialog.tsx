@@ -15,7 +15,7 @@ import { BRANDS, PRODUCT_TYPES } from '@/lib/constants';
 import type { Product } from '@/lib/types';
 import { useFirestore, useStorage } from '@/firebase';
 import { doc, setDoc, collection, serverTimestamp, updateDoc } from 'firebase/firestore';
-import { ref, uploadBytes, getDownloadURL, deleteObject } from "firebase/storage";
+import { ref, uploadString, getDownloadURL, deleteObject } from "firebase/storage";
 import { useToast } from '@/hooks/use-toast';
 import { Loader2, UploadCloud, X } from 'lucide-react';
 import Image from 'next/image';
@@ -103,53 +103,38 @@ export function ProductFormDialog({ isOpen, onOpenChange, product }: ProductForm
     setImagePreview(null);
   };
 
-  const onSubmit = async (values: z.infer<typeof formSchema>) => {
+ const onSubmit = async (values: z.infer<typeof formSchema>) => {
     if (!firestore || !storage) {
         toast({ title: 'Error', description: 'Database or Storage not available.', variant: 'destructive' });
         return;
     }
     
     setIsPending(true);
+    let finalImageUrl: string | null = product?.imgurl || null;
+    const oldImageUrl = product?.imgurl;
 
     try {
-        let finalImageUrl: string | null = product?.imgurl || null;
-
-        // 1. Handle Image Upload/Removal
-        if (newImageFile) {
-            // A new image is selected for upload
+        // Step 1: Upload new image if it exists
+        if (newImageFile && imagePreview) {
             toast({ title: "Uploading image..." });
             const imageRef = ref(storage, `products/${Date.now()}-${newImageFile.name}`);
             
-            // If editing and an old image exists, delete it from storage
-            if (product?.imgurl) {
-                try {
-                    const oldImageRef = ref(storage, product.imgurl);
-                    await deleteObject(oldImageRef).catch(e => console.warn("Old image deletion failed, it might not exist", e));
-                } catch(e) {
-                     console.warn("Could not create ref for old image, it might not exist.", e);
-                }
-            }
-            const snapshot = await uploadBytes(imageRef, newImageFile);
+            // imagePreview is a data URL (base64)
+            const snapshot = await uploadString(imageRef, imagePreview, 'data_url');
             finalImageUrl = await getDownloadURL(snapshot.ref);
-        } else if (imagePreview === null && product?.imgurl) {
-            // An existing image was removed
-            try {
-                const oldImageRef = ref(storage, product.imgurl);
-                await deleteObject(oldImageRef);
-            } catch (e) {
-                console.warn("Could not delete old image.", e)
-            }
+            toast({ title: "Image uploaded!" });
+        } else if (!imagePreview && oldImageUrl) {
+            // Image was removed
             finalImageUrl = null;
         }
-        
-        toast({ title: "Saving product..." });
-        
+
         const productData = { 
             ...values,
             imgurl: finalImageUrl,
         };
         
-        // 2. Save product data to Firestore
+        // Step 2: Save product data to Firestore
+        toast({ title: "Saving product..." });
         if (product) {
             // Editing an existing product
             const productRef = doc(firestore, 'products', product.id);
@@ -166,7 +151,17 @@ export function ProductFormDialog({ isOpen, onOpenChange, product }: ProductForm
             toast({ title: 'Product Created', description: `${values.name} has been saved successfully.` });
         }
         
-        // 3. Refresh page and close dialog
+        // Step 3: Delete old image from storage if a new one was uploaded or image was removed
+        if (oldImageUrl && oldImageUrl !== finalImageUrl) {
+            try {
+                const oldImageRef = ref(storage, oldImageUrl);
+                await deleteObject(oldImageRef);
+            } catch (e) {
+                console.warn("Could not delete old image, it might have already been deleted:", e);
+            }
+        }
+        
+        // Step 4: Refresh page and close dialog
         router.refresh();
         onOpenChange(false);
 
@@ -356,3 +351,5 @@ export function ProductFormDialog({ isOpen, onOpenChange, product }: ProductForm
     </Dialog>
   );
 }
+
+    
