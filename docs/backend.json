@@ -6,145 +6,106 @@
       "description": "Represents a user of the application.",
       "type": "object",
       "properties": {
-        "id": {
-          "type": "string",
-          "description": "The unique identifier for the user, matching the Firebase Auth UID."
-        },
         "email": {
           "type": "string",
           "format": "email",
           "description": "The user's email address."
         },
+        "displayName": {
+          "type": "string",
+          "description": "The user's display name."
+        },
         "createdAt": {
           "type": "number",
-          "description": "The timestamp of when the user was created."
+          "description": "The timestamp of when the user account was created."
         },
-        "firstName": {
+        "userType": {
           "type": "string",
-          "description": "The user's first name."
+          "description": "The type of user.",
+          "enum": ["customer", "admin"]
         },
-        "lastName": {
+        "shippingAddress": {
           "type": "string",
-          "description": "The user's last name."
+          "description": "The user's shipping address."
         },
-        "address": {
+        "billingAddress": {
           "type": "string",
-          "description": "The user's address."
+          "description": "The user's billing address."
         },
-        "phone": {
+        "phoneNumber": {
           "type": "string",
           "description": "The user's phone number."
-        },
-        "isAdmin": {
-          "type": "boolean",
-          "description": "Whether the user has administrative privileges."
         }
       },
-      "required": ["id", "email", "createdAt", "firstName"]
+      "required": ["email", "displayName", "createdAt", "userType"]
     },
     "Product": {
       "title": "Product",
       "description": "Represents a product in the store.",
       "type": "object",
       "properties": {
-        "id": { "type": "string" },
         "name": { "type": "string" },
         "description": { "type": "string" },
         "price": { "type": "number" },
-        "imgurl": {
+        "stockQuantity": { "type": "integer" },
+        "createdAt": { "type": "number" },
+        "imageUrl": {
           "type": "string",
-          "format": "uri",
-          "description": "The URL of the product image."
+          "format": "uri"
         },
-        "imgpath": {
-            "type": "string",
-            "description": "The storage path of the product image for deletion."
+        "category": { "type": "string" },
+        "merchant": {
+          "$ref": "#/entities/User"
+        }
+      },
+      "required": ["name", "description", "price", "stockQuantity", "createdAt"]
+    },
+    "CartItem": {
+      "title": "CartItem",
+      "description": "Represents a single item in a user's shopping cart.",
+      "type": "object",
+      "properties": {
+        "quantity": { "type": "integer" },
+        "customer": {
+          "$ref": "#/entities/User"
         },
-        "type": { "type": "string" },
-        "brand": { "type": "string" },
-        "gender": { "type": "string" },
-        "createdAt": { "type": "number" }
+        "product": {
+          "$ref": "#/entities/Product"
+        }
       },
-      "required": ["id", "name", "description", "price", "type", "brand"]
-    },
-    "Frame": {
-      "title": "Frame",
-      "description": "Represents a frame product.",
-      "type": "object",
-      "properties": {
-        "frameShape": { "type": "string" },
-        "size": { "type": "string" },
-        "templeLength": { "type": "string" },
-        "bridgeWidth": { "type": "string" }
-      },
-      "required": ["frameShape"]
-    },
-    "Sunglass": {
-      "title": "Sunglass",
-      "description": "Represents a sunglass product.",
-      "type": "object",
-      "properties": {
-        "lensColor": { "type": "string" },
-        "polarization": { "type": "boolean" },
-        "UVProtection": { "type": "string" }
-      },
-      "required": ["lensColor"]
-    },
-    "Lens": {
-      "title": "Lens",
-      "description": "Represents a lens product.",
-      "type": "object",
-      "properties": {
-        "lensType": { "type": "string" },
-        "material": { "type": "string" },
-        "coatings": { "type": "string" },
-        "prescriptionRange": { "type": "string" }
-      },
-      "required": ["lensType", "material"]
+      "required": ["quantity", "customer", "product"]
     },
     "Order": {
       "title": "Order",
       "description": "Represents an order made by a user.",
       "type": "object",
       "properties": {
-        "id": { "type": "string" },
-        "userId": { "type": "string" },
         "orderDate": { "type": "number" },
         "totalAmount": { "type": "number" },
         "status": { "type": "string" },
         "shippingAddress": { "type": "string" },
-        "billingAddress": { "type": "string" }
+        "paymentMethod": { "type": "string" },
+        "customer": {
+          "$ref": "#/entities/User"
+        }
       },
-      "required": ["id", "userId", "orderDate", "totalAmount", "status"]
+      "required": ["orderDate", "totalAmount", "status"]
     },
     "OrderItem": {
       "title": "OrderItem",
       "description": "Represents an item within an order.",
       "type": "object",
       "properties": {
-        "orderId": { "type": "string" },
-        "productId": { "type": "string" },
         "quantity": { "type": "integer" },
-        "priceAtPurchase": { "type": "number" }
-      },
-      "required": ["orderId", "productId", "quantity", "priceAtPurchase"]
-    },
-    "Review": {
-        "title": "Review",
-        "description": "Represents a user review for a product.",
-        "type": "object",
-        "properties": {
-            "id": { "type": "string" },
-            "productId": { "type": "string" },
-            "userId": { "type": "string" },
-            "userName": { "type": "string" },
-            "userImage": { "type": "string", "format": "uri" },
-            "rating": { "type": "number", "minimum": 1, "maximum": 5 },
-            "comment": { "type": "string" },
-            "imageUrl": { "type": "string", "format": "uri" },
-            "createdAt": { "type": "number" }
+        "priceAtPurchase": { "type": "number" },
+        "order": {
+          "$ref": "#/entities/Order"
         },
-        "required": ["id", "productId", "userId", "userName", "rating", "comment", "createdAt"]
+        "product": {
+          "$ref": "#/entities/Product"
+        }
+      },
+      "required": ["quantity", "priceAtPurchase", "order", "product"]
     }
   },
   "auth": {
@@ -159,27 +120,15 @@
       "schema": { "$ref": "#/entities/Product" },
       "description": "Stores all product details."
     },
-    "/products/{productId}/reviews/{reviewId}": {
-        "schema": { "$ref": "#/entities/Review" },
-        "description": "Stores user reviews for a specific product."
-    },
-    "/frames/{frameId}": {
-        "schema": { "$ref": "#/entities/Frame" },
-        "description": "Stores frame-specific product details."
-    },
-    "/sunglasses/{sunglassId}": {
-        "schema": { "$ref": "#/entities/Sunglass" },
-        "description": "Stores sunglass-specific product details."
-    },
-    "/lenses/{lensId}": {
-        "schema": { "$ref": "#/entities/Lens" },
-        "description": "Stores lens-specific product details."
+    "/users/{userId}/cart/{productId}": {
+      "schema": { "$ref": "#/entities/CartItem" },
+      "description": "Stores items in a user's shopping cart."
     },
     "/users/{userId}/orders/{orderId}": {
       "schema": { "$ref": "#/entities/Order" },
       "description": "Stores user orders."
     },
-    "/users/{userId}/orders/{orderId}/orderItems/{orderItemId}": {
+    "/users/{userId}/orders/{orderId}/orderItems/{productId}": {
       "schema": { "$ref": "#/entities/OrderItem" },
       "description": "Stores items within a user's order."
     }
