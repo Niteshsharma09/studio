@@ -113,22 +113,14 @@ export function ProductFormDialog({ isOpen, onOpenChange, product }: ProductForm
     setIsPending(true);
 
     try {
-        let finalImageUrl: string | null;
+        let uploadedImageUrl: string | null = product?.imgurl || null;
 
-        if (product) {
-            // Editing existing product
-            finalImageUrl = product.imgurl || null;
-        } else {
-            // Creating new product
-            finalImageUrl = null;
-        }
-
-
+        // 1. Handle Image Upload if a new file is selected
         if (newImageFile) {
             toast({ title: "Uploading image..." });
             const imageRef = ref(storage, `products/${Date.now()}-${newImageFile.name}`);
             
-            // If we are editing and there was an old image, try to delete it
+            // If editing, delete old image from storage if it exists
             if (product?.imgurl) {
                 try {
                     const oldImageRef = ref(storage, product.imgurl);
@@ -137,32 +129,34 @@ export function ProductFormDialog({ isOpen, onOpenChange, product }: ProductForm
                      console.warn("Could not create ref for old image, it might not exist.", e);
                 }
             }
-
             const snapshot = await uploadBytes(imageRef, newImageFile);
-            finalImageUrl = await getDownloadURL(snapshot.ref);
+            uploadedImageUrl = await getDownloadURL(snapshot.ref);
         } else if (imagePreview === null && product?.imgurl) {
-             // If image was removed (preview is null) on an existing product
-             try {
+            // Handle image removal
+            try {
                 const oldImageRef = ref(storage, product.imgurl);
                 await deleteObject(oldImageRef);
             } catch (e) {
                 console.warn("Could not delete old image.", e)
             }
-            finalImageUrl = null;
+            uploadedImageUrl = null;
         }
         
         toast({ title: "Saving product..." });
         
         const productData = { 
             ...values,
-            imgurl: finalImageUrl,
+            imgurl: uploadedImageUrl,
         };
         
+        // 2. Save product data to Firestore
         if (product) {
+            // Editing an existing product
             const productRef = doc(firestore, 'products', product.id);
             await updateDoc(productRef, productData);
             toast({ title: 'Product Updated', description: `${values.name} has been saved successfully.` });
         } else {
+            // Creating a new product
             const newDocRef = doc(collection(firestore, 'products'));
             await setDoc(newDocRef, {
                 ...productData,
@@ -172,7 +166,7 @@ export function ProductFormDialog({ isOpen, onOpenChange, product }: ProductForm
             toast({ title: 'Product Created', description: `${values.name} has been saved successfully.` });
         }
         
-        // This forces a server-side refresh of the page, ensuring new data is fetched
+        // 3. Refresh page and close dialog
         router.replace(pathname);
         onOpenChange(false);
 
