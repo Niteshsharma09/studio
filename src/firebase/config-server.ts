@@ -11,9 +11,16 @@ if (!serviceAccountKeyBase64) {
     throw new Error("FIREBASE_SERVICE_ACCOUNT_KEY environment variable not set. Server-side Firebase features will not work.");
 }
 
-// Decode the Base64 string to get the original JSON string
-const serviceAccountJson = Buffer.from(serviceAccountKeyBase64, 'base64').toString('utf8');
-const serviceAccount = JSON.parse(serviceAccountJson);
+let serviceAccount: any;
+try {
+    // Decode the Base64 string to get the original JSON string
+    const serviceAccountJson = Buffer.from(serviceAccountKeyBase64, 'base64').toString('utf8');
+    serviceAccount = JSON.parse(serviceAccountJson);
+} catch (e) {
+    console.error("Failed to parse Firebase service account key. Make sure it's a valid Base64 encoded JSON string.", e);
+    throw new Error("Invalid FIREBASE_SERVICE_ACCOUNT_KEY.");
+}
+
 
 export const firebaseAdminConfig = {
     credential: {
