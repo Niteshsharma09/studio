@@ -20,7 +20,7 @@ import { useToast } from '@/hooks/use-toast';
 import { Loader2, UploadCloud, X } from 'lucide-react';
 import Image from 'next/image';
 import { ScrollArea } from '../ui/scroll-area';
-import { useRouter, usePathname } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 
 const formSchema = z.object({
   name: z.string().min(1, 'Product name is required'),
@@ -46,7 +46,6 @@ export function ProductFormDialog({ isOpen, onOpenChange, product }: ProductForm
   const storage = useStorage();
   const { toast } = useToast();
   const router = useRouter();
-  const pathname = usePathname();
   
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -113,14 +112,15 @@ export function ProductFormDialog({ isOpen, onOpenChange, product }: ProductForm
     setIsPending(true);
 
     try {
-        let uploadedImageUrl: string | null = product?.imgurl || null;
+        let finalImageUrl: string | null = product?.imgurl || null;
 
-        // 1. Handle Image Upload if a new file is selected
+        // 1. Handle Image Upload/Removal
         if (newImageFile) {
+            // A new image is selected for upload
             toast({ title: "Uploading image..." });
             const imageRef = ref(storage, `products/${Date.now()}-${newImageFile.name}`);
             
-            // If editing, delete old image from storage if it exists
+            // If editing and an old image exists, delete it from storage
             if (product?.imgurl) {
                 try {
                     const oldImageRef = ref(storage, product.imgurl);
@@ -130,23 +130,23 @@ export function ProductFormDialog({ isOpen, onOpenChange, product }: ProductForm
                 }
             }
             const snapshot = await uploadBytes(imageRef, newImageFile);
-            uploadedImageUrl = await getDownloadURL(snapshot.ref);
+            finalImageUrl = await getDownloadURL(snapshot.ref);
         } else if (imagePreview === null && product?.imgurl) {
-            // Handle image removal
+            // An existing image was removed
             try {
                 const oldImageRef = ref(storage, product.imgurl);
                 await deleteObject(oldImageRef);
             } catch (e) {
                 console.warn("Could not delete old image.", e)
             }
-            uploadedImageUrl = null;
+            finalImageUrl = null;
         }
         
         toast({ title: "Saving product..." });
         
         const productData = { 
             ...values,
-            imgurl: uploadedImageUrl,
+            imgurl: finalImageUrl,
         };
         
         // 2. Save product data to Firestore
@@ -167,7 +167,7 @@ export function ProductFormDialog({ isOpen, onOpenChange, product }: ProductForm
         }
         
         // 3. Refresh page and close dialog
-        router.replace(pathname);
+        router.refresh();
         onOpenChange(false);
 
     } catch (e: any) {
@@ -356,5 +356,3 @@ export function ProductFormDialog({ isOpen, onOpenChange, product }: ProductForm
     </Dialog>
   );
 }
-
-    
