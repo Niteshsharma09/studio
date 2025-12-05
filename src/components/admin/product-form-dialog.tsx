@@ -89,14 +89,13 @@ export function ProductFormDialog({ isOpen, onOpenChange, product }: ProductForm
             URL.revokeObjectURL(imagePreview);
         }
     }
-  }, [product, form, isOpen]);
+    // Only run this effect when the dialog opens or the product changes
+  }, [product, isOpen, form]);
 
-  // 1) handleFileChange - use createObjectURL for immediate preview
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0] ?? null;
     if (file) {
       setNewImageFile(file);
-       // immediate local preview
       if (imagePreview && imagePreview.startsWith('blob:')) {
         URL.revokeObjectURL(imagePreview);
       }
@@ -113,7 +112,6 @@ export function ProductFormDialog({ isOpen, onOpenChange, product }: ProductForm
     setImagePreview(null);
   };
 
-  // 2) onSubmit - use uploadBytes and store both url and storagePath
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     if (!firestore || !storage) {
       toast({ title: 'Error', description: 'Database or Storage not available.', variant: 'destructive' });
@@ -122,31 +120,28 @@ export function ProductFormDialog({ isOpen, onOpenChange, product }: ProductForm
 
     setIsPending(true);
     let finalImageUrl: string | null = product?.imgurl || null;
-    let finalImagePath: string | null = product?.imgpath || null; // <-- store path in your doc
+    let finalImagePath: string | null = product?.imgpath || null;
     const oldImagePath = product?.imgpath;
 
     try {
+      // 1. Handle image upload if a new file is selected
       if (newImageFile) {
         toast({ title: "Uploading image..." });
-
-        // create a deterministic path and upload file directly
         const imagePath = `products/${Date.now()}-${newImageFile.name}`;
         const imageRef = ref(storage, imagePath);
 
-        // upload the raw File (no data URL)
         const snapshot = await uploadBytes(imageRef, newImageFile);
         const downloadURL = await getDownloadURL(snapshot.ref);
 
         finalImageUrl = downloadURL;
-        finalImagePath = imagePath; // we save the path to allow later deletion
-
+        finalImagePath = imagePath;
         toast({ title: "Image uploaded!" });
       } else if (!imagePreview) {
-        // user removed image in UI
+        // Handle case where image was removed
         finalImageUrl = null;
         finalImagePath = null;
       }
-
+      
       const productData = {
         ...values,
         imgurl: finalImageUrl,
@@ -154,11 +149,14 @@ export function ProductFormDialog({ isOpen, onOpenChange, product }: ProductForm
       };
 
       toast({ title: "Saving product..." });
+      // 2. Save product data to Firestore
       if (product) {
+        // Update existing product
         const productRef = doc(firestore, 'products', product.id);
         await updateDoc(productRef, productData);
         toast({ title: 'Product Updated', description: `${values.name} has been saved successfully.` });
       } else {
+        // Create new product
         const newDocRef = doc(collection(firestore, 'products'));
         await setDoc(newDocRef, {
           ...productData,
@@ -168,17 +166,17 @@ export function ProductFormDialog({ isOpen, onOpenChange, product }: ProductForm
         toast({ title: 'Product Created', description: `${values.name} has been saved successfully.` });
       }
 
-      // delete old image by storage path (if we uploaded a new one OR image removed)
+      // 3. Delete old image from storage if it has changed
       if (oldImagePath && oldImagePath !== finalImagePath) {
         try {
-          const oldRef = ref(storage, oldImagePath); // use path, not full URL
+          const oldRef = ref(storage, oldImagePath);
           await deleteObject(oldRef);
         } catch (e) {
-          console.warn("Could not delete old image:", e);
+          console.warn("Could not delete old image, it might have been already removed:", e);
         }
       }
 
-      router.refresh();
+      router.refresh(); // Refresh server components to show new data
       onOpenChange(false);
     } catch (e: any) {
       console.error("Error saving product:", e);
