@@ -113,12 +113,22 @@ export function ProductFormDialog({ isOpen, onOpenChange, product }: ProductForm
     setIsPending(true);
 
     try {
-        let finalImageUrl: string | null = product?.imgurl || null;
+        let finalImageUrl: string | null;
+
+        if (product) {
+            // Editing existing product
+            finalImageUrl = product.imgurl || null;
+        } else {
+            // Creating new product
+            finalImageUrl = null;
+        }
+
 
         if (newImageFile) {
             toast({ title: "Uploading image..." });
             const imageRef = ref(storage, `products/${Date.now()}-${newImageFile.name}`);
             
+            // If we are editing and there was an old image, try to delete it
             if (product?.imgurl) {
                 try {
                     const oldImageRef = ref(storage, product.imgurl);
@@ -131,6 +141,7 @@ export function ProductFormDialog({ isOpen, onOpenChange, product }: ProductForm
             const snapshot = await uploadBytes(imageRef, newImageFile);
             finalImageUrl = await getDownloadURL(snapshot.ref);
         } else if (imagePreview === null && product?.imgurl) {
+             // If image was removed (preview is null) on an existing product
              try {
                 const oldImageRef = ref(storage, product.imgurl);
                 await deleteObject(oldImageRef);
@@ -161,6 +172,7 @@ export function ProductFormDialog({ isOpen, onOpenChange, product }: ProductForm
             toast({ title: 'Product Created', description: `${values.name} has been saved successfully.` });
         }
         
+        // This forces a server-side refresh of the page, ensuring new data is fetched
         router.replace(pathname);
         onOpenChange(false);
 
@@ -350,3 +362,5 @@ export function ProductFormDialog({ isOpen, onOpenChange, product }: ProductForm
     </Dialog>
   );
 }
+
+    
