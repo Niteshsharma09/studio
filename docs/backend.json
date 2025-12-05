@@ -56,6 +56,10 @@
           "format": "uri",
           "description": "The URL of the product image."
         },
+        "imgpath": {
+            "type": "string",
+            "description": "The storage path of the product image for deletion."
+        },
         "type": { "type": "string" },
         "brand": { "type": "string" },
         "gender": { "type": "string" },

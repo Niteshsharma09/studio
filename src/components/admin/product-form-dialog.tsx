@@ -15,7 +15,7 @@ import { BRANDS, PRODUCT_TYPES } from '@/lib/constants';
 import type { Product } from '@/lib/types';
 import { useFirestore, useStorage } from '@/firebase';
 import { doc, setDoc, collection, serverTimestamp, updateDoc } from 'firebase/firestore';
-import { ref, uploadString, getDownloadURL, deleteObject } from "firebase/storage";
+import { ref, uploadBytes, getDownloadURL, deleteObject } from "firebase/storage";
 import { useToast } from '@/hooks/use-toast';
 import { Loader2, UploadCloud, X } from 'lucide-react';
 import Image from 'next/image';
@@ -86,94 +86,107 @@ export function ProductFormDialog({ isOpen, onOpenChange, product }: ProductForm
     }
   }, [product, form, isOpen]);
 
+  // 1) handleFileChange - use createObjectURL for immediate preview
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0];
+    const file = event.target.files?.[0] ?? null;
     if (file) {
       setNewImageFile(file);
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setImagePreview(reader.result as string);
-      };
-      reader.readAsDataURL(file);
+      // immediate local preview
+      if (imagePreview) {
+        URL.revokeObjectURL(imagePreview);
+      }
+      const objectUrl = URL.createObjectURL(file);
+      setImagePreview(objectUrl);
     }
   };
 
   const removeImage = () => {
     setNewImageFile(null);
+    if (imagePreview) {
+      URL.revokeObjectURL(imagePreview);
+    }
     setImagePreview(null);
   };
 
- const onSubmit = async (values: z.infer<typeof formSchema>) => {
+  // 2) onSubmit - use uploadBytes and store both url and storagePath
+  const onSubmit = async (values: z.infer<typeof formSchema>) => {
     if (!firestore || !storage) {
-        toast({ title: 'Error', description: 'Database or Storage not available.', variant: 'destructive' });
-        return;
+      toast({ title: 'Error', description: 'Database or Storage not available.', variant: 'destructive' });
+      return;
     }
-    
+
     setIsPending(true);
     let finalImageUrl: string | null = product?.imgurl || null;
-    const oldImageUrl = product?.imgurl;
+    let finalImagePath: string | null = product?.imgpath || null; // <-- store path in your doc
+    const oldImagePath = product?.imgpath;
 
     try {
-        // Step 1: Upload new image if it exists
-        if (newImageFile && imagePreview) {
-            toast({ title: "Uploading image..." });
-            const imageRef = ref(storage, `products/${Date.now()}-${newImageFile.name}`);
-            
-            // imagePreview is a data URL (base64)
-            const snapshot = await uploadString(imageRef, imagePreview, 'data_url');
-            finalImageUrl = await getDownloadURL(snapshot.ref);
-            toast({ title: "Image uploaded!" });
-        } else if (!imagePreview && oldImageUrl) {
-            // Image was removed
-            finalImageUrl = null;
-        }
+      if (newImageFile) {
+        toast({ title: "Uploading image..." });
 
-        const productData = { 
-            ...values,
-            imgurl: finalImageUrl,
-        };
-        
-        // Step 2: Save product data to Firestore
-        toast({ title: "Saving product..." });
-        if (product) {
-            // Editing an existing product
-            const productRef = doc(firestore, 'products', product.id);
-            await updateDoc(productRef, productData);
-            toast({ title: 'Product Updated', description: `${values.name} has been saved successfully.` });
-        } else {
-            // Creating a new product
-            const newDocRef = doc(collection(firestore, 'products'));
-            await setDoc(newDocRef, {
-                ...productData,
-                id: newDocRef.id,
-                createdAt: serverTimestamp(),
-            });
-            toast({ title: 'Product Created', description: `${values.name} has been saved successfully.` });
-        }
-        
-        // Step 3: Delete old image from storage if a new one was uploaded or image was removed
-        if (oldImageUrl && oldImageUrl !== finalImageUrl) {
-            try {
-                const oldImageRef = ref(storage, oldImageUrl);
-                await deleteObject(oldImageRef);
-            } catch (e) {
-                console.warn("Could not delete old image, it might have already been deleted:", e);
-            }
-        }
-        
-        // Step 4: Refresh page and close dialog
-        router.refresh();
-        onOpenChange(false);
+        // create a deterministic path and upload file directly
+        const imagePath = `products/${Date.now()}-${newImageFile.name}`;
+        const imageRef = ref(storage, imagePath);
 
-    } catch (e: any) {
-        console.error("Error saving product:", e);
-        toast({ 
-            title: 'Error Saving Product', 
-            description: e.message || "An unknown error occurred. Please check the console.",
-            variant: 'destructive',
+        // upload the raw File (no data URL)
+        const snapshot = await uploadBytes(imageRef, newImageFile);
+        const downloadURL = await getDownloadURL(snapshot.ref);
+
+        finalImageUrl = downloadURL;
+        finalImagePath = imagePath; // we save the path to allow later deletion
+
+        toast({ title: "Image uploaded!" });
+      } else if (!imagePreview) {
+        // user removed image in UI
+        finalImageUrl = null;
+        finalImagePath = null;
+      }
+
+      const productData = {
+        ...values,
+        imgurl: finalImageUrl,
+        imgpath: finalImagePath,
+      };
+
+      toast({ title: "Saving product..." });
+      if (product) {
+        const productRef = doc(firestore, 'products', product.id);
+        await updateDoc(productRef, productData);
+        toast({ title: 'Product Updated', description: `${values.name} has been saved successfully.` });
+      } else {
+        const newDocRef = doc(collection(firestore, 'products'));
+        await setDoc(newDocRef, {
+          ...productData,
+          id: newDocRef.id,
+          createdAt: serverTimestamp(),
         });
+        toast({ title: 'Product Created', description: `${values.name} has been saved successfully.` });
+      }
+
+      // delete old image by storage path (if we uploaded a new one OR image removed)
+      if (oldImagePath && oldImagePath !== finalImagePath) {
+        try {
+          const oldRef = ref(storage, oldImagePath); // use path, not full URL
+          await deleteObject(oldRef);
+        } catch (e) {
+          console.warn("Could not delete old image:", e);
+        }
+      }
+
+      router.refresh();
+      onOpenChange(false);
+    } catch (e: any) {
+      console.error("Error saving product:", e);
+      toast({
+        title: 'Error Saving Product',
+        description: e.message || "An unknown error occurred. Please check console.",
+        variant: 'destructive',
+      });
     } finally {
-        setIsPending(false);
+      setIsPending(false);
+      if (newImageFile && imagePreview) {
+        URL.revokeObjectURL(imagePreview);
+      }
     }
   };
 
@@ -351,5 +364,3 @@ export function ProductFormDialog({ isOpen, onOpenChange, product }: ProductForm
     </Dialog>
   );
 }
-
-    
