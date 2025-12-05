@@ -1,9 +1,23 @@
 
 import type { Product } from './types';
-import { collection, getDocs, doc, getDoc, query } from 'firebase/firestore';
+import { collection, getDocs, doc, getDoc, query, Timestamp } from 'firebase/firestore';
 import { initializeApp, getApps, cert, App as AdminApp } from 'firebase-admin/app';
 import { getFirestore } from 'firebase-admin/firestore';
 import { firebaseAdminConfig } from '@/firebase/config-server';
+
+// Helper function to safely transform Firestore Timestamps.
+const transformTimestamp = (timestamp: any): string => {
+  if (timestamp instanceof Timestamp) {
+    return timestamp.toDate().toISOString();
+  }
+  // If it's already a string or other primitive, return as is.
+  if (typeof timestamp === 'string' || typeof timestamp === 'number') {
+    return new Date(timestamp).toISOString();
+  }
+  // Fallback for unexpected types
+  return new Date().toISOString();
+};
+
 
 // This function now correctly handles Firebase Admin SDK initialization,
 // ensuring it only runs once per server instance.
@@ -35,10 +49,15 @@ export async function getProducts(): Promise<Product[]> {
             return [];
         }
 
-        const products: Product[] = productsCollection.docs.map(doc => ({
-            id: doc.id,
-            ...doc.data()
-        } as Product));
+        const products: Product[] = productsCollection.docs.map(doc => {
+            const data = doc.data();
+            return {
+                id: doc.id,
+                ...data,
+                // Transform timestamp to a serializable format
+                createdAt: data.createdAt ? transformTimestamp(data.createdAt) : undefined,
+            } as Product;
+        });
 
         return products;
 
@@ -59,7 +78,15 @@ export async function getProduct(id: string): Promise<Product | undefined> {
             return undefined;
         }
 
-        return { id: productDoc.id, ...productDoc.data() } as Product;
+        const data = productDoc.data();
+        if (!data) return undefined;
+
+        return { 
+            id: productDoc.id, 
+            ...data,
+            // Transform timestamp to a serializable format
+            createdAt: data.createdAt ? transformTimestamp(data.createdAt) : undefined,
+        } as Product;
     } catch (error) {
         console.error(`Failed to fetch product ${id}:`, error);
         return undefined;
